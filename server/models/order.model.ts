@@ -10,8 +10,7 @@ export interface IOrder extends mongoose.Document {
     }[];
     totalAmount: number; 
     status: "Pending" | "Preparing" | "Out for Delivery" | "Delivered";
-    paymentMethod: "Card" | "Strip" | "Cash"; 
-    createdAt: Date;
+    paymentMethod: "Card" | "Strip" | "Cash";  
 }
 
 const OrderSchema = new mongoose.Schema({
@@ -26,9 +25,18 @@ const OrderSchema = new mongoose.Schema({
     ],
     totalAmount: { type: Number, required: true },
     status: { type: String, enum: ["Pending", "Preparing", "Out for Delivery", "Delivered"], default: "Pending" },
-    paymentMethod: { type: String, enum: ["Card", "Strip", "Cash"], required: true },
-    createdAt: { type: Date, default: Date.now },
-}); 
+    paymentMethod: { type: String, enum: ["Card", "Strip", "Cash"], required: true }
+    }, {
+      toJSON:{
+          transform(doc, ret){ 
+              delete ret.__v;
+              delete ret.createdAt;
+              delete ret.updatedAt;
+          }
+      },
+      timestamps : true
+  });
+    
   
 const Order = mongoose.model<IOrder>("Order", OrderSchema);
-export default Order;
+export { Order } ;

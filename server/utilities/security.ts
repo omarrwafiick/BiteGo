@@ -10,7 +10,7 @@ export const hashingPassword = async (password:string, salt: string) => await bc
 
 export const validatePassword = async (password:string, dbPassword:string, salt: string) => await hashingPassword(password, salt) === dbPassword;
  
-export const GenerateSignature = (payload: VendorPayloadDto) => jwt.sign(payload, String(process.env.JWT_SECRET), {expiresIn: '1d'});
+export const GenerateSignature = (payload: AuthPayload) => jwt.sign(payload, String(process.env.JWT_SECRET), {expiresIn: '1d'});
 
 export const ValidateSignature = (req: Request) => {
     const token = req.get("Authorization"); 
@@ -21,3 +21,6 @@ export const ValidateSignature = (req: Request) => {
     }
     return false;
 };
+
+export const generateOTP = (): number => Math.floor(100000 + Math.random() * 900000);
+

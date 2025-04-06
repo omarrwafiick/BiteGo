@@ -1,22 +1,24 @@
 import express from "express";
 import { createVendor, getVendorByID, getVendors, getVendorProfile, updatetVendorProfile, updateVendorService } from '../controllers/vendors.controller'
-import { vendorLogin } from "../controllers/auth.controller";
+import { Login } from "../controllers/auth.controller";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 
 const router = express.Router(); 
+ 
+router.post("/", createVendor);
+
+router.post("/login", Login);
 
 router.get("/", getVendors);
 
 router.get("/:id", getVendorByID);
 
-router.get("/profile", ValidateSignatureMiddleWare, getVendorProfile);
+router.use(ValidateSignatureMiddleWare);
 
-router.patch("/profile", ValidateSignatureMiddleWare, updatetVendorProfile);
+router.get("/profile", getVendorProfile);
 
-router.patch("/service", ValidateSignatureMiddleWare, updateVendorService);
- 
-router.post("/", createVendor);
+router.patch("/profile", updatetVendorProfile);
 
-router.post("/login", vendorLogin);
+router.patch("/service", updateVendorService);
 
 export { router as VendorRoutes };

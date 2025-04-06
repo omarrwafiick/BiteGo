@@ -1,32 +1,49 @@
-import { Request, Response, NextFunction } from "express";
-import { LoginVendorDto } from "../dto/vendor.dto";
-import { findVendor } from "./vendors.controller";
+import { Request, Response } from "express";
+import { LoginDto } from "../dto/main.dto"; 
 import { GenerateSignature, validatePassword } from "../utilities/security";
+import { findAdmin, findUser, findVendor } from "../utilities/helper.methods";
+import { User } from "../models/user.model";
+import { Admin } from "../models/admin.model";
+import { Vendor } from "../models/vendor.model";
 
-export const vendorLogin = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
+export const Login = async (req: Request, res: Response): Promise<void> => { 
     try {
-        const { email, password } = <LoginVendorDto>req.body;
+        const { email, password, type} = req.body as LoginDto;
 
-        const exists = await findVendor('', email);
+        if (!email || !password) {
+            res.status(400).json({ success: false, message: 'Email and password are required.' });
+            return;
+        }
 
-        if(!exists) {
-            res.status(400).json({success:false, message: `Vendor was not found with email: ${email}`});
+        const exists = type === process.env.USER ? await findUser(email) : type === process.env.ADMIN ?  await findAdmin(email) : await findVendor(email);
+
+        if (!exists) {
+            res.status(404).json({ success: false, message: `${type} not found with email: ${email}` });
             return;
         }
 
         const passwordValidation = await validatePassword(password, exists.password, exists.salt);
 
-        if(!passwordValidation){
-            res.status(400).json({success:false, message: "Incorrect password"});
+        if (!passwordValidation) {
+            res.status(400).json({ success: false, message: 'Incorrect password' });
             return;
         }   
 
-        const jwt = GenerateSignature({id: exists.id, name: exists.name, email: email});
-           
-        res.status(200).json({success:true, vendor: exists, token: jwt});
+        const token = GenerateSignature({ 
+            id: exists.id, 
+            name: type === process.env.USER 
+                ? (exists as InstanceType<typeof User>).firstName 
+                : type === process.env.ADMIN 
+                    ? (await findAdmin(email) as InstanceType<typeof Admin>).name 
+                    : (await findVendor(email) as InstanceType<typeof Vendor>).name, 
+            verified: type === process.env.USER ?(exists as InstanceType<typeof User>).isVerified : false, 
+            email :email
+        });  
+        
+        res.status(200).json({ success: true, vendor: exists, token });
 
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error' });
+        console.error(error); 
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
-    return;
 };

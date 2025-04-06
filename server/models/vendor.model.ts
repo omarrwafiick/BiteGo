@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { CreateVendorDto } from "../dto/vendor.dto";
 
-interface VendorDoc extends Document, CreateVendorDto{
+interface IVendor extends Document, CreateVendorDto{
     salt: string;  
     profilePicture?: string;  
     serviceAvailable: boolean;   
@@ -37,6 +37,6 @@ const VendorSchema = new Schema({
     timestamps : true
 });
   
-const Vendor = mongoose.model<VendorDoc>('Vendor', VendorSchema);
+const Vendor = mongoose.model<IVendor>('Vendor', VendorSchema);
 
-export default Vendor ;
+export { Vendor }  ;
