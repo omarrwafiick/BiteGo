@@ -1,6 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute} from '../routes/index.routes'; 
+import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute, CartRoutes} from '../routes/index.routes'; 
 import { ConnectDB } from "../config/dbConnections.cofig";
 import  rateLimiter from 'express-rate-limit'; 
 import path from "path";
@@ -24,6 +24,7 @@ app.use(`${String(process.env.MAIN_URL)+String(process.env.VENDOR_URL)}`, Vendor
 app.use(`${String(process.env.MAIN_URL)+String(process.env.USER_URL)}`, UserRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.FOOD_URL)}`, FoodItemsRoute);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.ORDER_URL)}`, OrderRoute);
+app.use(`${String(process.env.MAIN_URL)+String(process.env.CART_URL)}`, CartRoutes);
 
 //rest route
 

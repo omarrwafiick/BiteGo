@@ -8,7 +8,7 @@ interface IVendor extends Document, CreateVendorDto{
     rating?: number; createdAt: Date;
     updatedAt: Date;  
 };
-
+ 
 const VendorSchema = new Schema({ 
     name:{ type : String, required: true },
     ownerName:{ type : String, required: true }, 

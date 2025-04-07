@@ -100,7 +100,7 @@ export const updateVendorService = async (req: Request, res: Response) : Promise
 
 export const getVendorByID = async (req: Request, res: Response) : Promise<void> => {
     try {
-        const vendorID= req.params.id;
+        const vendorID = req.params.id;
         const vendor = await findVendor(vendorID);
 
         if(!vendor) {

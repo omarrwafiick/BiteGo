@@ -15,6 +15,7 @@ export interface IUser extends mongoose.Document {
   longtude?:number;
   isVerified:boolean;
   orderHistory?: mongoose.Types.ObjectId[];  
+  cart?: mongoose.Types.ObjectId;  
 };
 
 const UserSchema = new mongoose.Schema({
@@ -31,7 +32,8 @@ const UserSchema = new mongoose.Schema({
     latitude: { type: Number, default: 0 }, 
     longtude: { type: Number, default: 0 }, 
     isVerified: { type: Boolean, default: false }, 
-    orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }], 
+    orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order", default: null }], 
+    cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" , default: null}, 
 }, {
   toJSON:{
       transform(doc, ret){

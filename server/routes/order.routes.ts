@@ -1,18 +1,20 @@
 import express from "express";   
+import { createOrder, getUserOrderDetails, getUserOrders, getVendorOrders, getVendorOrderDetails, updateVendorOrder } from "../controllers/order.controller"; 
 
 const router = express.Router(); 
  
-// router.post("", createOrder);  // Place a new order
-// router.get("/:id", getOrderDetails);  // Get specific order details
-// router.get("", getUserOrders);  // Get orders placed by the user
-// router.patch("/:id", updateOrderStatus);  // Update order status (cancel, shipped, etc.)
-// router.delete("/:id", cancelOrder);  // Cancel an order
+//user
+router.post("/user", createOrder); 
 
-// // Payment & Checkout Routes
-// router.post("/:id/payment", processPayment);  // Process payment for an order
-// router.post("/:id/checkout", finalizeOrder);  // Finalize the order and start fulfillment
+router.get("/user/:id", getUserOrderDetails);  
 
-// // Order History
-// router.get("/history", getOrderHistory);  // Get the user's order history
+router.get("/user", getUserOrders);  
 
+//vendor
+router.get("/vendor", getVendorOrders); 
+
+router.get("/vendor/:id", getVendorOrderDetails);  
+
+router.put("/vendor/:id/process", updateVendorOrder);  
+   
 export { router as OrderRoute };

@@ -24,3 +24,4 @@ export const ValidateSignature = (req: Request) => {
 
 export const generateOTP = (): number => Math.floor(100000 + Math.random() * 900000);
 
+export const generateOrderID = (): string =>  generateOTP().toString();

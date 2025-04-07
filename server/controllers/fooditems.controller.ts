@@ -92,8 +92,8 @@ export const getFoodAvailable = async (req: Request, res: Response): Promise<voi
  
         const result = await Vendor.find({pinCode: pincode, serviceAvailable: true})
             .sort([['rating', 'descending']])
-            .populate('FoodItem');
-  
+            .populate('menu');  
+
         if(result.length === 0){
             res.status(404).json({ success: false, message: 'Nothing was not found'});
             return;
@@ -133,7 +133,7 @@ export const getFoodIn30Minute = async (req: Request, res: Response): Promise<vo
         const pincode = req.params.pincode; 
  
         const result = await Vendor.find({pinCode: pincode, serviceAvailable: true})
-            .populate('FoodItem');
+            .populate('menu');
             
         if(result.length === 0){
             res.status(404).json({ success: false, message: 'Nothing was not found'});
@@ -160,7 +160,7 @@ export const searchFood = async (req: Request, res: Response): Promise<void> => 
         const pincode = req.params.pincode; 
  
         const result = await Vendor.find({pinCode: pincode, serviceAvailable: true}) 
-            .populate('FoodItem');
+            .populate('menu');
   
         if(result.length === 0){
             res.status(404).json({ success: false, message: 'Nothing was not found'});
@@ -185,7 +185,7 @@ export const getResturantById = async (req: Request, res: Response): Promise<voi
     try {  
         const id = req.params.id; 
  
-        const result = await Vendor.findById(id).populate('FoodItem');
+        const result = await Vendor.findById(id).populate('menu');
          
         if(!result){
             res.status(404).json({ success: false, message: 'Nothing was not found'});
