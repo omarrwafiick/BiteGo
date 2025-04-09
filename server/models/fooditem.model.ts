@@ -3,8 +3,8 @@ import { CreateFoodItemDto } from "../dto/foodItem.dto";
 
 export interface IFoodItem extends Document, CreateFoodItemDto {
   vendorId: mongoose.Types.ObjectId;
-  images: [string]; 
-  rating: number
+  images: string[]; 
+  rating: number;
 };
 
 const FoodItemSchema = new Schema<IFoodItem>({

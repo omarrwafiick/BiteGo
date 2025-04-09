@@ -1,4 +1,4 @@
-import mongoose from "mongoose"; 
+import mongoose, { Schema } from "mongoose"; 
 
 export interface IOrder extends mongoose.Document {
     userId: mongoose.Types.ObjectId; 
@@ -8,17 +8,15 @@ export interface IOrder extends mongoose.Document {
       quantity: number; 
       price: number;  
     }[];
-    totalAmount: number; 
-    status: "Pending" | "Preparing" | "Out for Delivery" | "Delivered";
-    paymentMethod: "Card" | "Strip" | "Cash"; 
+    totalAmount: number;  
     remarks: string;
-    deliveryId: string;
-    appliedOffers: boolean;
-    offerId: string;
+    deliveryId: mongoose.Schema.Types.ObjectId;
+    appliedOffers: boolean; 
     readyTime: number;
+    status: "Pending" | "Preparing" | "Out for Delivery" | "Delivered";
 }
 
-const OrderSchema = new mongoose.Schema({
+const OrderSchema = new Schema<IOrder>({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     vendorId: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor", required: true },
     items: [
@@ -29,13 +27,11 @@ const OrderSchema = new mongoose.Schema({
       }
     ],
     totalAmount: { type: Number, required: true },
-    status: { type: String, enum: ["Pending", "Preparing", "Out for Delivery", "Delivered"], default: "Pending" },
-    paymentMethod: { type: String, enum: ["Card", "Strip", "Cash"], required: true },
     remarks:  { type: String },
     deliveryId:  { type: mongoose.Schema.Types.ObjectId, ref: "Delivery" },
-    appliedOffers:  { type: Boolean , default: false},
-    offerId:  { type: mongoose.Schema.Types.ObjectId, ref: "Offer"  },
-    readyTime:  { type: Number }
+    appliedOffers:  { type: Boolean , default: false}, 
+    readyTime:  { type: Number },
+    status: { type: String, enum: ["Pending", "Preparing", "Out for Delivery", "Delivered"], default: "Pending" },
     }, {
       toJSON:{
           transform(doc, ret){ 

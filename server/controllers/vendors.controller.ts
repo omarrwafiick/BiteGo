@@ -1,11 +1,10 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import { CreateVendorDto, UpdateVendorDto } from "../dto/vendor.dto";
-import { Vendor } from "../models/vendor.model";   
-import { z } from 'zod'; 
+import { Vendor } from "../models/vendor.model";    
 import { GenerateSalt, GenerateSignature, hashingPassword } from "../utilities/security";
 import { findVendor } from "../utilities/helper.methods";
 import { plainToClass } from "class-transformer";
-import { validate } from "class-validator";
+import { validate } from "class-validator"; 
 
 export const getVendors = async (req: Request, res: Response) : Promise<void> => {
     try {
@@ -156,10 +155,12 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
 
     res.status(201).json({success:true, message: "Vendor is created Successfully", vendor: newVendorModel, token: jwt}); 
       
-    } catch (error) {
-        if (error instanceof z.ZodError) res.status(400).json({ errors: error.errors });
-           
-        else res.status(500).json({ message: 'Internal server error' });
+    } catch (error) {  
+        res.status(500).json({ message: 'Internal server error' });
     }
     return;
 };
+
+
+
+

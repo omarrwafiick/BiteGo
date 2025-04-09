@@ -1,19 +1,16 @@
 import express from "express";
 import { createVendor, getVendorByID, getVendors, getVendorProfile, updatetVendorProfile, updateVendorService } from '../controllers/vendors.controller'
-import { Login } from "../controllers/auth.controller";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 
 const router = express.Router(); 
  
-router.post("/", createVendor);
-
-router.post("/login", Login);
-
-router.get("/", getVendors);
-
-router.get("/:id", getVendorByID);
+router.post("/", createVendor); 
 
 router.use(ValidateSignatureMiddleWare);
+
+router.get("/", getVendors); 
+
+router.get("/:id", getVendorByID);
 
 router.get("/profile", getVendorProfile);
 

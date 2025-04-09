@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { IsEmpty } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateCartItem {
-  @IsEmpty()
+  @IsNotEmpty()
   foodId: mongoose.Types.ObjectId;
-  @IsEmpty()
+  @IsNotEmpty()
   quantity: number;
-  @IsEmpty()
+  @IsNotEmpty()
   price: number;
 } 

@@ -1,13 +1,8 @@
 import express from "express";  
-import { uploadUserImage } from "../controllers/main.controller";
-import { Login } from "../controllers/auth.controller";
+import { uploadUserImage } from "../controllers/main.controller"; 
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
-import { editProfile, getProfile, requestOtp, signUp, verifyAccount } from "../controllers/users.controller";
-const router = express.Router(); 
- 
-router.post("/signup", signUp);
-
-router.post("/login", Login);
+import { editProfile, getProfile, requestOtp, verifyAccount } from "../controllers/users.controller";
+const router = express.Router();  
 
 router.use(ValidateSignatureMiddleWare);
 

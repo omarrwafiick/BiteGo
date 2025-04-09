@@ -6,8 +6,7 @@ export interface IDelivery extends Document {
   vehicleType: "Bike" | "Car" | "Van"; 
   status: "Pending" | "In Transit" | "Delivered";
   orderId: mongoose.Types.ObjectId;
-  estimatedTime?: string;
-  createdAt: Date;
+  estimatedTime?: string; 
 }
 
 const DeliverySchema = new Schema<IDelivery>({
@@ -16,8 +15,15 @@ const DeliverySchema = new Schema<IDelivery>({
   vehicleType: { type: String, enum: ["Bike", "Car", "Van"], required: true },
   status: { type: String, enum: ["Pending", "In Transit", "Delivered"], default: "Pending" },
   orderId: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true },
-  estimatedTime: { type: String },
-  createdAt: { type: Date, default: Date.now },
+  estimatedTime: { type: String }, 
+}, {
+  toJSON:{
+      transform(doc, ret){ 
+          delete ret.createdAt;
+          delete ret.updatedAt;
+      }
+  },
+  timestamps : true
 });
 
 const Delivery = mongoose.model<IDelivery>("Delivery", DeliverySchema);

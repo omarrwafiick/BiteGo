@@ -1,11 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 import { createAdmin } from '../controllers/admins.controller' 
-import { Login } from "../controllers/auth.controller";
+import { login } from "../controllers/auth.controller";
 
 const router = express.Router();
  
  
-router.post("/login", Login);  // Admin login
+router.post("/login", login);  // Admin login
+//createadmin
 // router.get("/users", getUsers);  // List all users
 // router.get("/user/:id", getUserDetails);  // Get specific user
 // router.patch("/user/:id", updateUser);  // Update user info

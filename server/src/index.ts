@@ -4,6 +4,8 @@ import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute, CartR
 import { ConnectDB } from "../config/dbConnections.cofig";
 import  rateLimiter from 'express-rate-limit'; 
 import path from "path";
+import { OfferRoutes } from "../routes/offers.route";
+import { PaymentRoutes } from "../routes/payment.route";
 
 const app = express(); 
 require('dotenv').config();
@@ -25,8 +27,8 @@ app.use(`${String(process.env.MAIN_URL)+String(process.env.USER_URL)}`, UserRout
 app.use(`${String(process.env.MAIN_URL)+String(process.env.FOOD_URL)}`, FoodItemsRoute);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.ORDER_URL)}`, OrderRoute);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.CART_URL)}`, CartRoutes);
-
-//rest route
+app.use(`${String(process.env.MAIN_URL)+String(process.env.OFFER_URL)}`, OfferRoutes);
+app.use(`${String(process.env.MAIN_URL)+String(process.env.PAYMENT_URL)}`, PaymentRoutes);
 
 app.listen(process.env.PORT_NUMBER, async () => {
     await ConnectDB();

@@ -1,4 +1,5 @@
-import mongoose from "mongoose"; 
+import mongoose, { Schema } from "mongoose"; 
+import { number } from "zod";
 
 export interface IUser extends mongoose.Document {
   firstName: string;
@@ -9,6 +10,8 @@ export interface IUser extends mongoose.Document {
   address: string; 
   profilePicture?: string; 
   salt:string;
+  resetToken: string;
+  resetTokenExpiration: Date;
   otp:number;
   otpExp:Date;
   latitude?:number;
@@ -18,12 +21,14 @@ export interface IUser extends mongoose.Document {
   cart?: mongoose.Types.ObjectId;  
 };
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema<IUser>({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     salt: { type : String, required: true  },
+    resetToken: { type : String, default: "" },
+    resetTokenExpiration: { type : Date, default: Date.now() },
     phone: { type: String, required: true },
     address: { type: String, required: true },
     profilePicture: { type: String, default: "" }, 

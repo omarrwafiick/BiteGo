@@ -1,5 +1,5 @@
 import { IFoodItem } from "../models/fooditem.model";
-import { Length, IsString, IsNotEmpty, IsEmail, length } from 'class-validator';
+import { Length, IsString, IsNotEmpty, IsEmail } from 'class-validator';
 
 export class CreateVendorDto{
     @IsString()

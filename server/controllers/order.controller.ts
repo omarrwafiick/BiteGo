@@ -6,8 +6,10 @@ import { validate } from "class-validator";
 import { CreateOrderDto } from "../dto/order.dto";
 import { Order } from "../models/order.model";
 import { Vendor } from "../models/vendor.model";
+import { Transaction } from "../models/transaction.model";
 
 export const createOrder = async (req: Request, res: Response): Promise<void> => { 
+   
     try {   
         const user = req.user;
 
@@ -22,31 +24,36 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
             res.status(400).json({ success: false, message: 'User was not found'});
             return;
         };        
-
+ 
         const orderData = plainToClass(CreateOrderDto, req.body);
         const errors = await validate(orderData, { skipMissingProperties: false });
         if(errors.length > 0){
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
         };       
+    
+        const { transactionId, userId, vendorId, items, remarks, deliveryId, appliedOffers, readyTime } = orderData;
         
-        const orderId = generateOrderID();
+        const transaction = await Transaction.findById(transactionId);
 
-        const { userId, vendorId, items, totalAmount, status, paymentMethod, remarks, deliveryId, appliedOffers, offerId, readyTime } = orderData;
+        if(!transaction && !transaction?.status){
+            res.status(404).json({ success: false, message: 'Transaction was not found/completed' });
+            return;
+        };       
+ 
+        const orderId = generateOrderID();
 
         const newOrder = await Order.create({
             id: orderId,
             userId: userId,
             vendorId: vendorId,
             items: items,
-            totalAmount: totalAmount,
-            status: status,
-            paymentMethod: paymentMethod,
+            totalAmount: transaction.orderValue, 
             remarks: remarks,
             deliveryId: deliveryId,
-            appliedOffers: appliedOffers,
-            offerId: offerId,
-            readyTime : readyTime
+            appliedOffers: appliedOffers, 
+            readyTime : readyTime,
+            status: "Preparing"
         });
 
         const orderResult = await newOrder.save();
@@ -167,9 +174,8 @@ export const updateVendorOrder = async (req: Request, res: Response): Promise<vo
             res.status(404).json({ success: false, message: 'No order was found'});
             return;
         }
-        const { status, remarks, readyTime } = req.body;
-  
-        order.status = status;
+        const { remarks, readyTime } = req.body;
+   
         order.remarks = remarks;
         order.readyTime = readyTime;
 

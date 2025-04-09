@@ -11,17 +11,7 @@ export class CreateOrderDto {
 
     @IsString() 
     @IsNotEmpty()
-    items: Items;
-
-    totalAmount: number;
-
-    @IsString()
-    @IsNotEmpty()
-    status: "Pending" | "Preparing" | "Out for Delivery" | "Delivered";
-
-    @IsString()
-    @IsNotEmpty()
-    paymentMethod: "Card" | "Strip" | "Cash"; 
+    items: Items; 
 
     @IsString()
     @IsNotEmpty()
@@ -32,14 +22,18 @@ export class CreateOrderDto {
     deliveryId: string; 
 
     @IsNotEmpty()
-    appliedOffers: boolean;
+    appliedOffers: boolean; 
 
     @IsString()
     @IsNotEmpty()
-    offerId: string;
+    transactionId: string;
     
     @IsNotEmpty()
     readyTime: number;
+
+    @IsNotEmpty()
+    status: string;
+    
 }
 
 class Items{

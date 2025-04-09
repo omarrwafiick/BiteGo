@@ -1,8 +1,8 @@
 import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { VendorPayloadDto } from '../dto/vendor.dto';
-import { Request } from "express";
+import jwt from 'jsonwebtoken'; 
+import { Request, Response } from "express";
 import { AuthPayload } from '../dto/auth.dto';
+import { randomBytes } from 'crypto';
 
 export const GenerateSalt = async () => await bcryptjs.genSalt()
 
@@ -25,3 +25,21 @@ export const ValidateSignature = (req: Request) => {
 export const generateOTP = (): number => Math.floor(100000 + Math.random() * 900000);
 
 export const generateOrderID = (): string =>  generateOTP().toString();
+
+export const setCookie = (res: Response, token: string) : void => { 
+    res.cookie("token", token, {
+        httpOnly: true,        
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict",     
+        maxAge: 7 * 24 * 60 * 60 * 1000 
+    }); 
+};
+
+export const clearCookie = (res: Response): void =>{
+    res.clearCookie('token');
+};
+
+export const  generateOfferCode = (): string => randomBytes(length).toString('hex').slice(0, length).toUpperCase();
+
+ 
+  

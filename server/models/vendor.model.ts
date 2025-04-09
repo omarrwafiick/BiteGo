@@ -3,13 +3,15 @@ import { CreateVendorDto } from "../dto/vendor.dto";
 
 interface IVendor extends Document, CreateVendorDto{
     salt: string;  
+    resetToken: string;
+    resetTokenExpiration: Date;
     profilePicture?: string;  
     serviceAvailable: boolean;   
     rating?: number; createdAt: Date;
     updatedAt: Date;  
 };
  
-const VendorSchema = new Schema({ 
+const VendorSchema = new Schema<IVendor>({ 
     name:{ type : String, required: true },
     ownerName:{ type : String, required: true }, 
     pinCode:{ type : String, required: true },
@@ -18,6 +20,8 @@ const VendorSchema = new Schema({
     email:{ type : String, required: true, unique: true },
     password:{ type : String, required: true },
     salt: { type : String, required: true  },
+    resetToken: { type : String, default: "" },
+    resetTokenExpiration: { type : Date, default: Date.now() },
     profilePicture: { type: String, default: "" }, 
     serviceAvailable: { type : Boolean, required: true  }, 
     rating:  { type : Number },  
