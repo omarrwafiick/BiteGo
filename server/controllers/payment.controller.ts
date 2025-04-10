@@ -30,18 +30,19 @@ export const addUserPayment = async (req: Request, res: Response) : Promise<void
 
         const { amount, paymentMode, offerId, vendorId, orderId } = req.body as CreatePaymentDto;
 
-        let totalAmount: number = Number(amount);
+        let netAmount: number = Number(amount);
         const offer = await Offer.findById(offerId);
         if(offer && offer.isActive){
-            totalAmount = totalAmount - (totalAmount * offer.discountPercentage)
+            netAmount = netAmount - (netAmount * offer.discountPercentage)
         }; 
 
         const newTransaction = await Transaction.create({
             userId: isUser.id,
             vendorId:vendorId,
             orderId: orderId,
-            offerId: offerId || 0,
-            orderValue: totalAmount , 
+            offerId: offerId || 0, 
+            orderTotalValue: amount,
+            orderNetValue: netAmount,
             paymentMethod: paymentMode, 
             status: true
         });

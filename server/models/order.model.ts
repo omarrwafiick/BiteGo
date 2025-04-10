@@ -8,12 +8,12 @@ export interface IOrder extends mongoose.Document {
       quantity: number; 
       price: number;  
     }[];
-    totalAmount: number;  
+    totalAmount: number;   
     remarks: string;
     deliveryId: mongoose.Schema.Types.ObjectId;
     appliedOffers: boolean; 
     readyTime: number;
-    status: "Pending" | "Preparing" | "Out for Delivery" | "Delivered";
+    status: "Pending" | "Preparing" | "Out for Delivery" | "Delivered" | "Cancelled";
 }
 
 const OrderSchema = new Schema<IOrder>({
@@ -26,12 +26,12 @@ const OrderSchema = new Schema<IOrder>({
         price: { type: Number, required: true },
       }
     ],
-    totalAmount: { type: Number, required: true },
+    totalAmount: { type: Number, required: true }, 
     remarks:  { type: String },
     deliveryId:  { type: mongoose.Schema.Types.ObjectId, ref: "Delivery" },
     appliedOffers:  { type: Boolean , default: false}, 
     readyTime:  { type: Number },
-    status: { type: String, enum: ["Pending", "Preparing", "Out for Delivery", "Delivered"], default: "Pending" },
+    status: { type: String, enum: ["Pending", "Preparing", "Out for Delivery", "Delivered", "Cancelled"], default: "Pending" },
     }, {
       toJSON:{
           transform(doc, ret){ 

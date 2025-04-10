@@ -1,11 +1,12 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute, CartRoutes} from '../routes/index.routes'; 
+import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute, CartRoutes, MainRoutes} from '../routes/index.routes'; 
 import { ConnectDB } from "../config/dbConnections.cofig";
 import  rateLimiter from 'express-rate-limit'; 
 import path from "path";
 import { OfferRoutes } from "../routes/offers.route";
 import { PaymentRoutes } from "../routes/payment.route";
+import { DeliveryRoutes } from "../routes/delivery.routes";
 
 const app = express(); 
 require('dotenv').config();
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use('images/', express.static(path.join(__dirname, 'images'))) 
 
+app.use(`${String(process.env.MAIN_URL)}`, MainRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.ADMIN_URL)}`, AdminRoutes); 
 app.use(`${String(process.env.MAIN_URL)+String(process.env.VENDOR_URL)}`, VendorRoutes); 
 app.use(`${String(process.env.MAIN_URL)+String(process.env.USER_URL)}`, UserRoutes);
@@ -29,6 +31,7 @@ app.use(`${String(process.env.MAIN_URL)+String(process.env.ORDER_URL)}`, OrderRo
 app.use(`${String(process.env.MAIN_URL)+String(process.env.CART_URL)}`, CartRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.OFFER_URL)}`, OfferRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.PAYMENT_URL)}`, PaymentRoutes);
+app.use(`${String(process.env.MAIN_URL)+String(process.env.DELIVERY_URL)}`, DeliveryRoutes);
 
 app.listen(process.env.PORT_NUMBER, async () => {
     await ConnectDB();

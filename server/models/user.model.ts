@@ -1,5 +1,4 @@
-import mongoose, { Schema } from "mongoose"; 
-import { number } from "zod";
+import mongoose, { Schema } from "mongoose";  
 
 export interface IUser extends mongoose.Document {
   firstName: string;

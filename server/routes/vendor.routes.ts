@@ -1,21 +1,22 @@
 import express from "express";
-import { createVendor, getVendorByID, getVendors, getVendorProfile, updatetVendorProfile, updateVendorService } from '../controllers/vendors.controller'
+import { createVendor, getVendorProfile, updatetVendorProfile, updateVendorLocation, updateVendorService } from '../controllers/vendors.controller'
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
+import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware"; 
 
 const router = express.Router(); 
- 
-router.post("/", createVendor); 
 
-router.use(ValidateSignatureMiddleWare);
+router.post("/signup", createVendor);   
 
-router.get("/", getVendors); 
+router.use(ValidateSignatureMiddleWare); 
 
-router.get("/:id", getVendorByID);
+router.use(RoleBasedAuthentication(String(process.env.VENDOR)));
 
 router.get("/profile", getVendorProfile);
 
 router.patch("/profile", updatetVendorProfile);
 
 router.patch("/service", updateVendorService);
+
+router.patch("/location", updateVendorLocation);
 
 export { router as VendorRoutes };

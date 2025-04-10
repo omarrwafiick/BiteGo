@@ -1,19 +1,27 @@
-import express from "express";  
-import { uploadUserImage } from "../controllers/main.controller"; 
+import express from "express";   
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
-import { editProfile, getProfile, requestOtp, verifyAccount } from "../controllers/users.controller";
+import { CreateUser, editUserProfile, getUserProfile, requestOtp, updateUserLocation, verifyUserAccount } from "../controllers/users.controller";
+import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
+import { createOrder } from "../controllers/order.controller";
+
 const router = express.Router();  
 
-router.use(ValidateSignatureMiddleWare);
+router.post("/signup", CreateUser);
 
-router.patch("/verify-account", verifyAccount);
+router.use(ValidateSignatureMiddleWare); 
+
+router.use(RoleBasedAuthentication(String(process.env.USER))); 
+
+router.post("/user", createOrder); 
+
+router.patch("/verify-account", verifyUserAccount);
 
 router.get("/otp", requestOtp);
 
-router.get("/profile", getProfile);
+router.get("/profile", getUserProfile);
 
-router.patch("/profile", editProfile);
+router.patch("/profile", editUserProfile); 
 
-router.post("/uploadimage/:id", uploadUserImage);
+router.patch("/location", updateUserLocation);
  
 export { router as UserRoutes };

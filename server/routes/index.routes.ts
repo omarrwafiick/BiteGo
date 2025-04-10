@@ -4,3 +4,8 @@ export * from './user.routes';
 export * from './fooditem.route';
 export * from './order.routes';
 export * from './cart.route';
+export * from './delivery.routes';
+export * from './auth.route';
+export * from './offers.route';
+export * from './payment.route';
+export * from './main.routes';

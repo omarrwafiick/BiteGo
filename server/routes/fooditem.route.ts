@@ -3,18 +3,21 @@ import { addFoodItem, getFoodItems, getFoodAvailable, getFoodIn30Minute, getRest
 import imageStorage from "../middlewares/imageStorage.middleware";
 import multer from "multer";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
+import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 
 const router = express.Router(); 
 
-router.use(ValidateSignatureMiddleWare);
+const uploadImage = multer({ storage: imageStorage }).array('images',5);
 
-const uploadImage = multer({ storage: imageStorage }).array('images',10);
+router.use(ValidateSignatureMiddleWare);
+ 
+router.use(RoleBasedAuthentication(String(process.env.VENDOR)));
 
 router.post("/", uploadImage, addFoodItem);
 
-router.patch("/", uploadImage);
-
 router.get("/", getFoodItems);  
+
+router.use(RoleBasedAuthentication(String(process.env.USER)));
 
 router.get("/:pincode", getFoodAvailable);
 

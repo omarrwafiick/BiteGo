@@ -8,13 +8,11 @@ declare global{
             user?:AuthPayload
         }
     }
-};
+}; 
 
 export const ValidateSignatureMiddleWare = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     const validate = await ValidateSignature(req);
     if(validate) next();
- 
     else res.status(401).json({success: false, message: "User is not authenticated"});
-    
     return;
 };

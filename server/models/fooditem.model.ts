@@ -1,7 +1,12 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { CreateFoodItemDto } from "../dto/foodItem.dto";
+import mongoose, { Schema, Document } from "mongoose"; 
 
-export interface IFoodItem extends Document, CreateFoodItemDto {
+export interface IFoodItem extends Document { 
+  name: string;
+  description: string;
+  price: number;
+  category: "Fast Food" | "Dessert" | "Beverage" | "Main Course";
+  available: boolean;
+  readyTime: number;
   vendorId: mongoose.Types.ObjectId;
   images: string[]; 
   rating: number;
@@ -9,7 +14,7 @@ export interface IFoodItem extends Document, CreateFoodItemDto {
 
 const FoodItemSchema = new Schema<IFoodItem>({
   vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
-  name: { type: String, required: true },
+  name: { type: String, required: true }, 
   description: { type: String },
   price: { type: Number, required: true },
   category: { type: String, enum: ["Fast Food", "Dessert", "Beverage", "Main Course"] },

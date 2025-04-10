@@ -9,5 +9,4 @@ const imageStorage = multer.diskStorage({
   },
 });
 
-
 export default imageStorage;

@@ -38,10 +38,5 @@ export class UpdateUserDto {
 
   @IsString()
   address: string; 
-};
-
-export interface UserPayloadDto{
-  id:string;
-  email:string;
-  verified:boolean;
-};
+}; 
+ 

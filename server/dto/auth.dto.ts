@@ -1,6 +1,11 @@
-import { VendorPayloadDto } from "./vendor.dto";
-import { UserPayloadDto } from "./user.dto";
-
-export type AuthPayload = VendorPayloadDto | UserPayloadDto;
+ 
+export type AuthPayload = LoginPayloadDto;
 
 
+export interface LoginPayloadDto{
+    id:string;
+    email:string;
+    name:string; 
+    role:string; 
+    verified:boolean;   
+}

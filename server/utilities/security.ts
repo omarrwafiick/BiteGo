@@ -13,11 +13,11 @@ export const validatePassword = async (password:string, dbPassword:string, salt:
 export const GenerateSignature = (payload: AuthPayload) => jwt.sign(payload, String(process.env.JWT_SECRET), {expiresIn: '1d'});
 
 export const ValidateSignature = (req: Request) => {
-    const token = req.get("Authorization"); 
+    const token = req.cookies['token']; 
     if(token){ 
         const payload = jwt.verify(token.split(" ")[1], String(process.env.JWT_SECRET)) as AuthPayload;
         req.user = payload;
-        return true;
+        return true; 
     }
     return false;
 };

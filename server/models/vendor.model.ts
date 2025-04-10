@@ -1,14 +1,26 @@
-import mongoose, { Schema, Document } from "mongoose";
-import { CreateVendorDto } from "../dto/vendor.dto";
+import mongoose, { Schema, Document } from "mongoose"; 
+import { IFoodItem } from "./fooditem.model";
 
-interface IVendor extends Document, CreateVendorDto{
+interface IVendor extends Document{
+    name:string; 
+    ownerName:string;  
+    pinCode:string; 
+    address:string; 
+    phone:string; 
+    email:string; 
+    password:string;
+    menu: IFoodItem[];
+    orders: [];
+    isApproved: boolean;
     salt: string;  
     resetToken: string;
     resetTokenExpiration: Date;
     profilePicture?: string;  
     serviceAvailable: boolean;   
     rating?: number; createdAt: Date;
-    updatedAt: Date;  
+    updatedAt: Date;   
+    latitude?:number;
+    longtude?:number;
 };
  
 const VendorSchema = new Schema<IVendor>({ 
@@ -27,7 +39,9 @@ const VendorSchema = new Schema<IVendor>({
     rating:  { type : Number },  
     menu: [{ type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
-    isApproved: { type: Boolean, default: false }
+    isApproved: { type: Boolean, default: false },
+    latitude: { type: Number, default: 0 }, 
+    longtude: { type: Number, default: 0 }
 }, {
     toJSON:{
         transform(doc, ret){

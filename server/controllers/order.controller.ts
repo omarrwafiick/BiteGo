@@ -7,9 +7,10 @@ import { CreateOrderDto } from "../dto/order.dto";
 import { Order } from "../models/order.model";
 import { Vendor } from "../models/vendor.model";
 import { Transaction } from "../models/transaction.model";
+import { findVendor } from "../utilities/helper.methods";
+import { Delivery } from "../models/delivery.model";
 
 export const createOrder = async (req: Request, res: Response): Promise<void> => { 
-   
     try {   
         const user = req.user;
 
@@ -36,10 +37,16 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
         
         const transaction = await Transaction.findById(transactionId);
 
-        if(!transaction && !transaction?.status){
-            res.status(404).json({ success: false, message: 'Transaction was not found/completed' });
+        if(!transaction?.status){  
+            res.status(404).json({ success: false, message: 'Transaction was not found or completed' });
+            return; 
+        };        
+
+        const vendor = await findVendor(vendorId);
+        if(!vendor){
+            res.status(404).json({ success: false, message: 'No vendor was found'});
             return;
-        };       
+        }
  
         const orderId = generateOrderID();
 
@@ -48,7 +55,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
             userId: userId,
             vendorId: vendorId,
             items: items,
-            totalAmount: transaction.orderValue, 
+            totalAmount: transaction.orderNetValue, 
             remarks: remarks,
             deliveryId: deliveryId,
             appliedOffers: appliedOffers, 
@@ -65,9 +72,15 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 
         profile.orderHistory?.push(newOrder.id);
         await profile.save();
-  
-        res.status(200).json({ success: true, message: "Order is created successfully"});
 
+        const deliveryResult = await assignOrderDelivery(newOrder.id, vendorId, Number(vendor.longtude), Number( vendor.latitude), vendor.pinCode);
+  
+        if(!deliveryResult){
+            res.status(400).json({ success: false, message: 'No delivery was found please contact support'});
+            return;
+        }
+
+        res.status(200).json({ success: true, message: "Order is created successfully"});
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
@@ -182,6 +195,49 @@ export const updateVendorOrder = async (req: Request, res: Response): Promise<vo
         await order.save();
 
         res.status(200).json({ success: true, message: 'Order is updated successfully' });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+    return;
+};
+
+export const assignOrderDelivery = async (orderId:string, vendorId:string, longtude: number, latitude: number, pinCode: string): Promise<boolean> => { 
+    try {    
+        const availableDeliveries= await Delivery.find({pincode: pinCode, isApproved: true, status: true});
+
+        if(availableDeliveries.length === 0) return false;
+
+        const order = await Order.findById(orderId);
+
+        if(!order) return false;
+        
+        order.deliveryId = availableDeliveries[0].id;
+
+        await order?.save();
+
+    } catch (error) { 
+        return false;
+    }
+    return true;
+};
+
+export const cancelOrder = async (req: Request, res: Response): Promise<void> => { 
+    try {    
+        const orderId = req.params.id;
+        const order = await Order.findOne({id: orderId});
+        
+        if(!order){
+            res.status(404).json({ success: false, message: 'No order was found'});
+            return;
+        } 
+   
+        order.status = "Cancelled"; 
+
+        //notify delivery
+        await order.save();
+
+        res.status(200).json({ success: true, message: 'Order is cancelled successfully' });
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });

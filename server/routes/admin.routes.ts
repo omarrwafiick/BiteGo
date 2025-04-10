@@ -1,28 +1,33 @@
-import express, { Request, Response, NextFunction } from "express";
-import { createAdmin } from '../controllers/admins.controller' 
-import { login } from "../controllers/auth.controller";
+import express from "express";  
+import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
+import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
+import { approveAccount, createAdmin, deleteEntityById, deleteOrder, getEntity, getEntityById, getOrderById, getOrders, getTransactionById, getTransactions } from "../controllers/admins.controller";
 
 const router = express.Router();
+
+router.post("/signup", createAdmin);
  
+router.use(ValidateSignatureMiddleWare);
  
-router.post("/login", login);  // Admin login
-//createadmin
-// router.get("/users", getUsers);  // List all users
-// router.get("/user/:id", getUserDetails);  // Get specific user
-// router.patch("/user/:id", updateUser);  // Update user info
-// router.delete("/user/:id", deleteUser);  // Delete user
+router.use(RoleBasedAuthentication(String(process.env.ADMIN)));
 
-// router.get("/products", getProducts);  // List all products
-// router.get("/product/:id", getProductDetails);  // Get specific product
-// router.post("/product", createProduct);  // Add new product
-// router.patch("/product/:id", updateProduct);  // Update product
-// router.delete("/product/:id", deleteProduct);  // Delete product
+router.get("/entity", getEntity); 
 
-// router.get("/orders", getOrders);  // List all orders
-// router.get("/order/:id", getOrderDetails);  // Get order details
-// router.patch("/order/:id", updateOrderStatus);  // Update order status
-// router.delete("/order/:id", cancelOrder);  // Cancel order
+router.get("/entity/:id", getEntityById); 
 
+router.delete("/entity/:id", deleteEntityById);  
+
+router.post("/transactions", getTransactions);
+
+router.post("/transaction/:id", getTransactionById);
+
+router.post("/approve-account", approveAccount); 
+
+router.get("/order", getOrders); 
+
+router.get("/order/:id", getOrderById); 
+ 
+router.delete("/order/:id", deleteOrder);  
 
 export { router as AdminRoutes };
 
