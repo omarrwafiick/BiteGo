@@ -1,11 +1,23 @@
 import { IFoodItem } from "../models/fooditem.model";
 import { Length, IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import { IOrder } from "../models/order.model";
 
-export class CreateVendorDto{
+class MainEntity{
+    @IsString()
+    @IsNotEmpty()
+    phone:string;
+
+    @IsString()
+    @IsEmail()
+    email:string;
+
     @IsString()
     @IsNotEmpty()
     name:string;
 
+    menu: IFoodItem[];
+}
+export class CreateVendorDto extends MainEntity{ 
     @IsString()
     @IsNotEmpty()
     ownerName:string; 
@@ -16,41 +28,19 @@ export class CreateVendorDto{
 
     @IsString()
     @IsNotEmpty()
-    address:string;
-
-    @IsString()
-    @IsNotEmpty()
-    phone:string;
-
-    @IsString()
-    @IsEmail()
-    email:string;
+    address:string; 
 
     @IsString()
     @Length(6,12)
     password:string;
-    
-    menu: IFoodItem[];
-
-    orders: [];
+      
+    orders: IOrder[];
 
     isApproved: boolean;
 }
 
 
-export class UpdateVendorDto{
-    @IsString()
-    @IsNotEmpty()
-    phone:string;
-
-    @IsString()
-    @IsEmail()
-    email:string;
-
-    @IsString()
-    @IsNotEmpty()
-    name:string;
-
-    menu: [];
+export class UpdateVendorDto extends MainEntity{
+    
 }
 

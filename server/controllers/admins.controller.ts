@@ -8,8 +8,9 @@ import { UpdateEntityDto, CreateAdminDto } from "../dto/admin.dto";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { GenerateSalt, hashingPassword } from "../utilities/security";
-import { findAdmin, findDelivery, findUser, findVendor } from "../utilities/helper.methods";
+import { findDelivery, findVendor } from "../utilities/helper.methods";
 import { Order } from "../models/order.model";
+import { checkUser } from "../utilities/getUser";
 
 export const createAdmin = async (req: Request, res: Response): Promise<void> => {
      try {   
@@ -39,8 +40,8 @@ export const createAdmin = async (req: Request, res: Response): Promise<void> =>
                 salt: salt
             });
     
-            if(!result){
-                res.status(404).json({ success: false, message: 'Nothing was found'});
+            if(!result || !result._id){
+                res.status(400).json({ success: false, message: 'Admin could not be created'});
                 return;
             }   
     
@@ -63,31 +64,30 @@ export const getEntityById = async (req: Request, res: Response) : Promise<void>
         if(errors.length > 0){
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
-        };
+        }; 
 
-        const entity = type === process.env.USER 
-                    ? await findUser(id) 
-                    : type === process.env.ADMIN 
-                    ? await findAdmin(id) 
-                    : type === process.env.DELIVERY 
-                    ? await findDelivery(id)
-                    : await findVendor(id) ;
-
-        if(!entity) {
-            res.status(404).json({success:false, message: "Nothing was found"});
+        const entity= await checkUser(req, res, type);   
+                
+        if(!entity){
+            res.status(404).json({ success: false, message: `${type} was not found`});
             return;
-        } 
+        };      
 
         res.status(200).json({success:true, data: entity}); 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
     }
     return;
-};
+}; 
 
 export const getEntity= async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const { type } = req.body; 
+        const { type } = req.body;
+        
+        if(typeof type !== "string"){
+            res.status(400).json({success:false, message: "Type is not valid"});
+            return;
+        }
 
         const entity = type === process.env.USER 
                     ? await User.find() 
@@ -128,7 +128,7 @@ export const deleteEntityById = async (req: Request, res: Response) : Promise<vo
                     ? await Delivery.findByIdAndDelete(id) 
                     : await Vendor.findByIdAndDelete(id) ;
 
-        if(!entity) {
+        if(!entity?.isModified()) {
             res.status(404).json({success:false, message: "No entity was found"});
             return;
         }  
@@ -195,6 +195,12 @@ export const approveAccount = async (req: Request, res: Response):Promise<void> 
         }  
 
         entity.isApproved = true;
+        const result = await entity.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected' });
+            return;
+        } 
 
         res.status(200).json({ success: true, message: 'Account is approved by admin' });
 
@@ -244,12 +250,12 @@ export const deleteOrder = async (req: Request, res: Response):Promise<void> => 
         const orderId = req.params.id;
         const order = await Order.findByIdAndDelete(orderId);
   
-        if(!order){
+        if(!order?.isModified()){
             res.status(404).json({ success: false, message: 'Nothing was found'});
             return;
         }    
 
-        res.status(200).json({ success: true, message: "Order was deleted successfully" });
+        res.status(204).json({ success: true, message: "Order was deleted successfully" });
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });

@@ -5,15 +5,16 @@ import { validate } from "class-validator";
 import { CreateOfferDto, UpdateOfferDto } from "../dto/offer.dto";
 import { Offer } from "../models/offer.model";
 import { generateOfferCode } from "../utilities/security";
+import { checkUser } from "../utilities/getUser";
 
 export const getVendorOffers = async (req: Request, res: Response) : Promise<void> => {
     try { 
-        const user = req.user;
-        
-        if(!user){
-             res.status(401).json({ success: false, message: 'Unauthorized access' });
-             return;
-        }
+       const vendor = await checkUser(req, res, String(process.env.VENDOR));
+       
+       if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }        
 
         const offers = await Offer.find().populate('vendors');  
 
@@ -22,7 +23,7 @@ export const getVendorOffers = async (req: Request, res: Response) : Promise<voi
             offers.map((offer)=>{
                 if(offer.vendors){
                     offer.vendors.map(vendor => {
-                        if(String(vendor) === user.id){
+                        if(String(vendor) === String(vendor.id)){
                             vendorOffers.push(offer);
                         }
                     });
@@ -45,14 +46,12 @@ export const addVendorOffers = async (req: Request, res: Response) : Promise<voi
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
         };
-        const user = req.user;
-        
-        if(!user){
-             res.status(401).json({ success: false, message: 'Unauthorized access' });
-             return;
-        }
-
-        const vendor = await Vendor.findById(user.id);
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+       
+       if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }    
 
         const { pinCode, discountPercentage, validFrom, validTo, isActive } = req.body as CreateOfferDto;
 
@@ -67,6 +66,11 @@ export const addVendorOffers = async (req: Request, res: Response) : Promise<voi
         });
 
         await newOffer.save();
+
+        if(!newOffer || !newOffer._id){
+            res.status(404).json({ success: false, message: 'Offer could not be created'});
+            return;
+        } 
 
         res.status(201).json({success:true, message: "Offer was created successfully"});  
     } catch (error) {
@@ -90,14 +94,22 @@ export const updateOffers = async (req: Request, res: Response) : Promise<void> 
 
         const offer = await Offer.findById(offetId);
 
-        if(offer){ 
-            offer.discountPercentage = discountPercentage;
-            offer.validTo = validTo;
-            offer.isActive = isActive;
+        if(!offer){ 
+            res.status(404).json({ success: false, message: 'Offer was not found'});
+            return;
         };
 
-        await offer?.save();
+        offer.discountPercentage = discountPercentage;
+        offer.validTo = validTo;
+        offer.isActive = isActive;
 
+        const offerResult = await offer.save();
+
+        if (!offerResult.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
+ 
         res.status(200).json({success:true, message: "Offer was updated successfully"});  
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
@@ -107,24 +119,31 @@ export const updateOffers = async (req: Request, res: Response) : Promise<void> 
 
 export const removeVendorFromOffer = async (req: Request, res: Response) : Promise<void> => {
     try {
-        const user = req.user;
-        
-        if(!user){
-             res.status(401).json({ success: false, message: 'Unauthorized access' });
-             return;
-        }
-
-        const vendor = await Vendor.findById(user.id);
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+       
+       if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        } 
+ 
         const offerId = req.params.id;
         const offer = await Offer.findById(offerId);
         
-        if (offer) { 
-            offer.vendors = offer.vendors.filter(vendorId => !vendorId === vendor?.id);
+        if (!offer || !offer.vendors) { 
+            res.status(404).json({ success: false, message: 'Offer was not found' });
+            return;
         };
 
-        await offer?.save();
+        offer.vendors = offer.vendors.filter(vendorId => !vendorId === vendor?.id);
 
-        res.status(200).json({success:true, message: "Offer was updated successfully"});  
+        const offerResult = await offer?.save();
+
+        if (!offerResult.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
+
+        res.status(200).json({success:true, message: "Vendor was removed from offer successfully"});  
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
     }

@@ -7,7 +7,7 @@ export interface ITransaction extends mongoose.Document {
   offerId: mongoose.Schema.Types.ObjectId;
   orderTotalValue:number;
   orderNetValue:number;
-  status: boolean; 
+  status?: boolean; 
   paymentMethod: "Card" | "Strip" | "Cash"; 
 }
 

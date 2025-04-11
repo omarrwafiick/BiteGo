@@ -4,8 +4,8 @@ import { Request, Response } from "express";
 import { CreateDeliveryDto, UpdateDeliveryDto } from "../dto/delivery.dto";
 import { Delivery } from "../models/delivery.model";
 import { GenerateSalt, hashingPassword } from "../utilities/security";
-import { UpdateLocationDto } from "../dto/main.dto";
-import { findDelivery } from "../utilities/helper.methods";
+import { UpdateLocationDto } from "../dto/main.dto"; 
+import { checkUser } from "../utilities/getUser";
 
 
 export const CreateDelivey = async (req: Request, res: Response): Promise<void> => {
@@ -29,7 +29,7 @@ export const CreateDelivey = async (req: Request, res: Response): Promise<void> 
         const salt = await GenerateSalt();
         const hashedPassword = await hashingPassword(password, salt); 
  
-        const result = await Delivery.create({
+        const newDelivery = await Delivery.create({
             email: email,
             password: hashedPassword,
             driverName: driverName, 
@@ -40,7 +40,12 @@ export const CreateDelivey = async (req: Request, res: Response): Promise<void> 
             vehicleType: vehicleType
         });
  
-        await result.save(); 
+        await newDelivery.save(); 
+
+        if(!newDelivery || !newDelivery._id){
+            res.status(400).json({ success: false, message: 'Delivery could not be created'});
+            return;
+        }
 
         res.status(201).json({ success: true, message: "Delivery account was created successfully" });
 
@@ -51,20 +56,13 @@ export const CreateDelivey = async (req: Request, res: Response): Promise<void> 
 };
 
 export const getDeliveryProfile = async (req: Request, res: Response): Promise<void> => {
-     try {   
-            const user = req.user;
-    
-            if(!user){
-                res.status(401).json({ success: false, message: 'Unauthorized access'});
-                return;
-            };
-    
-            const profile = await Delivery.findById(user.id);
+     try {     
+            const profile = await checkUser(req, res, String(process.env.DELIVERY))
     
             if(!profile){
                 res.status(404).json({ success: false, message: 'User was not found'});
                 return;
-            };
+            }; 
       
             res.status(200).json({ success: true, profile});
     
@@ -74,21 +72,14 @@ export const getDeliveryProfile = async (req: Request, res: Response): Promise<v
         return;
 };
 
-export const editDeliveryProfile = async (req: Request, res: Response): Promise<void> => {
+export const updateDeliveryProfile = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const user = req.user;
-
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        }; 
-
-        const profile = await Delivery.findById(user.id);
-
+        const profile = await checkUser(req, res, String(process.env.DELIVERY))
+    
         if(!profile){
-            res.status(404).json({ success: false, message: 'Delivery was not found'});
+            res.status(404).json({ success: false, message: 'User was not found'});
             return;
-        };
+        };     
  
         const deliveryData = plainToClass(UpdateDeliveryDto, req.body);
         const errors = await validate(deliveryData, { skipMissingProperties: false });
@@ -97,7 +88,7 @@ export const editDeliveryProfile = async (req: Request, res: Response): Promise<
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
         };
-        
+
         const { driverName, phone, address, pincode, vehicleType, estimatedTime, isApproved, latitude, longtude } = deliveryData;
         profile.driverName = driverName;
         profile.pincode =pincode;
@@ -108,10 +99,15 @@ export const editDeliveryProfile = async (req: Request, res: Response): Promise<
         profile.latitude =latitude;
         profile.longtude =longtude;
         if (vehicleType === "Bike" || vehicleType === "Car" || vehicleType === "Van") profile.vehicleType = vehicleType;
+ 
+        const result = await profile.save();
+         
+        if (!result.isModified()) {
+            res.status(400).json({ success: false, message: 'No changes detected' });
+            return ;
+        }
 
-        await profile.save();
-
-        res.status(200).json({ success: true, message:"Profile is updated successfully" });
+        res.status(200).json({ success: true, message: "Profile is updated successfully" });
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -121,17 +117,23 @@ export const editDeliveryProfile = async (req: Request, res: Response): Promise<
 
 export const updateDeliveyStatus = async (req: Request, res: Response) : Promise<void> =>  {
     try {  
-            const user = req.user;
-            if(!user) {   
-                res.status(404).json({success:false, message: "No delivery was found"});
+            const delivery = await checkUser(req, res, String(process.env.DELIVERY))
+        
+            if(!delivery){
+                res.status(404).json({ success: false, message: 'User was not found'});
+                return;
+            };     
+            
+            delivery.status = !delivery.status;
+
+            const result = await delivery.save();
+            
+            if (!result.isModified()){
+                res.status(400).json({ success: false, message: 'No changes detected' });
                 return;
             }
-            const delivery = await findDelivery(user.id);
-            if(delivery){
-                delivery.status = !delivery.status;
-                await delivery.save();
-                res.status(200).json({success:true, message: "Delivery status was updated successfully"});  
-            }
+            
+            res.status(200).json({success:true, message: "Delivery status was updated successfully"});  
             
         } catch (error) {
             res.status(500).json({ message: 'Internal server error'});
@@ -141,8 +143,9 @@ export const updateDeliveyStatus = async (req: Request, res: Response) : Promise
 
 export const updateDeliveryLocation = async (req: Request, res: Response): Promise<void> => {
     try {  
-            const user = req.user;
-            if(!user) {  
+            const delivery =await checkUser(req, res, String(process.env.DELIVERY));
+            
+            if(!delivery) {  
                 res.status(404).json({success:false, message: "No delivery was found"});
                 return;
             }
@@ -153,16 +156,19 @@ export const updateDeliveryLocation = async (req: Request, res: Response): Promi
                 res.status(400).json({ success: false, message: 'All fields are required', errors });
                 return;
             };
-            const { latitude, longtude } = deliveryData;
-            const delivery = await findDelivery(user.id);
-            if(delivery){
-                delivery.longtude = longtude;
-                delivery.latitude = latitude;
-                await delivery.save();
-                res.status(200).json({success:true, message: "Delivery location status was updated successfully"});  
+            const { latitude, longtude } = deliveryData;  
+
+            delivery.longtude = longtude;
+            delivery.latitude = latitude;
+
+            const result = await delivery.save();
+
+            if (!result.isModified()){
+                res.status(400).json({ success: false, message: 'No changes detected'});
                 return;
             }
-            
+
+            res.status(200).json({success:true, message: "Delivery location status was updated successfully"});   
         } catch (error) {
             res.status(500).json({ message: 'Internal server error'});
         }

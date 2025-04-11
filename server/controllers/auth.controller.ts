@@ -6,7 +6,8 @@ import { User } from "../models/user.model";
 import { Admin } from "../models/admin.model";
 import Crypto from "crypto"; 
 import { Vendor } from "../models/vendor.model"; 
-import { Delivery } from "../models/delivery.model";
+import { Delivery } from "../models/delivery.model"; 
+import { checkUser } from "../utilities/getUser";
  
 export const login = async (req: Request, res: Response): Promise<void> => { 
     try {
@@ -31,17 +32,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        if (!( (exists as InstanceType<typeof Vendor>).isApproved || (exists as InstanceType<typeof Delivery>).isApproved || (exists as InstanceType<typeof User>).isVerified)) {
-            res.status(400).json({ success: false, message: "You can't login until admin approve your request or verify your account" });
-            return;
-        }
-
         const passwordValidation = await validatePassword(password, exists.password, String(exists.salt));
 
         if (!passwordValidation) {
             res.status(400).json({ success: false, message: 'Incorrect password' });
             return;
         }   
+
+        if (!( ('isApproved' in exists && exists.isApproved) || ('isVerified' in exists && exists.isVerified))){
+            res.status(400).json({ success: false, message: "You can't login until admin approves your request or verifies your account" });
+            return;
+        }
+
         const entity = type === process.env.USER 
             ? (exists as InstanceType<typeof User>) 
             : type === process.env.ADMIN 
@@ -71,8 +73,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         
         res.status(200).json({ success: true, vendor: exists });
 
-    } catch (error) {
-        console.error(error); 
+    } catch (error) { 
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
@@ -81,39 +82,30 @@ export const logOut = async (req: Request, res: Response): Promise<void> => {
     clearCookie(res);
     res.status(200).json({success: true, message: "Logged out successfully"});
     return;
-};
+}; 
 
 export const forgetPassword = async (req: Request, res: Response): Promise<void> => { 
-    try { 
-        const user = req.user;
-
+    try {   
         const type = req.params.type;
 
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        };
+        const profile= await checkUser(req, res, type);   
         
-        const profile =
-            type === process.env.USER 
-            ? await findUser(user.id) 
-            : type === process.env.ADMIN 
-            ? await findAdmin(user.id) 
-            : type === process.env.DELIVERY 
-            ? await findDelivery(user.id)
-            : await findVendor(user.id) ;
-
         if(!profile){
             res.status(404).json({ success: false, message: `${type} was not found`});
             return;
-        };
-        
+        }; 
+
         const resetToken = Crypto.randomBytes(20).toString("hex");
         const resetTokenExpiration = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
         profile.resetToken = resetToken;
         profile.resetTokenExpiration = resetTokenExpiration;
-        await profile.save(); 
+        const result = await profile.save();   
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(300).json({success: true, redirectTo: `${process.env.CLIENT_ADDRESS}/reset-password/${resetToken}`});
 
@@ -125,41 +117,35 @@ export const forgetPassword = async (req: Request, res: Response): Promise<void>
 };
 
 export const resetPassword = async (req: Request, res: Response): Promise<void> => { 
-    try { 
-        const user = req.user;
-
+    try {   
         const type = req.params.type;
 
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        };
+        const profile= await checkUser(req, res, type);   
         
-        const profile = type === process.env.USER 
-            ? await findUser(user.id) 
-            : type === process.env.ADMIN 
-            ? await findAdmin(user.id) 
-            : type === process.env.DELIVERY 
-            ? await findDelivery(user.id)
-            : await findVendor(user.id) ;
-
         if(!profile){
             res.status(404).json({ success: false, message: `${type} was not found`});
             return;
         };
+        
         const today = new Date(Date.now())
         const password  = req.body.password;  
-        const resetToken  = req.params.reset_token; 
+        const resetToken  = req.params.token; 
         if( profile.resetTokenExpiration && (today > profile.resetTokenExpiration || resetToken !== profile.resetToken) ){
             res.status(400).json({ success: false, message: 'Reset token is expired or incorrect'});
             return;
         }
+
         const hashedPassword = await hashingPassword(password, String(profile.salt));
 
         profile.password = hashedPassword;
         profile.resetToken = "";
         profile.resetTokenExpiration = today;
-        await profile.save();  
+        const result = await profile.save();  
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(200).json({success: true, message: "Password was reset successfully"});
     } catch (error) {
@@ -170,35 +156,20 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
 
 export const checkAuth = async (req: Request, res: Response): Promise<void> => { 
     try { 
-        const user = req.user;
-
         const type = req.params.type;
 
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        };
-        
-        const profile = type === process.env.USER 
-            ? await findUser(user.id) 
-            : type === process.env.ADMIN 
-            ? await findAdmin(user.id) 
-            : type === process.env.DELIVERY 
-            ? await findDelivery(user.id)
-            : await findVendor(user.id) ;
+        const profile= await checkUser(req, res, type);   
         
         if(!profile){
             res.status(404).json({ success: false, message: `${type} was not found`});
             return;
         };
 
-        if( !(profile as InstanceType<typeof User>).isVerified 
-            || !(profile as InstanceType<typeof Vendor>).isApproved 
-            || !(profile as InstanceType<typeof Delivery>).isApproved
-        ){
-            res.status(401).json({ success: false, message: `${type} is not approved or verified`});
+        if (!( ('isApproved' in profile && profile.isApproved) || ('isVerified' in profile && profile.isVerified))){
+            res.status(401).json({ success: false, message: "You can't login until admin approves your request or verifies your account" });
             return;
         }
+
         res.status(200).json({ success: true, authenticated: true});
 
     } catch (error) {

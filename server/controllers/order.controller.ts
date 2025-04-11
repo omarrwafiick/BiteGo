@@ -4,27 +4,21 @@ import { User } from "../models/user.model";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { CreateOrderDto } from "../dto/order.dto";
-import { Order } from "../models/order.model";
-import { Vendor } from "../models/vendor.model";
+import { Order } from "../models/order.model"; 
 import { Transaction } from "../models/transaction.model";
 import { findVendor } from "../utilities/helper.methods";
 import { Delivery } from "../models/delivery.model";
+import { checkUser } from "../utilities/getUser";
+import { notifyDelivery } from "../utilities/notification";
 
 export const createOrder = async (req: Request, res: Response): Promise<void> => { 
     try {   
-        const user = req.user;
-
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        };
-        
-        const profile = await User.findById(user.id);
-        
+        const profile = await checkUser(req, res, String(process.env.USER));
+               
         if(!profile){
-            res.status(400).json({ success: false, message: 'User was not found'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };        
+        }            
  
         const orderData = plainToClass(CreateOrderDto, req.body);
         const errors = await validate(orderData, { skipMissingProperties: false });
@@ -65,7 +59,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 
         const orderResult = await newOrder.save();
 
-        if(!orderResult){
+        if(!orderResult||!orderResult._id){
             res.status(400).json({ success: false, message: 'Order could not be created'});
             return;
         }
@@ -89,12 +83,12 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 
 export const getUserOrders = async (req: Request, res: Response): Promise<void> => { 
     try {   
-        const user = req.user;
-
+        const user = await checkUser(req, res, String(process.env.USER));
+               
         if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };
+        }  
  
         const orders = await User.findById(user.id).populate('orderHistory');
          
@@ -131,19 +125,12 @@ export const getUserOrderDetails= async (req: Request, res: Response): Promise<v
 
 export const getVendorOrders = async (req: Request, res: Response): Promise<void> => { 
     try {   
-        const vendor = req.user;
-
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+               
         if(!vendor){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };
-        
-        const profile = await Vendor.findById(vendor.id);
-        
-        if(!profile){
-            res.status(404).json({ success: false, message: 'Vendor was not found'});
-            return;
-        };         
+        }           
 
         const orders = await Order.find({vendorId: vendor.id}).populate('items.foodId');
         
@@ -192,7 +179,12 @@ export const updateVendorOrder = async (req: Request, res: Response): Promise<vo
         order.remarks = remarks;
         order.readyTime = readyTime;
 
-        await order.save();
+        const orderResult = await order.save();
+
+        if (!orderResult.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(200).json({ success: true, message: 'Order is updated successfully' });
 
@@ -214,7 +206,11 @@ export const assignOrderDelivery = async (orderId:string, vendorId:string, longt
         
         order.deliveryId = availableDeliveries[0].id;
 
-        await order?.save();
+        const orderResult = await order?.save();
+        
+        if (!orderResult.isModified()){ 
+            return false;
+        } 
 
     } catch (error) { 
         return false;
@@ -224,6 +220,20 @@ export const assignOrderDelivery = async (orderId:string, vendorId:string, longt
 
 export const cancelOrder = async (req: Request, res: Response): Promise<void> => { 
     try {    
+        const type = req.params.type;
+
+        if(type === process.env.DELIVERY){
+            res.status(403).json({ success: false, message: "Forbidden route" });
+            return 
+        }
+
+        const user = await checkUser(req, res, type);
+               
+        if(!user){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }    
+
         const orderId = req.params.id;
         const order = await Order.findOne({id: orderId});
         
@@ -234,8 +244,17 @@ export const cancelOrder = async (req: Request, res: Response): Promise<void> =>
    
         order.status = "Cancelled"; 
 
-        //notify delivery
-        await order.save();
+        const delivery = await Delivery.findById(order.deliveryId);
+        if(delivery){ 
+            await notifyDelivery("We notify you that the order of id ${} is cancelled, for more info contact support", delivery.phone);
+        }
+        
+        const orderResult = await order.save();
+
+        if (!orderResult.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(200).json({ success: true, message: 'Order is cancelled successfully' });
 

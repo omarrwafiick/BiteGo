@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateCartItem {
+  @IsString()
   @IsNotEmpty()
-  foodId: mongoose.Types.ObjectId;
-  @IsNotEmpty()
+  foodId: string; 
+  @IsNumber()
   quantity: number;
-  @IsNotEmpty()
+  @IsNumber() 
   price: number;
 } 

@@ -5,6 +5,7 @@ import { User } from "../models/user.model";
 import { CreateCartItem } from "../dto/cart.dto";
 import { Cart } from "../models/cart.model";
 import { FoodItem } from "../models/fooditem.model";
+import { findUser } from "../utilities/helper.methods";
 
 
 export const addToCart = async (req: Request, res: Response):Promise<void> => {
@@ -16,7 +17,7 @@ export const addToCart = async (req: Request, res: Response):Promise<void> => {
             return;
         };
         
-        const profile = await User.findById(user.id);
+        const profile = await findUser(user.id);
         
         if(!profile){
             res.status(404).json({ success: false, message: 'User was not found'});
@@ -42,19 +43,28 @@ export const addToCart = async (req: Request, res: Response):Promise<void> => {
         //user have a cart already
         if(profile.cart){  
             const userCart = await Cart.findById(profile.cart.id);
-            let itemExists = userCart?.items.find(i => i.foodId === foodItem.id);
-            if(itemExists){
-                itemExists.quantity = quantity;
-                itemExists.price += quantity * price;
-            } 
-            else{  
-                userCart?.items.push( {
-                    foodId: foodItem.id,
-                    quantity: quantity,
-                    price: price
-                });
-            };
-            await userCart?.save()
+            if(userCart?.items){
+                let itemExists = userCart?.items.find(i => i.foodId === foodItem.id);
+                if(itemExists){
+                    itemExists.quantity = quantity;
+                    itemExists.price += quantity * price;
+                } 
+                else{  
+                    userCart?.items.push( {
+                        foodId: foodItem.id,
+                        quantity: quantity,
+                        price: price
+                    });
+                };
+            }
+            
+            await userCart?.save();
+            if(!userCart?.isModified()){
+                res.status(400).json({ success: false, message: 'Cart could not be updated'});
+                return;
+            }
+            res.status(200).json({ success: true, message: "User Cart item is updated successfully"});
+            return;
         };
         
         //new cart to user
@@ -68,6 +78,11 @@ export const addToCart = async (req: Request, res: Response):Promise<void> => {
         });
 
         await newCart.save();
+
+        if(!newCart || !newCart._id){
+            res.status(400).json({ success: false, message: 'Cart could not be created'});
+            return;
+        }
 
         res.status(200).json({ success: true, message: "Cart item is added successfully"});
 
@@ -86,7 +101,7 @@ export const getCartItems = async (req: Request, res: Response):Promise<void> =>
             return;
         };
         
-        const profile = await User.findById(user.id);
+        const profile = await findUser(user.id);
         
         if(!profile){
             res.status(404).json({ success: false, message: 'User was not found'});
@@ -117,30 +132,37 @@ export const deleteCartItem = async (req: Request, res: Response): Promise<void>
             return;
         }
 
-        const profile = await User.findById(user.id);
+        const profile = await findUser(user.id);
         if (!profile) {
             res.status(404).json({ success: false, message: 'User was not found' });
             return;
         }
 
         const cart = await Cart.findOne({ userId: profile.id });
-        if (!cart) {
+        if (!cart ) {
             res.status(404).json({ success: false, message: 'Cart was not found' });
             return;
         }
 
         const itemId = req.params.id;
 
-        const itemIndex = cart.items.findIndex(i => i.foodId.toString() === itemId);
+        if(cart.items){ 
+            const itemIndex = cart.items.findIndex(i => i.foodId.toString() === itemId);
 
-        if (itemIndex === -1) {
-            res.status(404).json({ success: false, message: 'Item was not found' });
-            return;
+            if (itemIndex === -1) {
+                res.status(404).json({ success: false, message: 'Item was not found' });
+                return;
+            }
+    
+            cart.items.splice(itemIndex, 1);
         }
 
-        cart.items.splice(itemIndex, 1);
+        const result = await cart.save(); 
 
-        await cart.save();
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(200).json({ success: true, message: 'Cart item was removed successfully' });
 
@@ -174,6 +196,13 @@ export const clearCart = async (req: Request, res: Response):Promise<void> => {
         };
 
         cart.items = [];
+
+        const result = await cart.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(200).json({ success: true,  message: 'Cart is now empty'});
 

@@ -1,17 +1,15 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
-export interface IOffer extends Document {
-  code: string;
+export interface IOffer extends Document { 
   discountPercentage: number;
   pinCode: string;
   validFrom: Date;
   validTo: Date;
-  isActive: boolean; 
-  vendors: Types.ObjectId[];
+  isActive: boolean;  
+  vendors?: Types.ObjectId[];
 }
 
-const OfferSchema = new Schema<IOffer>({
-  code: { type: String, required: true, unique: true },
+const OfferSchema = new Schema<IOffer>({  
   discountPercentage: { type: Number, required: true },
   pinCode:{ type : String, required: true },
   validFrom: { type: Date, required: true },

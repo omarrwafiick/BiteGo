@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose"; 
 import { IFoodItem } from "./fooditem.model";
+import { IOrder } from "./order.model";
 
 interface IVendor extends Document{
     name:string; 
@@ -9,16 +10,15 @@ interface IVendor extends Document{
     phone:string; 
     email:string; 
     password:string;
-    menu: IFoodItem[];
-    orders: [];
+    menu?: IFoodItem[]; 
+    orders?: IOrder[];
     isApproved: boolean;
     salt: string;  
-    resetToken: string;
-    resetTokenExpiration: Date;
+    resetToken?: string;
+    resetTokenExpiration?: Date;
     profilePicture?: string;  
     serviceAvailable: boolean;   
-    rating?: number; createdAt: Date;
-    updatedAt: Date;   
+    rating?: number; createdAt: Date; 
     latitude?:number;
     longtude?:number;
 };
@@ -36,7 +36,7 @@ const VendorSchema = new Schema<IVendor>({
     resetTokenExpiration: { type : Date, default: Date.now() },
     profilePicture: { type: String, default: "" }, 
     serviceAvailable: { type : Boolean, required: true  }, 
-    rating:  { type : Number },  
+    rating:  { type : Number, default: 0 },  
     menu: [{ type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
     isApproved: { type: Boolean, default: false },

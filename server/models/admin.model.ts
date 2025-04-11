@@ -1,10 +1,10 @@
 import mongoose, { Schema } from "mongoose"; 
 
 export interface IAdmin extends mongoose.Document {
-  name: string;
+  name: string; 
   email: string;  
   password: string;  
-  salt?:string;
+  salt:string;
   resetToken?: string;
   resetTokenExpiration?: Date;
 }

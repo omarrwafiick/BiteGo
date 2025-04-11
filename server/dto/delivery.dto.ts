@@ -1,48 +1,43 @@
-import { IsEmail, Length, IsString, IsNumber, IsBoolean } from 'class-validator';
+import { IsEmail, Length, IsString, IsNumber, IsBoolean, IsNotEmpty } from 'class-validator';
 
-export class CreateDeliveryDto {
+class MainEntity{
   
   @IsString()
-  @IsEmail()
-  email: string; 
+  @IsNotEmpty()
+  @Length(12, 70) 
+  driverName: string; 
 
+  @IsNotEmpty()
+  @Length(12, 12)
+  phone: string;  
+
+  @IsNotEmpty()
+  @IsString()
+  address: string; 
+
+  @IsNotEmpty()
+  @IsString()
+  pincode: string; 
+
+  @IsNotEmpty()
+  @IsString() 
+  vehicleType: string; 
+}
+
+export class CreateDeliveryDto extends MainEntity { 
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;   
+  
+  @IsString() 
+  @IsNotEmpty()
   @Length(6, 12)
   password: string;  
-  
-  @IsString()
-  @Length(12, 70) 
-  driverName: string; 
-
-  @Length(12, 12)
-  phone: string;  
-
-  @IsString()
-  address: string; 
-
-  @IsString()
-  pincode: string; 
-
-  @IsString() 
-  vehicleType: string; 
 };
 
-export class UpdateDeliveryDto {
-  @IsString()
-  @Length(12, 70) 
-  driverName: string; 
-
-  @Length(12, 12)
-  phone: string;  
-
-  @IsString()
-  address: string; 
-
-  @IsString()
-  pincode: string; 
-
-  @IsString() 
-  vehicleType: string; 
-
+export class UpdateDeliveryDto  extends MainEntity{ 
+    
   @IsNumber() 
   estimatedTime: number;
 

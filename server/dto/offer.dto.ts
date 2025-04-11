@@ -1,23 +1,21 @@
-import { IsNotEmpty } from 'class-validator'; 
+import { IsDate, IsNotEmpty, IsNumber } from 'class-validator'; 
 
-export class CreateOfferDto{ 
+export class MainEntity{  
     @IsNotEmpty()
-    pinCode: string; 
-    @IsNotEmpty()
-    discountPercentage: number;
-    @IsNotEmpty()
-    validFrom: Date;
-    @IsNotEmpty()
+    @IsNumber()
+    discountPercentage: number; 
+    @IsDate()
     validTo: Date;
     @IsNotEmpty()
     isActive: boolean;
 }
 
-export class UpdateOfferDto{ 
+export class CreateOfferDto extends MainEntity{ 
     @IsNotEmpty()
-    discountPercentage: number; 
-    @IsNotEmpty()
-    validTo: Date;
-    @IsNotEmpty()
-    isActive: boolean;
+    pinCode: string;  
+    @IsDate()
+    validFrom: Date;  
+}
+
+export class UpdateOfferDto extends MainEntity{  
 }

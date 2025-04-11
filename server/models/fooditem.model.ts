@@ -4,12 +4,12 @@ export interface IFoodItem extends Document {
   name: string;
   description: string;
   price: number;
-  category: "Fast Food" | "Dessert" | "Beverage" | "Main Course";
+  category: "Fast Food" | "Dessert" | "Beverage" | "Main Course" | "UnKnown";
   available: boolean;
   readyTime: number;
   vendorId: mongoose.Types.ObjectId;
   images: string[]; 
-  rating: number;
+  rating?: number;
 };
 
 const FoodItemSchema = new Schema<IFoodItem>({
@@ -17,10 +17,10 @@ const FoodItemSchema = new Schema<IFoodItem>({
   name: { type: String, required: true }, 
   description: { type: String },
   price: { type: Number, required: true },
-  category: { type: String, enum: ["Fast Food", "Dessert", "Beverage", "Main Course"] },
-  images: { type: [String] },
+  category: { type: String, enum: ["Fast Food", "Dessert", "Beverage", "Main Course", "UnKnown"], default: "UnKnown" },
+  images: { type: [String], required: true  },
   available: { type: Boolean, default: true }, 
-  rating: { type: Number },
+  rating: { type: Number, default: 0 },
   readyTime: { type: Number }
 },{
   toJSON:{
@@ -34,4 +34,4 @@ const FoodItemSchema = new Schema<IFoodItem>({
 });
 
 const FoodItem = mongoose.model<IFoodItem>("FoodItem", FoodItemSchema);
-export { FoodItem } ;
+export { FoodItem };

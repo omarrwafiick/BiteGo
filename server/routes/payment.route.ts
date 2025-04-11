@@ -1,6 +1,6 @@
 import express from "express";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
-import { addUserPayment } from "../controllers/payment.controller";
+import { addUserPayment } from "../controllers/transaction";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 
 const router = express.Router(); 

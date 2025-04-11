@@ -6,6 +6,7 @@ export class CreateAdminDto {
   @IsEmail()
   email: string; 
 
+  @IsString()
   @Length(6, 12)
   password: string; 
   

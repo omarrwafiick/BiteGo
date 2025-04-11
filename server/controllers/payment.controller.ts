@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator"; 
 import { Offer } from "../models/offer.model";  
-import { CreatePaymentDto } from "../dto/payment.dto";
-import { User } from "../models/user.model";
+import { CreatePaymentDto } from "../dto/payment.dto"; 
 import { Transaction } from "../models/transaction.model";
+import { checkUser } from "../utilities/getUser";
 
 export const addUserPayment = async (req: Request, res: Response) : Promise<void> => {
     try {
@@ -14,16 +14,9 @@ export const addUserPayment = async (req: Request, res: Response) : Promise<void
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
         };
-        const user = req.user;
-        
+        const user = await checkUser(req, res, String(process.env.USER));
+                        
         if(!user){
-             res.status(401).json({ success: false, message: 'Unauthorized access' });
-             return;
-        }
-
-        const isUser = await User.findById(user.id);
-
-        if(!isUser){
             res.status(403).json({ success: false, message: 'Only user can make a payment' });
              return;
         }
@@ -37,7 +30,7 @@ export const addUserPayment = async (req: Request, res: Response) : Promise<void
         }; 
 
         const newTransaction = await Transaction.create({
-            userId: isUser.id,
+            userId: user.id,
             vendorId:vendorId,
             orderId: orderId,
             offerId: offerId || 0, 
@@ -48,6 +41,12 @@ export const addUserPayment = async (req: Request, res: Response) : Promise<void
         });
 
         await newTransaction.save();
+
+        if (!newTransaction || !newTransaction._id){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
+ 
         res.status(201).json({success:true, transaction: newTransaction});  
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});

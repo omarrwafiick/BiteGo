@@ -4,15 +4,15 @@ export interface IDelivery extends Document {
   email: string;  
   password: string;  
   salt: string;  
-  resetToken: string;
-  resetTokenExpiration: Date;
+  resetToken?: string;
+  resetTokenExpiration?: Date;
   profilePicture?: string;  
   address: string;  
   driverName: string;
   phone: string;
   pincode: string;
   vehicleType: "Bike" | "Car" | "Van"; 
-  status: boolean; 
+  status?: boolean; 
   estimatedTime?: Number; 
   isApproved: boolean;
   latitude?:number;

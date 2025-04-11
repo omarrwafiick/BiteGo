@@ -2,26 +2,35 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute, CartRoutes, MainRoutes} from '../routes/index.routes'; 
 import { ConnectDB } from "../config/dbConnections.cofig";
-import  rateLimiter from 'express-rate-limit'; 
 import path from "path";
 import { OfferRoutes } from "../routes/offers.route";
 import { PaymentRoutes } from "../routes/payment.route";
-import { DeliveryRoutes } from "../routes/delivery.routes";
+import { DeliveryRoutes } from "../routes/delivery.routes"; 
+import expressSanitizer from 'express-sanitizer';
+import helmet from "helmet";
+import { rateLimiting } from "../utilities/rateLimit";
+import cors from 'cors';
 
 const app = express(); 
+//environment variables
 require('dotenv').config();
-const rateLimit = rateLimiter({
-    windowMs:15 * 60 * 1000, 
-    max: 50,
-    message: { error: 'Too many requests, please try again later.' }
-});
 
-app.use(rateLimit);
+//load balancing
+app.use(rateLimiting);
+//parse json to an object
 app.use(express.json());
+//parse cookie to an object
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use('images/', express.static(path.join(__dirname, 'images'))) 
-
+//sanitize request body  
+app.use(expressSanitizer());
+//image path
+app.use('/images', express.static(path.join(__dirname, 'images'))) 
+//sanitize request headers  
+app.use(helmet());
+//cors policy
+app.use(cors());
+//routes
 app.use(`${String(process.env.MAIN_URL)}`, MainRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.ADMIN_URL)}`, AdminRoutes); 
 app.use(`${String(process.env.MAIN_URL)+String(process.env.VENDOR_URL)}`, VendorRoutes); 

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateOrderDto {
     @IsString()
@@ -8,8 +8,7 @@ export class CreateOrderDto {
     @IsString()
     @IsNotEmpty()
     vendorId: string;
-
-    @IsString() 
+ 
     @IsNotEmpty()
     items: Items; 
 
@@ -21,16 +20,17 @@ export class CreateOrderDto {
     @IsNotEmpty()
     deliveryId: string; 
 
-    @IsNotEmpty()
+    @IsBoolean()
     appliedOffers: boolean; 
 
     @IsString()
     @IsNotEmpty()
     transactionId: string;
     
-    @IsNotEmpty()
+    @IsNumber()
     readyTime: number;
 
+    @IsString()
     @IsNotEmpty()
     status: string;
     
@@ -40,6 +40,10 @@ class Items{
     @IsString() 
     @IsNotEmpty()
     foodId: string;  
+
+    @IsNumber()
     quantity: number; 
+
+    @IsNumber()
     price: number;  
 }

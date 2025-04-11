@@ -1,6 +1,6 @@
 import express from "express";   
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
-import { CreateUser, editUserProfile, getUserProfile, requestOtp, updateUserLocation, verifyUserAccount } from "../controllers/users.controller";
+import { CreateUser, updateUserProfile, getUserProfile, requestOtp, updateUserLocation, verifyUserAccount } from "../controllers/users.controller";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 import { createOrder } from "../controllers/order.controller";
 
@@ -20,7 +20,7 @@ router.get("/otp", requestOtp);
 
 router.get("/profile", getUserProfile);
 
-router.patch("/profile", editUserProfile); 
+router.patch("/profile", updateUserProfile); 
 
 router.patch("/location", updateUserLocation);
  

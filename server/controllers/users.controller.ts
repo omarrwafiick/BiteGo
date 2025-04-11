@@ -5,8 +5,8 @@ import { validate } from 'class-validator';
 import { generateOTP, GenerateSalt, GenerateSignature, hashingPassword, setCookie } from "../utilities/security";
 import { User } from "../models/user.model";
 import { sendOtp } from "../utilities/notification";
-import { UpdateLocationDto } from "../dto/main.dto";
-import { findUser } from "../utilities/helper.methods";
+import { UpdateLocationDto } from "../dto/main.dto"; 
+import { checkUser } from "../utilities/getUser";
  
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
     try {   
@@ -48,7 +48,12 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }   
 
-        await result.save();
+        const userResult = await result.save();
+
+        if (!userResult || !userResult._id ){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        } 
 
         await sendOtp(otp, phone); 
 
@@ -63,23 +68,26 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
 export const verifyUserAccount = async (req: Request, res: Response): Promise<void> => {
     try {   
         const { otp } = req.body;
-        const user = req.user;
-
+        const user = await checkUser(req, res, String(process.env.USER));
+                       
         if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };
+        }         
 
-        const profile = await User.findById(user.id);
-
-        if(!profile || !(profile.otp === parseInt(otp) && profile.otpExp >= new Date() )){
+        if(!user || !(user.otp === parseInt(otp) && user.otpExp >= new Date() )){
             res.status(400).json({ success: false, message: 'Invalid otp or user not found'});
             return;
         };
 
-        profile.isVerified = true;
+        user.isVerified = true;
 
-        const result = await profile.save();
+        const result = await user.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         const token = GenerateSignature({ 
             id: result.id, 
@@ -91,7 +99,7 @@ export const verifyUserAccount = async (req: Request, res: Response): Promise<vo
             
         setCookie(res, token);
 
-        res.status(200).json({ success: true, token });
+        res.status(200).json({ success: true });
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -101,19 +109,12 @@ export const verifyUserAccount = async (req: Request, res: Response): Promise<vo
 
 export const requestOtp = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const user = req.user;
-
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        };
-
-        const profile = await User.findById(user.id);
-
+        const profile = await checkUser(req, res, String(process.env.USER));
+                       
         if(!profile){
-            res.status(404).json({ success: false, message: 'User was not found'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };
+        }    
 
         const otp = generateOTP();
         const otpExp = new Date();
@@ -121,10 +122,16 @@ export const requestOtp = async (req: Request, res: Response): Promise<void> => 
         profile.otp = otp;
         profile.otpExp = otpExp;
 
-        await profile.save();
+        const result = await profile.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
+
         await sendOtp(otp, profile.phone);
  
-        res.status(200).json({ success: true, message: "Otp is sent via email" });
+        res.status(200).json({ success: true, message: "Otp is sent via SMS" });
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -134,19 +141,12 @@ export const requestOtp = async (req: Request, res: Response): Promise<void> => 
  
 export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const user = req.user;
-
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        };
-
-        const profile = await User.findById(user.id);
-
+        const profile = await checkUser(req, res, String(process.env.USER));
+                       
         if(!profile){
-            res.status(404).json({ success: false, message: 'User was not found'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };
+        } 
   
         res.status(200).json({ success: true, profile});
 
@@ -156,21 +156,14 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
     return;
 };
 
-export const editUserProfile = async (req: Request, res: Response): Promise<void> => {
+export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const user = req.user;
-
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access'});
-            return;
-        }; 
-
-        const profile = await User.findById(user.id);
-
+        const profile = await checkUser(req, res, String(process.env.USER));
+                       
         if(!profile){
-            res.status(404).json({ success: false, message: 'User was not found'});
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
             return;
-        };
+        } 
  
         const userData = plainToClass(UpdateUserDto, req.body);
         const errors = await validate(userData, { skipMissingProperties: false });
@@ -186,7 +179,12 @@ export const editUserProfile = async (req: Request, res: Response): Promise<void
         profile.phone =phone;
         profile.address =address;
 
-        await profile.save();
+        const result = await profile.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        }
 
         res.status(200).json({ success: true, message:"Profile is updated successfully" });
 
@@ -198,28 +196,37 @@ export const editUserProfile = async (req: Request, res: Response): Promise<void
 
 export const updateUserLocation = async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const user = req.user;
-        if(user) { 
-            const userData = plainToClass(UpdateLocationDto, req.body);
-            const errors = await validate(userData, { skipMissingProperties: false });
-            if(errors.length > 0){
-                res.status(400).json({ success: false, message: 'All fields are required', errors });
-                return;
-            };
+        const user = await checkUser(req, res, String(process.env.USER));
+                       
+        if(!user){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        } 
 
-            const { latitude, longtude } = userData;
-            const appUser = await findUser(user.id);
-            if(appUser){
-                appUser.longtude = longtude;
-                appUser.latitude = latitude;
-                await appUser.save();
-                res.status(200).json({success:true, message: "User location status was updated successfully"});  
-                return;
-            }
-        }
+        const userData = plainToClass(UpdateLocationDto, req.body);
+            
+        const errors = await validate(userData, { skipMissingProperties: false });
+        if(errors.length > 0){
+            res.status(400).json({ success: false, message: 'All fields are required', errors });
+            return;
+        };
 
-        res.status(404).json({success:false, message: "No user was found"});
+        const { latitude, longtude } = userData; 
         
+        if(!user){
+            res.status(404).json({success:false, message: "No user was found"});
+            return;
+        }
+        user.longtude = longtude;
+        user.latitude = latitude;
+        const result = await user.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
+        } 
+        res.status(200).json({success:true, message: "User location status was updated successfully"});  
+         
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
     }

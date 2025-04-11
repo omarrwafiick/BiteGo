@@ -10,7 +10,7 @@ router.post("/logout", logOut);
 
 router.post("/forget-password/:type", forgetPassword);
 
-router.post("/reset-password/:type", resetPassword);
+router.post("/reset-password/:type/:token", resetPassword);
 
 router.use(ValidateSignatureMiddleWare);
  

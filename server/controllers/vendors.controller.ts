@@ -6,6 +6,7 @@ import { validate } from "class-validator";
 import { UpdateLocationDto } from "../dto/main.dto";
 import { GenerateSalt, hashingPassword } from "../utilities/security";
 import { Vendor } from "../models/vendor.model";
+import { checkUser } from "../utilities/getUser";
 
 
 export const createVendor = async (req: Request, res: Response) : Promise<void> => {
@@ -18,7 +19,7 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
     };    
     
     const { name, ownerName, pinCode, address, phone, email, password } = <CreateVendorDto>req.body; 
-
+ 
     const exists = await findVendor('', email);
 
     if(exists) {
@@ -45,6 +46,11 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
     });
  
     await newVendorModel.save(); 
+    
+    if(!newVendorModel || !newVendorModel._id){
+        res.status(400).json({ success: false, message: 'Vendor could not be created'});
+        return;
+    } 
 
     res.status(201).json({success:true, message: "Vendor is created Successfully", vendor: newVendorModel}); 
       
@@ -56,17 +62,14 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
 
 export const getVendorProfile = async (req: Request, res: Response) : Promise<void> => {
     try {
-        const user = req.user;
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+                               
+        if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }            
 
-        if(user) { 
-            const vendor = await findVendor(user.id);
-            if(vendor){
-                res.status(200).json({vendor}); 
-                return;
-            }  
-        }
-
-        res.status(404).json({success:false, message: "No vendor was found"});
+        res.status(200).json({success:true, message: "Vendor is created Successfully", vendor}); 
         
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
@@ -85,22 +88,25 @@ export const updatetVendorProfile = async (req: Request, res: Response) : Promis
                 
         const { email, name, phone, menu } = req.body as UpdateVendorDto;
         
-        const user = req.user;
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+                               
+        if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }   
 
-        if(user) { 
-            const vendor = await findVendor(user.id);
-            if(vendor){
-                vendor.name = name;
-                vendor.email = email;
-                vendor.phone = phone;
-                vendor.menu = menu;
-                await vendor.save();
-                res.status(200).json({success:true, message: "Vendor was updated successfully"});  
-                return;
-            }
+        vendor.name = name;
+        vendor.email = email;
+        vendor.phone = phone;
+        vendor.menu = menu;
+        const result = await vendor.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
         }
 
-        res.status(404).json({success:false, message: "No vendor was found"});
+        res.status(200).json({success:true, message: "Vendor was updated successfully"});   
         
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
@@ -110,18 +116,22 @@ export const updatetVendorProfile = async (req: Request, res: Response) : Promis
 
 export const updateVendorService = async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const user = req.user;
-        if(user) { 
-            const vendor = await findVendor(user.id);
-            if(vendor){
-                vendor.serviceAvailable = !vendor.serviceAvailable;
-                await vendor.save();
-                res.status(200).json({success:true, message: "Vendor service status was updated successfully"});  
-                return;
-            }
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+                               
+        if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }   
+
+        vendor.serviceAvailable = !vendor.serviceAvailable;
+        const result = await vendor.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
         }
 
-        res.status(404).json({success:false, message: "No vendor was found"});
+        res.status(200).json({success:true, message: "Vendor service status was updated successfully"});   
         
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
@@ -131,26 +141,30 @@ export const updateVendorService = async (req: Request, res: Response) : Promise
 
 export const updateVendorLocation = async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const user = req.user;
-        if(user) { 
-            const vendorData = plainToClass(UpdateLocationDto, req.body);
-            const errors = await validate(vendorData, { skipMissingProperties: false });
-            if(errors.length > 0){
-                res.status(400).json({ success: false, message: 'All fields are required', errors });
-                return;
-            };
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
+                               
+        if(!vendor){
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return;
+        }   
 
-            const vendor = await findVendor(user.id);
-            if(vendor){
-                vendor.longtude = vendorData.longtude;
-                vendor.latitude = vendorData.latitude;
-                await vendor.save();
-                res.status(200).json({success:true, message: "Vendor location status was updated successfully"});  
-                return;
-            }
+        const vendorData = plainToClass(UpdateLocationDto, req.body);
+        const errors = await validate(vendorData, { skipMissingProperties: false });
+        if(errors.length > 0){
+            res.status(400).json({ success: false, message: 'All fields are required', errors });
+            return;
+        };
+ 
+        vendor.longtude = vendorData.longtude;
+        vendor.latitude = vendorData.latitude;
+        const result = await vendor.save();
+
+        if (!result.isModified()){
+            res.status(400).json({ success: false, message: 'No changes detected'});
+            return;
         }
 
-        res.status(404).json({success:false, message: "No vendor was found"});
+        res.status(200).json({success:true, message: "Vendor location status was updated successfully"});    
         
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});

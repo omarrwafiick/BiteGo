@@ -8,11 +8,11 @@ export interface IUser extends mongoose.Document {
   phone: string;  
   address: string; 
   profilePicture?: string; 
-  salt:string;
-  resetToken: string;
-  resetTokenExpiration: Date;
-  otp:number;
-  otpExp:Date;
+  salt:string; 
+  resetToken?: string;
+  resetTokenExpiration?: Date;
+  otp?:number;
+  otpExp?:Date;
   latitude?:number;
   longtude?:number;
   isVerified:boolean;
@@ -31,8 +31,8 @@ const UserSchema = new Schema<IUser>({
     phone: { type: String, required: true },
     address: { type: String, required: true },
     profilePicture: { type: String, default: "" }, 
-    otp: { type: Number }, 
-    otpExp: { type: Date }, 
+    otp: { type: Number, default: 0 }, 
+    otpExp: { type: Date, default: Date.now()  }, 
     latitude: { type: Number, default: 0 }, 
     longtude: { type: Number, default: 0 }, 
     isVerified: { type: Boolean, default: false }, 
