@@ -1,4 +1,5 @@
-import { Length, IsString, IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
+import { Length, IsString, IsNotEmpty, IsBoolean, IsDecimal } from 'class-validator';
+import { Decimal128 } from 'mongoose';
 
 export class CreateFoodItemDto {
     @IsString()
@@ -10,8 +11,8 @@ export class CreateFoodItemDto {
     @IsNotEmpty()
     description: string;
 
-    @IsNumber()
-    price: number;
+    @IsDecimal()
+    price: Decimal128;
 
     @IsString()
     @IsNotEmpty()
@@ -20,6 +21,6 @@ export class CreateFoodItemDto {
     @IsBoolean()
     available: boolean;
 
-    @IsNumber()
-    readyTime: number;
+    @IsDecimal()
+    readyTime: Decimal128;
 }

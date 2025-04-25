@@ -107,7 +107,7 @@ export const forgetPassword = async (req: Request, res: Response): Promise<void>
             return;
         }
 
-        res.status(300).json({success: true, redirectTo: `${process.env.CLIENT_ADDRESS}/reset-password/${resetToken}`});
+        res.status(200).json({success: true, resetToken});
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -127,9 +127,9 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
             return;
         };
         
+        const resetToken  = req.params.token; 
         const today = new Date(Date.now())
         const password  = req.body.password;  
-        const resetToken  = req.params.token; 
         if( profile.resetTokenExpiration && (today > profile.resetTokenExpiration || resetToken !== profile.resetToken) ){
             res.status(400).json({ success: false, message: 'Reset token is expired or incorrect'});
             return;

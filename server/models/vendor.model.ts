@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose"; 
+import mongoose, { Schema, Document, Types } from "mongoose"; 
 import { IFoodItem } from "./fooditem.model";
 import { IOrder } from "./order.model";
 
@@ -18,9 +18,9 @@ interface IVendor extends Document{
     resetTokenExpiration?: Date;
     profilePicture?: string;  
     serviceAvailable: boolean;   
-    rating?: number; createdAt: Date; 
-    latitude?:number;
-    longtude?:number;
+    rating?: Types.Decimal128; 
+    latitude?:Types.Decimal128;
+    longtude?:Types.Decimal128;
 };
  
 const VendorSchema = new Schema<IVendor>({ 
@@ -36,12 +36,12 @@ const VendorSchema = new Schema<IVendor>({
     resetTokenExpiration: { type : Date, default: Date.now() },
     profilePicture: { type: String, default: "" }, 
     serviceAvailable: { type : Boolean, required: true  }, 
-    rating:  { type : Number, default: 0 },  
+    rating:  { type : Types.Decimal128, default: 0 },  
     menu: [{ type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
     isApproved: { type: Boolean, default: false },
-    latitude: { type: Number, default: 0 }, 
-    longtude: { type: Number, default: 0 }
+    latitude: { type: Types.Decimal128, default: 0 }, 
+    longtude: { type: Types.Decimal128, default: 0 }
 }, {
     toJSON:{
         transform(doc, ret){

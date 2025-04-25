@@ -16,7 +16,7 @@ export const checkUser = async (req: Request, res: Response, type: string): Prom
             ? await findAdmin(user.id) 
             : type === process.env.DELIVERY 
             ? await findDelivery(user.id)
-            : await findVendor(user.id) ;
+            : await findVendor(user.id);
         
         if(profile){ 
             return profile;

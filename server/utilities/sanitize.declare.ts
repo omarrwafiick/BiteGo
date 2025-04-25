@@ -3,3 +3,4 @@ declare module 'express-sanitizer' {
     const expressSanitizer: () => RequestHandler;
     export default expressSanitizer;
 }
+  

@@ -1,9 +1,10 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsDecimal, IsNotEmpty, IsString } from 'class-validator';
+import { Decimal128 } from 'mongoose';
 
 export class CreatePaymentDto { 
     @IsNotEmpty()
-    @IsString()
-    amount: string; 
+    @IsDecimal()
+    amount: Decimal128; 
 
     @IsNotEmpty()
     @IsString()

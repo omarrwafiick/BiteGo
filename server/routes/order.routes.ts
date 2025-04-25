@@ -5,14 +5,7 @@ import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middlew
 
 const router = express.Router(); 
 
-router.use(ValidateSignatureMiddleWare);  
-
-//user
-router.use(RoleBasedAuthentication(String(process.env.USER)));
-
-router.get("/user/:id", getUserOrderDetails);  
-
-router.get("/user", getUserOrders);  
+router.use(ValidateSignatureMiddleWare);   
 
 //vendor
 router.use(RoleBasedAuthentication(String(process.env.VENDOR)));
@@ -22,5 +15,12 @@ router.get("/vendor", getVendorOrders);
 router.get("/vendor/:id", getVendorOrderDetails);  
 
 router.put("/vendor/:id/process", updateVendorOrder);  
+
+//user
+router.use(RoleBasedAuthentication(String(process.env.USER)));
+
+router.get("/user/:id", getUserOrderDetails);  
+
+router.get("/user", getUserOrders);  
    
 export { router as OrderRoute };

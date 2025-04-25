@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { AuthPayload } from '../dto/auth.dto';
 import { randomBytes } from 'crypto';
 
-export const GenerateSalt = async () => await bcryptjs.genSalt()
+export const GenerateSalt = async () => await bcryptjs.genSalt();
 
 export const hashingPassword = async (password:string, salt: string) => await bcryptjs.hash(password, salt);
 
@@ -31,7 +31,7 @@ export const setCookie = (res: Response, token: string) : void => {
         httpOnly: true,        
         secure: process.env.NODE_ENV === 'production',
         sameSite: "strict",     
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+        maxAge: 3 * 24 * 60 * 60 * 1000 
     }); 
 };
 

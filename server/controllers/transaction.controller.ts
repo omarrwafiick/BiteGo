@@ -6,7 +6,7 @@ import { CreatePaymentDto } from "../dto/payment.dto";
 import { Transaction } from "../models/transaction.model";
 import { checkUser } from "../utilities/getUser";
 
-export const addUserPayment = async (req: Request, res: Response) : Promise<void> => {
+export const addTransaction = async (req: Request, res: Response) : Promise<void> => {
     try {
         const paymentData = plainToClass(CreatePaymentDto, req.body);
         const errors = await validate(paymentData, { skipMissingProperties: false });
@@ -23,10 +23,11 @@ export const addUserPayment = async (req: Request, res: Response) : Promise<void
 
         const { amount, paymentMode, offerId, vendorId, orderId } = req.body as CreatePaymentDto;
 
-        let netAmount: number = Number(amount);
+        let netAmount: number = Number(amount); 
         const offer = await Offer.findById(offerId);
         if(offer && offer.isActive){
-            netAmount = netAmount - (netAmount * offer.discountPercentage)
+            let disc = Number(offer.discountPercentage);  
+            netAmount = netAmount - (netAmount * disc);
         }; 
 
         const newTransaction = await Transaction.create({

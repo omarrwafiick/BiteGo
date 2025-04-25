@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose"; 
+import mongoose, { Schema, Types } from "mongoose"; 
 
 export interface IOrder extends mongoose.Document {
     userId: mongoose.Types.ObjectId; 
@@ -6,12 +6,12 @@ export interface IOrder extends mongoose.Document {
     items: {
       foodId: mongoose.Types.ObjectId;  
       quantity: number; 
-      price: number;  
+      price: Types.Decimal128;  
     }[];
-    totalAmount: number;   
+    totalAmount: Types.Decimal128;   
     remarks?: string;
     deliveryId: mongoose.Schema.Types.ObjectId; 
-    readyTime: number;
+    readyTime: Types.Decimal128;
     status?: "Pending" | "Preparing" | "Out for Delivery" | "Delivered" | "Cancelled";
 }
 
@@ -22,13 +22,13 @@ const OrderSchema = new Schema<IOrder>({
       {
         foodId: { type: mongoose.Schema.Types.ObjectId, ref: "FoodItem", required: true },
         quantity: { type: Number, required: true },
-        price: { type: Number, required: true },
+        price: { type: Types.Decimal128, required: true },
       }
     ],
-    totalAmount: { type: Number, required: true }, 
+    totalAmount: { type: Types.Decimal128, required: true }, 
     remarks:  { type: String },
     deliveryId:  { type: mongoose.Schema.Types.ObjectId, ref: "Delivery", required: true }, 
-    readyTime:  { type: Number, required: true },
+    readyTime:  { type: Types.Decimal128, required: true },
     status: { type: String, enum: ["Pending", "Preparing", "Out for Delivery", "Delivered", "Cancelled"], default: "Pending" },
     }, {
       toJSON:{

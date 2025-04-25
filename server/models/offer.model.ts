@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IOffer extends Document { 
-  discountPercentage: number;
+  discountPercentage: Types.Decimal128;
   pinCode: string;
   validFrom: Date;
   validTo: Date;
@@ -10,7 +10,7 @@ export interface IOffer extends Document {
 }
 
 const OfferSchema = new Schema<IOffer>({  
-  discountPercentage: { type: Number, required: true },
+  discountPercentage: { type: Types.Decimal128, required: true },
   pinCode:{ type : String, required: true },
   validFrom: { type: Date, required: true },
   validTo: { type: Date, required: true },

@@ -1,4 +1,5 @@
-import { IsEmail, Length, IsString, IsNumber, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsEmail, Length, IsString, IsNumber, IsBoolean, IsNotEmpty, IsDecimal } from 'class-validator';
+import { Decimal128 } from 'mongoose';
 
 class MainEntity{
   
@@ -44,9 +45,9 @@ export class UpdateDeliveryDto  extends MainEntity{
   @IsBoolean()
   isApproved: boolean;
 
-  @IsNumber() 
-  latitude: number;
+  @IsDecimal() 
+  latitude: Decimal128;
 
-  @IsNumber() 
-  longtude: number;
+  @IsDecimal() 
+  longtude: Decimal128;
 };

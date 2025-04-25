@@ -1,11 +1,11 @@
 import { Request, Response } from "express"; 
-import { Vendor } from "../models/vendor.model";     
-import { plainToClass } from "class-transformer";
+ import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";
 import { CreateOfferDto, UpdateOfferDto } from "../dto/offer.dto";
 import { Offer } from "../models/offer.model";
 import { generateOfferCode } from "../utilities/security";
 import { checkUser } from "../utilities/getUser";
+import { Types } from 'mongoose';
 
 export const getVendorOffers = async (req: Request, res: Response) : Promise<void> => {
     try { 
@@ -99,7 +99,8 @@ export const updateOffers = async (req: Request, res: Response) : Promise<void> 
             return;
         };
 
-        offer.discountPercentage = discountPercentage;
+        let disc = Number(discountPercentage);
+        offer.discountPercentage = Types.Decimal128.fromString(disc.toString());
         offer.validTo = validTo;
         offer.isActive = isActive;
 

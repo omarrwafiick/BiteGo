@@ -1,6 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IDelivery extends Document {
+  driverName: string;
   email: string;  
   password: string;  
   salt: string;  
@@ -8,15 +9,14 @@ export interface IDelivery extends Document {
   resetTokenExpiration?: Date;
   profilePicture?: string;  
   address: string;  
-  driverName: string;
   phone: string;
   pincode: string;
   vehicleType: "Bike" | "Car" | "Van"; 
   status?: boolean; 
-  estimatedTime?: Number; 
+  estimatedTime?: Types.Decimal128; 
   isApproved: boolean;
-  latitude?:number;
-  longtude?:number;
+  latitude?:Types.Decimal128;
+  longtude?:Types.Decimal128;
 }
 
 const DeliverySchema = new Schema<IDelivery>({
@@ -31,10 +31,10 @@ const DeliverySchema = new Schema<IDelivery>({
   pincode:{ type : String, required: true },
   vehicleType: { type: String, enum: ["Bike", "Car", "Van"], required: true },
   status: { type: Boolean, default: false }, 
-  estimatedTime: { type: Number, default: 0  }, 
+  estimatedTime: { type: Types.Decimal128, default: 0  }, 
   isApproved: { type: Boolean, default: false },
-  latitude: { type: Number, default: 0 }, 
-  longtude: { type: Number, default: 0 }
+  latitude: { type: Types.Decimal128, default: 0 }, 
+  longtude: { type: Types.Decimal128, default: 0 }
 }, {
   toJSON:{
       transform(doc, ret){ 

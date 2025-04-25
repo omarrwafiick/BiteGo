@@ -4,7 +4,7 @@ import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middlew
 import { approveAccount, createAdmin, deleteEntityById, deleteOrder, getEntity, getEntityById, getOrderById, getOrders, getTransactionById, getTransactions } from "../controllers/admins.controller";
 
 const router = express.Router();
-
+ 
 router.post("/signup", createAdmin);
  
 router.use(ValidateSignatureMiddleWare);

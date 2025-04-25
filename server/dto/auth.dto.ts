@@ -1,6 +1,4 @@
- 
 export type AuthPayload = LoginPayloadDto;
-
 
 export interface LoginPayloadDto{
     id:string;

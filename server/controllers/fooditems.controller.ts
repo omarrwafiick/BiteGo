@@ -145,7 +145,7 @@ export const getFoodIn30Minute = async (req: Request, res: Response): Promise<vo
 
         result.map( (vendor) => {
             const foods = vendor.menu as [IFoodItem];
-            foodResult.push(...foods.filter(food => food.readyTime <= 30));
+            foodResult.push(...foods.filter(food => Number(food.readyTime) <= 30));
         });
 
         res.status(200).json({ success: true, foodResult });

@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";  
+import mongoose, { Schema, Types } from "mongoose";  
 
 export interface IUser extends mongoose.Document {
   firstName: string;
@@ -13,8 +13,8 @@ export interface IUser extends mongoose.Document {
   resetTokenExpiration?: Date;
   otp?:number;
   otpExp?:Date;
-  latitude?:number;
-  longtude?:number;
+  latitude?:Types.Decimal128;
+  longtude?:Types.Decimal128;
   isVerified:boolean;
   orderHistory?: mongoose.Types.ObjectId[];  
   cart?: mongoose.Types.ObjectId;  
@@ -33,8 +33,8 @@ const UserSchema = new Schema<IUser>({
     profilePicture: { type: String, default: "" }, 
     otp: { type: Number, default: 0 }, 
     otpExp: { type: Date, default: Date.now()  }, 
-    latitude: { type: Number, default: 0 }, 
-    longtude: { type: Number, default: 0 }, 
+    latitude: { type: Types.Decimal128, default: 0 }, 
+    longtude: { type: Types.Decimal128, default: 0 }, 
     isVerified: { type: Boolean, default: false }, 
     orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order", default: null }], 
     cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" , default: null}, 

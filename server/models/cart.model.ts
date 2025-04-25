@@ -1,13 +1,13 @@
-import mongoose, { Schema } from "mongoose";  
+import mongoose, { Schema, Types } from "mongoose";  
 
 export interface ICart extends Document {
   userId: mongoose.Types.ObjectId;
   items?: {
     foodId: mongoose.Schema.Types.ObjectId,
     quantity: number,
-    price: number,
+    price: Types.Decimal128,
   }[]; 
-  totalAmount: number; 
+  totalAmount: Types.Decimal128; 
 }
 
 const CartSchema = new Schema<ICart>({
@@ -16,10 +16,10 @@ const CartSchema = new Schema<ICart>({
     {
       foodId: { type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" },
       quantity: { type: Number, min: 1 },
-      price: { type: Number },
+      price: { type: Types.Decimal128 },
     }
   ],
-  totalAmount: { type: Number, default: 0 },
+  totalAmount: { type: Types.Decimal128, default: 0 },
 }, { timestamps: true });
  
 const Cart = mongoose.model<ICart>("Cart", CartSchema);

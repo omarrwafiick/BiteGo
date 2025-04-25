@@ -5,7 +5,8 @@ import { User } from "../models/user.model";
 import { CreateCartItem } from "../dto/cart.dto";
 import { Cart } from "../models/cart.model";
 import { FoodItem } from "../models/fooditem.model";
-import { findUser } from "../utilities/helper.methods";
+import { findUser } from "../utilities/helper.methods";  
+import { Types } from 'mongoose';
 
 
 export const addToCart = async (req: Request, res: Response):Promise<void> => {
@@ -47,13 +48,16 @@ export const addToCart = async (req: Request, res: Response):Promise<void> => {
                 let itemExists = userCart?.items.find(i => i.foodId === foodItem.id);
                 if(itemExists){
                     itemExists.quantity = quantity;
-                    itemExists.price += quantity * price;
+                    let newPrice = (Number(quantity) * Number(price));
+                    itemExists.price = Types.Decimal128.fromString(newPrice.toString());;
                 } 
                 else{  
+                    let thePrice = Number(price) 
                     userCart?.items.push( {
                         foodId: foodItem.id,
-                        quantity: quantity,
-                        price: price
+                        quantity: quantity, 
+                        
+                        price: Types.Decimal128.fromString(thePrice.toString())
                     });
                 };
             }
