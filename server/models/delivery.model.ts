@@ -16,7 +16,7 @@ export interface IDelivery extends Document {
   estimatedTime?: Types.Decimal128; 
   isApproved: boolean;
   latitude?:Types.Decimal128;
-  longtude?:Types.Decimal128;
+  longitude?:Types.Decimal128;
 }
 
 const DeliverySchema = new Schema<IDelivery>({
@@ -34,13 +34,15 @@ const DeliverySchema = new Schema<IDelivery>({
   estimatedTime: { type: Types.Decimal128, default: 0  }, 
   isApproved: { type: Boolean, default: false },
   latitude: { type: Types.Decimal128, default: 0 }, 
-  longtude: { type: Types.Decimal128, default: 0 }
+  longitude: { type: Types.Decimal128, default: 0 }
 }, {
   toJSON:{
       transform(doc, ret){ 
           delete ret.password;
           delete ret.salt;
           delete ret.__v;
+          delete ret.resetToken;
+          delete ret.resetTokenExpiration;
           delete ret.createdAt;
           delete ret.updatedAt;
       }

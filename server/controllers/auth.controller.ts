@@ -5,27 +5,27 @@ import { findAdmin, findDelivery, findUser, findVendor } from "../utilities/help
 import { User } from "../models/user.model";
 import { Admin } from "../models/admin.model";
 import Crypto from "crypto"; 
-import { Vendor } from "../models/vendor.model"; 
-import { Delivery } from "../models/delivery.model"; 
+import { Vendor } from "../models/vendor.model";  
+import { Delivery } from "../models/delivery.model";  
 import { checkUser } from "../utilities/getUser";
- 
+  
 export const login = async (req: Request, res: Response): Promise<void> => { 
     try {
         const { email, password, type} = req.body as LoginDto;
 
-        if (!email || !password) {
-            res.status(400).json({ success: false, message: 'Email and password are required.' });
+        if (!email || !password || !type) {
+            res.status(400).json({ success: false, message: 'All fields are required.' });
             return;
         }
-
+ 
         const exists = 
             type === process.env.USER 
-            ? await findUser(email) 
+            ? await findUser(undefined, email) 
             : type === process.env.ADMIN 
-            ? await findAdmin(email) 
+            ? await findAdmin(undefined,email) 
             : type === process.env.DELIVERY 
-            ? await findDelivery(email)
-            : await findVendor(email) ;
+            ? await findDelivery(undefined, email)
+            : await findVendor(undefined, email) ;
 
         if (!exists) {
             res.status(404).json({ success: false, message: `${type} not found with email: ${email}` });
@@ -39,11 +39,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             return;
         }   
 
-        if (!( ('isApproved' in exists && exists.isApproved) || ('isVerified' in exists && exists.isVerified))){
-            res.status(400).json({ success: false, message: "You can't login until admin approves your request or verifies your account" });
+        if (
+            ('isApproved' in exists && !exists.isApproved) ||
+            ('isVerified' in exists && !exists.isVerified)
+          ) {
+            res.status(400).json({
+              success: false,
+              message: "You can't login until admin approves your request or verifies your account"
+            });
             return;
-        }
-
+          }
         const entity = type === process.env.USER 
             ? (exists as InstanceType<typeof User>) 
             : type === process.env.ADMIN 
@@ -71,10 +76,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
  
         setCookie(res, token);
         
-        res.status(200).json({ success: true, vendor: exists });
+        res.status(200).json({ success: true, account: exists });
 
-    } catch (error) { 
-        res.status(500).json({ success: false, message: 'Internal server error' });
+    } catch (error) {  
+
+        res.status(500).json({ success: false, message: 'Internal server error', error });
     }
 };
  
@@ -89,7 +95,7 @@ export const forgetPassword = async (req: Request, res: Response): Promise<void>
         const type = req.params.type;
 
         const profile= await checkUser(req, res, type);   
-        
+         
         if(!profile){
             res.status(404).json({ success: false, message: `${type} was not found`});
             return;
@@ -99,20 +105,18 @@ export const forgetPassword = async (req: Request, res: Response): Promise<void>
         const resetTokenExpiration = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
 
         profile.resetToken = resetToken;
-        profile.resetTokenExpiration = resetTokenExpiration;
-        const result = await profile.save();   
-
-        if (!result.isModified()){
+        profile.resetTokenExpiration = resetTokenExpiration; 
+        if (!profile.isModified()){
             res.status(400).json({ success: false, message: 'No changes detected'});
             return;
         }
+        await profile.save();   
 
         res.status(200).json({success: true, resetToken});
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
-    }
-
+    } 
     return;
 };
 
@@ -140,12 +144,12 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
         profile.password = hashedPassword;
         profile.resetToken = "";
         profile.resetTokenExpiration = today;
-        const result = await profile.save();  
 
-        if (!result.isModified()){
+        if (!profile.isModified()){
             res.status(400).json({ success: false, message: 'No changes detected'});
             return;
         }
+        await profile.save();  
 
         res.status(200).json({success: true, message: "Password was reset successfully"});
     } catch (error) {
@@ -165,7 +169,7 @@ export const checkAuth = async (req: Request, res: Response): Promise<void> => {
             return;
         };
 
-        if (!( ('isApproved' in profile && profile.isApproved) || ('isVerified' in profile && profile.isVerified))){
+        if (!(('isApproved' in profile && profile.isApproved) || ('isVerified' in profile && profile.isVerified))){
             res.status(401).json({ success: false, message: "You can't login until admin approves your request or verifies your account" });
             return;
         }

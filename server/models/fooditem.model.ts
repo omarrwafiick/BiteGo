@@ -8,7 +8,7 @@ export interface IFoodItem extends Document {
   available: boolean;
   readyTime: Types.Decimal128;
   vendorId: mongoose.Types.ObjectId;
-  images: string[]; 
+  images: string[] | any; 
   rating?: Types.Decimal128;
 };
 

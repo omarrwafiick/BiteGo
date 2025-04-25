@@ -8,11 +8,10 @@ import { GenerateSalt, hashingPassword } from "../utilities/security";
 import { Vendor } from "../models/vendor.model";
 import { checkUser } from "../utilities/getUser";
 
-
 export const createVendor = async (req: Request, res: Response) : Promise<void> => {
     try { 
     const vendorData = plainToClass(CreateVendorDto, req.body);
-    const errors = await validate(vendorData, { skipMissingProperties: false });
+    const errors = await validate(vendorData, { skipMissingProperties: true });
     if(errors.length > 0){
         res.status(400).json({ success: false, message: 'All fields are required', errors });
         return;
@@ -44,9 +43,7 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
         coverImages: [], 
         isApproved: false
     });
- 
-    await newVendorModel.save(); 
-    
+     
     if(!newVendorModel || !newVendorModel._id){
         res.status(400).json({ success: false, message: 'Vendor could not be created'});
         return;
@@ -80,13 +77,13 @@ export const getVendorProfile = async (req: Request, res: Response) : Promise<vo
 export const updatetVendorProfile = async (req: Request, res: Response) : Promise<void> => {
     try {
         const vendorData = plainToClass(UpdateVendorDto, req.body);
-        const errors = await validate(vendorData, { skipMissingProperties: false });
+        const errors = await validate(vendorData, { skipMissingProperties: true });
         if(errors.length > 0){
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
         };
                 
-        const { email, name, phone, menu } = req.body as UpdateVendorDto;
+        const { name, phone, menu, pinCode } = req.body as UpdateVendorDto;
         
         const vendor = await checkUser(req, res, String(process.env.VENDOR));
                                
@@ -95,21 +92,24 @@ export const updatetVendorProfile = async (req: Request, res: Response) : Promis
             return;
         }   
 
-        vendor.name = name;
-        vendor.email = email;
+        vendor.name = name; 
         vendor.phone = phone;
-        vendor.menu = menu;
-        const result = await vendor.save();
+        vendor.pinCode = pinCode;
+        if(menu.length > 0){
+            vendor.menu.push(menu);
+        } 
 
-        if (!result.isModified()){
+        if (!vendor.isModified()){
             res.status(400).json({ success: false, message: 'No changes detected'});
             return;
         }
+        
+        await vendor.save();
 
         res.status(200).json({success:true, message: "Vendor was updated successfully"});   
         
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error'});
+        res.status(500).json({ message: 'Internal server error', error});
     }
     return;
 };
@@ -123,14 +123,13 @@ export const updateVendorService = async (req: Request, res: Response) : Promise
             return;
         }   
 
-        vendor.serviceAvailable = !vendor.serviceAvailable;
-        const result = await vendor.save();
+        vendor.serviceAvailable = !vendor.serviceAvailable; 
 
-        if (!result.isModified()){
+        if (!vendor.isModified()){
             res.status(400).json({ success: false, message: 'No changes detected'});
             return;
         }
-
+        await vendor.save();
         res.status(200).json({success:true, message: "Vendor service status was updated successfully"});   
         
     } catch (error) {
@@ -155,15 +154,14 @@ export const updateVendorLocation = async (req: Request, res: Response) : Promis
             return;
         };
  
-        vendor.longtude = vendorData.longtude;
-        vendor.latitude = vendorData.latitude;
-        const result = await vendor.save();
+        vendor.longitude = vendorData.longitude;
+        vendor.latitude = vendorData.latitude;  
 
-        if (!result.isModified()){
+        if (!vendor.isModified()){
             res.status(400).json({ success: false, message: 'No changes detected'});
             return;
         }
-
+        await vendor.save();
         res.status(200).json({success:true, message: "Vendor location status was updated successfully"});    
         
     } catch (error) {

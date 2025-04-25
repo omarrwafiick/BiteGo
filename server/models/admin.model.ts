@@ -22,6 +22,8 @@ const AdminSchema = new Schema<IAdmin>({
             delete ret.password;
             delete ret.salt;
             delete ret.__v;
+            delete ret.resetToken;
+            delete ret.resetTokenExpiration;
             delete ret.createdAt;
             delete ret.updatedAt;
         }

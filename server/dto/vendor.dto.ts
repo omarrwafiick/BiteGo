@@ -8,23 +8,24 @@ class MainEntity{
     phone:string;
 
     @IsString()
+    @IsNotEmpty()
+    name:string;
+
+    @IsString()
+    @IsNotEmpty()
+    pinCode:string;
+
+    menu: IFoodItem[];
+}
+export class CreateVendorDto extends MainEntity{ 
+
+    @IsString()
     @IsEmail()
     email:string;
 
     @IsString()
     @IsNotEmpty()
-    name:string;
-
-    menu: IFoodItem[];
-}
-export class CreateVendorDto extends MainEntity{ 
-    @IsString()
-    @IsNotEmpty()
     ownerName:string; 
-
-    @IsString()
-    @IsNotEmpty()
-    pinCode:string;
 
     @IsString()
     @IsNotEmpty()
@@ -35,8 +36,6 @@ export class CreateVendorDto extends MainEntity{
     password:string;
       
     orders: IOrder[];
-
-    isApproved: boolean;
 }
 
 

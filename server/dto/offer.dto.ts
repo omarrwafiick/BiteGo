@@ -1,10 +1,9 @@
-import { IsDate, IsDecimal, IsNotEmpty } from 'class-validator'; 
-import { Decimal128 } from 'mongoose';
+import { IsDate, IsDecimal, IsNotEmpty } from 'class-validator';  
 
 export class MainEntity{  
     @IsNotEmpty()
     @IsDecimal()
-    discountPercentage: Decimal128; 
+    discountPercentage: number; 
     @IsDate()
     validTo: Date;
     @IsNotEmpty()

@@ -12,7 +12,7 @@ class MainEntity{
   lastName: string;
 
   @IsString()
-  @Length(12, 12)
+  @Length(11, 11)
   @IsNotEmpty()
   phone: string;  
 

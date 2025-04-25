@@ -1,11 +1,10 @@
-import { IsEmail, Length, IsString, IsNumber, IsBoolean, IsNotEmpty, IsDecimal } from 'class-validator';
+import { IsEmail, Length, IsString, IsNumber, IsNotEmpty, IsDecimal } from 'class-validator';
 import { Decimal128 } from 'mongoose';
 
-class MainEntity{
-  
+class MainEntity{ 
   @IsString()
   @IsNotEmpty()
-  @Length(12, 70) 
+  @Length(8, 70) 
   driverName: string; 
 
   @IsNotEmpty()
@@ -40,14 +39,11 @@ export class CreateDeliveryDto extends MainEntity {
 export class UpdateDeliveryDto  extends MainEntity{ 
     
   @IsNumber() 
-  estimatedTime: number;
-
-  @IsBoolean()
-  isApproved: boolean;
+  estimatedTime: number; 
 
   @IsDecimal() 
   latitude: Decimal128;
 
   @IsDecimal() 
-  longtude: Decimal128;
+  longitude: Decimal128;
 };

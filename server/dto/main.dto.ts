@@ -1,6 +1,5 @@
-import { IsDecimal, IsEmail, IsNotEmpty, IsString } from "class-validator";
-import { Decimal128 } from "mongoose";
-
+import { IsNumber , IsEmail, IsNotEmpty, IsString } from "class-validator";
+ 
 export class LoginDto {
     @IsString()
     @IsNotEmpty()
@@ -18,9 +17,9 @@ export class LoginDto {
 
 
 export class UpdateLocationDto{  
-    @IsDecimal()
-    latitude?:Decimal128;
+    @IsNumber ()
+    latitude:number;
      
-    @IsDecimal()
-    longtude?:Decimal128;
+    @IsNumber ()
+    longitude:number;
 }

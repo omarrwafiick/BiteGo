@@ -7,7 +7,6 @@ import { GenerateSalt, hashingPassword } from "../utilities/security";
 import { UpdateLocationDto } from "../dto/main.dto"; 
 import { checkUser } from "../utilities/getUser";
 
-
 export const CreateDelivey = async (req: Request, res: Response): Promise<void> => {
     try {   
         const deliveryData = plainToClass(CreateDeliveryDto, req.body);
@@ -38,9 +37,7 @@ export const CreateDelivey = async (req: Request, res: Response): Promise<void> 
             salt: salt,
             pincode: pincode,
             vehicleType: vehicleType
-        });
- 
-        await newDelivery.save(); 
+        }); 
 
         if(!newDelivery || !newDelivery._id){
             res.status(400).json({ success: false, message: 'Delivery could not be created'});
@@ -89,23 +86,22 @@ export const updateDeliveryProfile = async (req: Request, res: Response): Promis
             return;
         };
 
-        const { driverName, phone, address, pincode, vehicleType, estimatedTime, isApproved, latitude, longtude } = deliveryData;
+        const { driverName, phone, address, pincode, vehicleType, estimatedTime, latitude, longitude } = deliveryData;
         profile.driverName = driverName;
         profile.pincode =pincode;
         profile.phone =phone;
         profile.address =address;
         profile.estimatedTime =estimatedTime;
-        profile.isApproved =isApproved;
         profile.latitude =latitude;
-        profile.longtude =longtude;
+        profile.longitude =longitude;
         if (vehicleType === "Bike" || vehicleType === "Car" || vehicleType === "Van") profile.vehicleType = vehicleType;
- 
-        const result = await profile.save();
-         
-        if (!result.isModified()) {
+  
+        if (!profile.isModified()) {
             res.status(400).json({ success: false, message: 'No changes detected' });
             return ;
         }
+
+        await profile.save();
 
         res.status(200).json({ success: true, message: "Profile is updated successfully" });
 
@@ -126,13 +122,13 @@ export const updateDeliveyStatus = async (req: Request, res: Response) : Promise
             
             delivery.status = !delivery.status;
 
-            const result = await delivery.save();
-            
-            if (!result.isModified()){
+            if (!delivery.isModified()){
                 res.status(400).json({ success: false, message: 'No changes detected' });
                 return;
             }
             
+            await delivery.save();
+
             res.status(200).json({success:true, message: "Delivery status was updated successfully"});  
             
         } catch (error) {
@@ -154,20 +150,18 @@ export const updateDeliveryLocation = async (req: Request, res: Response): Promi
             const errors = await validate(deliveryData, { skipMissingProperties: false });
             if(errors.length > 0){
                 res.status(400).json({ success: false, message: 'All fields are required', errors });
-                return;
+                return; 
             };
-            const { latitude, longtude } = deliveryData;  
+            const { latitude, longitude } = deliveryData;  
 
-            delivery.longtude = longtude;
-            delivery.latitude = latitude;
+            delivery.longitude = longitude;
+            delivery.latitude = latitude; 
 
-            const result = await delivery.save();
-
-            if (!result.isModified()){
+            if (!delivery.isModified()){
                 res.status(400).json({ success: false, message: 'No changes detected'});
                 return;
             }
-
+            await delivery.save();
             res.status(200).json({success:true, message: "Delivery location status was updated successfully"});   
         } catch (error) {
             res.status(500).json({ message: 'Internal server error'});

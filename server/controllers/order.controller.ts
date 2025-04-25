@@ -67,7 +67,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
         profile.orderHistory?.push(newOrder.id);
         await profile.save();
 
-        const deliveryResult = await assignOrderDelivery(newOrder.id, vendorId, Number(vendor.longtude), Number( vendor.latitude), vendor.pinCode);
+        const deliveryResult = await assignOrderDelivery(newOrder.id, vendorId, Number(vendor.longitude), Number( vendor.latitude), vendor.pinCode);
   
         if(!deliveryResult){
             res.status(400).json({ success: false, message: 'No delivery was found please contact support'});

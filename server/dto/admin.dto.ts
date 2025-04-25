@@ -15,11 +15,4 @@ export class CreateAdminDto {
   name: string; 
 };
 
-
-export class UpdateEntityDto { 
-  @IsString() 
-  id: string;  
-
-  @IsString() 
-  type: string; 
-};
+ 

@@ -14,7 +14,7 @@ export interface IUser extends mongoose.Document {
   otp?:number;
   otpExp?:Date;
   latitude?:Types.Decimal128;
-  longtude?:Types.Decimal128;
+  longitude?:Types.Decimal128;
   isVerified:boolean;
   orderHistory?: mongoose.Types.ObjectId[];  
   cart?: mongoose.Types.ObjectId;  
@@ -34,7 +34,7 @@ const UserSchema = new Schema<IUser>({
     otp: { type: Number, default: 0 }, 
     otpExp: { type: Date, default: Date.now()  }, 
     latitude: { type: Types.Decimal128, default: 0 }, 
-    longtude: { type: Types.Decimal128, default: 0 }, 
+    longitude: { type: Types.Decimal128, default: 0 }, 
     isVerified: { type: Boolean, default: false }, 
     orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order", default: null }], 
     cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" , default: null}, 
@@ -44,6 +44,10 @@ const UserSchema = new Schema<IUser>({
           delete ret.password;
           delete ret.salt;
           delete ret.__v;
+          delete ret.otp;
+          delete ret.otpExp;
+          delete ret.resetToken;
+          delete ret.resetTokenExpiration;
           delete ret.createdAt;
           delete ret.updatedAt;
       }

@@ -22,8 +22,27 @@ export const checkUser = async (req: Request, res: Response, type: string): Prom
             return profile;
         };
     }
-    catch(error){
-        return null;
+    catch(error){ 
     }
     return null;
 }
+
+export const getEntityForAdmin = async ( type: string, id: string): Promise<any | null> => { 
+    try {      
+        const profile = type === process.env.USER 
+            ? await findUser(id) 
+            : type === process.env.ADMIN 
+            ? await findAdmin(id) 
+            : type === process.env.DELIVERY 
+            ? await findDelivery(id)
+            : await findVendor(id);
+        
+        if(profile){ 
+            return profile;
+        };
+    }
+    catch(error){ 
+    }
+    return null;
+}
+ 

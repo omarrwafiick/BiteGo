@@ -3,8 +3,10 @@ import { checkAuth, forgetPassword, login, logOut, resetPassword } from "../cont
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware"; 
 
 const router = express.Router(); 
+ 
+router.post("/login", login); 
 
-router.post("/login", login);
+router.use(ValidateSignatureMiddleWare);
  
 router.post("/logout", logOut);
 
@@ -12,8 +14,6 @@ router.post("/forget-password/:type", forgetPassword);
 
 router.post("/reset-password/:type/:token", resetPassword);
 
-router.use(ValidateSignatureMiddleWare);
- 
-router.get("/check-auth/:type", checkAuth); 
+router.post("/check-auth/:type", checkAuth); 
  
 export { router as AuthRoutes };

@@ -20,7 +20,7 @@ interface IVendor extends Document{
     serviceAvailable: boolean;   
     rating?: Types.Decimal128; 
     latitude?:Types.Decimal128;
-    longtude?:Types.Decimal128;
+    longitude?:Types.Decimal128;
 };
  
 const VendorSchema = new Schema<IVendor>({ 
@@ -41,13 +41,15 @@ const VendorSchema = new Schema<IVendor>({
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
     isApproved: { type: Boolean, default: false },
     latitude: { type: Types.Decimal128, default: 0 }, 
-    longtude: { type: Types.Decimal128, default: 0 }
+    longitude: { type: Types.Decimal128, default: 0 }
 }, {
     toJSON:{
         transform(doc, ret){
             delete ret.password;
             delete ret.salt;
             delete ret.__v;
+            delete ret.resetToken;
+            delete ret.resetTokenExpiration;
             delete ret.createdAt;
             delete ret.updatedAt;
         }

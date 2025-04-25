@@ -1,5 +1,4 @@
-import { IsDecimal, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Decimal128 } from 'mongoose';
+import { IsDecimal, IsNotEmpty, IsNumber, IsString } from 'class-validator'; 
 
 export class CreateCartItem {
   @IsString()
@@ -8,5 +7,5 @@ export class CreateCartItem {
   @IsNumber()
   quantity: number;
   @IsDecimal() 
-  price: Decimal128;
+  price: number;
 } 

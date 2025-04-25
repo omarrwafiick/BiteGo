@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 //image path
-app.use('/images', express.static(path.join(__dirname, 'images'))) 
+app.use('../assets/uploads', express.static(path.join(__dirname, '../assets/uploads')));
 //sanitize request headers  
 app.use(helmet());
 //cors policy

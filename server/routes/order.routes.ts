@@ -2,7 +2,7 @@ import express from "express";
 import { getUserOrderDetails, getUserOrders, getVendorOrders, getVendorOrderDetails, updateVendorOrder } from "../controllers/order.controller"; 
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
-
+require('dotenv').config();
 const router = express.Router(); 
 
 router.use(ValidateSignatureMiddleWare);   

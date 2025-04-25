@@ -1,5 +1,4 @@
-import { IsString, IsNotEmpty, IsBoolean, IsNumber, IsDecimal } from 'class-validator';
-import { Decimal128 } from 'mongoose';
+import { IsString, IsNotEmpty, IsBoolean, IsNumber, IsDecimal } from 'class-validator';  
 
 export class CreateOrderDto {
     @IsString()
@@ -29,7 +28,7 @@ export class CreateOrderDto {
     transactionId: string;
     
     @IsDecimal()
-    readyTime: Decimal128;
+    readyTime: number;
 
     @IsString()
     @IsNotEmpty()
@@ -45,6 +44,6 @@ class Items{
     @IsNumber()
     quantity: number; 
 
-    @IsNumber()
+    @IsDecimal()
     price: number;  
 }

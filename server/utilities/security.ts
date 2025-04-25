@@ -14,13 +14,19 @@ export const GenerateSignature = (payload: AuthPayload) => jwt.sign(payload, Str
 
 export const ValidateSignature = (req: Request) => {
     const token = req.cookies['token']; 
-    if(token){ 
-        const payload = jwt.verify(token.split(" ")[1], String(process.env.JWT_SECRET)) as AuthPayload;
-        req.user = payload;
-        return true; 
+    if (token) {
+        try {
+            const payload = jwt.verify(token, String(process.env.JWT_SECRET)) as AuthPayload;
+            req.user = payload; 
+            return true;
+        } catch (err) {
+            console.error("Token verification failed:", err);
+            return false; 
+        }
     }
-    return false;
+    return false;   
 };
+
 
 export const generateOTP = (): number => Math.floor(100000 + Math.random() * 900000);
 

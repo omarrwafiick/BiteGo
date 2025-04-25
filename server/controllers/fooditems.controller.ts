@@ -5,61 +5,75 @@ import { Vendor } from "../models/vendor.model";
 import { plainToClass } from "class-transformer";
 import { validate } from "class-validator";  
 import { IFoodItem } from "../models/fooditem.model";
-import { checkUser } from "../utilities/getUser";
+import { checkUser } from "../utilities/getUser"; 
+import path from 'path';
+import fs from 'fs';
 
 export const addFoodItem = async (req: Request, res: Response): Promise<void> => {
-    try { 
-            const vendor = await checkUser(req, res, String(process.env.VENDOR));
+    try {
+        const vendor = await checkUser(req, res, String(process.env.VENDOR));
 
-            if(!vendor){
-                res.status(401).json({ success: false, message: 'Unauthorized access' });
-                return;
-            }
-
-            const foodData = plainToClass(CreateFoodItemDto, req.body);
-            const errors = await validate(foodData, { skipMissingProperties: false });
-            if(errors.length > 0){
-                res.status(400).json({ success: false, message: 'All fields are required', errors });
-                return;
-            };
-   
-            const { name, description, price, category, available, readyTime} = req.body as CreateFoodItemDto;
-             
-            const files = req.files as [Express.Multer.File];
-
-            const foodImages = files.map((file:Express.Multer.File) => file.fieldname)
-
-            const newFood = await FoodItem.create({
-                vendorId: vendor.id,
-                name: name,
-                description: description,
-                price: price,
-                category: category,
-                images: foodImages,
-                available: available,
-                rating: 0,
-                readyTime: readyTime
-            }) ;
-            const foodResult = await newFood.save();
-
-            if(!foodResult || !foodResult._id){
-                res.status(400).json({ success: false, message: 'Food item could not be created'});
-                return;
-            }    
-
-            await vendor.menu.push(newFood);
-            const vendorResult = await vendor.save();
-
-            if(!vendorResult || !vendorResult._id){
-                res.status(400).json({ success: false, message: 'Vendor could not be updated'});
-                return;
-            }  
-            
-            res.status(200).json({ success: true, message: "Food item was created successfully"});
-        } catch (error) {
-            res.status(500).json({ message: 'Internal server error' });
+        if (!vendor) { 
+            res.status(401).json({ success: false, message: 'Unauthorized access' });
+            return 
         }
-        return;
+
+        const foodData = plainToClass(CreateFoodItemDto, req.body);
+        const errors = await validate(foodData, { skipMissingProperties: false });
+        
+        if (errors.length > 0) {
+            res.status(400).json({ success: false, message: 'All fields are required', errors });
+            return 
+        }
+
+        const { name, description, price, category, available, readyTime } = req.body as CreateFoodItemDto;
+        
+        const exists = await FoodItem.find({ name, category, vendorId: vendor._id });
+        if (exists.length > 0) {
+            console.log("Item already exists");
+            res.status(400).json({ success: false, message: 'Item already exists' });
+            return;
+        }
+
+        const newFood = await FoodItem.create({
+            vendorId: vendor.id,
+            name,
+            description,
+            price,
+            category,
+            available,
+            readyTime,
+            images: [] 
+        });
+
+        if (!newFood || !newFood._id) {
+            console.log("Food item could not be created");
+            res.status(400).json({ success: false, message: 'Food item could not be created' });
+            return;
+        }
+
+        if (req.files && Array.isArray(req.files)) {
+            const imagePaths = [];
+          
+            for (const file of req.files) {
+              const filename = `${Date.now()}-${file.originalname}`;
+              const filepath = path.join(__dirname, "../assets/uploads", filename);
+              fs.writeFileSync(filepath, file.buffer); 
+              imagePaths.push(filename);
+            }
+          
+            newFood.images = imagePaths;
+            await newFood.save();
+          }
+
+        await vendor.menu.push(newFood);   
+        await vendor.save();
+
+        res.status(200).json({ success: true, message: "Food item was created successfully" });
+    } catch (error) {
+        console.error("Error occurred:", error);
+        res.status(500).json({ message: 'Internal server error', error });
+    }
 };
 
 export const getFoodItems = async (req: Request, res: Response): Promise<void>  => {
@@ -76,17 +90,33 @@ export const getFoodItems = async (req: Request, res: Response): Promise<void>  
         if(!foodItems){
             res.status(404).json({ success: false, message: 'Nothing was not found'});
             return;
-        }  
-
-        res.status(200).json({ success: true, foodItems });
+        }      
+ 
+        const foodItemsWithImages = await Promise.all(foodItems.map(async (foodItem) => {
+            const foodItemWithImages = { ...foodItem.toObject() }; 
+             
+            foodItemWithImages.images = await Promise.all(foodItem.images.map(async (image: any) => {
+                const imagePath = path.join(__dirname, "../assets/uploads", image);
+        
+                if (fs.existsSync(imagePath)) {
+                    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${image}`;
+                    return imageUrl;
+                } else {
+                    return null;
+                }
+            }));
+        
+            return foodItemWithImages;
+        }));
+  
+        res.status(200).json({ success: true, foodItemsWithImages });
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
     }
     return;
 };
-//services not tied to a user it's general
- 
+
 export const getFoodAvailable = async (req: Request, res: Response): Promise<void> => {
     try {  
         const pincode = req.params.pincode; 
@@ -128,7 +158,7 @@ export const getTopResturant = async (req: Request, res: Response): Promise<void
     }
     return;
 };
-
+ 
 export const getFoodIn30Minute = async (req: Request, res: Response): Promise<void> => {
     try {  
         const pincode = req.params.pincode; 
