@@ -4,7 +4,7 @@ import {AdminRoutes, VendorRoutes, UserRoutes, OrderRoute, FoodItemsRoute, CartR
 import { ConnectDB } from "../config/dbConnections.cofig";
 import path from "path";
 import { OfferRoutes } from "../routes/offers.route";
-import { PaymentRoutes } from "../routes/payment.route";
+import { TransactionRoutes } from "../routes/transaction.route";
 import { DeliveryRoutes } from "../routes/delivery.routes"; 
 import helmet from "helmet";
 import { rateLimiting } from "../utilities/rateLimit";
@@ -29,7 +29,6 @@ app.use(helmet());
 app.use(cors());
 //routes
 app.use(`${String(process.env.MAIN_URL)}`, MainRoutes);
-
 app.use(`${String(process.env.MAIN_URL)+String(process.env.AUTH_URL)}`, AuthRoutes); 
 app.use(`${String(process.env.MAIN_URL)+String(process.env.ADMIN_URL)}`, AdminRoutes); 
 app.use(`${String(process.env.MAIN_URL)+String(process.env.VENDOR_URL)}`, VendorRoutes); 
@@ -38,7 +37,7 @@ app.use(`${String(process.env.MAIN_URL)+String(process.env.FOOD_URL)}`, FoodItem
 app.use(`${String(process.env.MAIN_URL)+String(process.env.ORDER_URL)}`, OrderRoute);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.CART_URL)}`, CartRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.OFFER_URL)}`, OfferRoutes);
-app.use(`${String(process.env.MAIN_URL)+String(process.env.PAYMENT_URL)}`, PaymentRoutes);
+app.use(`${String(process.env.MAIN_URL)+String(process.env.TRANSACTION_URL)}`, TransactionRoutes);
 app.use(`${String(process.env.MAIN_URL)+String(process.env.DELIVERY_URL)}`, DeliveryRoutes);
 
 app.listen(process.env.PORT_NUMBER, async () => {

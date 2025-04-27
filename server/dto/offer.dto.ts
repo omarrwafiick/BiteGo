@@ -1,20 +1,16 @@
-import { IsDate, IsDecimal, IsNotEmpty } from 'class-validator';  
+import { IsDecimal, IsNotEmpty, IsNumber } from 'class-validator';  
 
 export class MainEntity{  
-    @IsNotEmpty()
-    @IsDecimal()
-    discountPercentage: number; 
-    @IsDate()
-    validTo: Date;
+    @IsNotEmpty() 
+    discountPercentage: string; 
+    @IsNotEmpty() 
+    validTo: string;
     @IsNotEmpty()
     isActive: boolean;
 }
 
 export class CreateOfferDto extends MainEntity{ 
-    @IsNotEmpty()
-    pinCode: string;  
-    @IsDate()
-    validFrom: Date;  
+
 }
 
 export class UpdateOfferDto extends MainEntity{  

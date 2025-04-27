@@ -124,12 +124,7 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
     try {   
         const type = req.params.type;
 
-        const profile= await checkUser(req, res, type);   
-        
-        if(!profile){
-            res.status(404).json({ success: false, message: `${type} was not found`});
-            return;
-        };
+        const profile= await checkUser(req, res, type);    
         
         const resetToken  = req.params.token; 
         const today = new Date(Date.now())
@@ -163,11 +158,6 @@ export const checkAuth = async (req: Request, res: Response): Promise<void> => {
         const type = req.params.type;
 
         const profile= await checkUser(req, res, type);   
-        
-        if(!profile){
-            res.status(404).json({ success: false, message: `${type} was not found`});
-            return;
-        };
 
         if (!(('isApproved' in profile && profile.isApproved) || ('isVerified' in profile && profile.isVerified))){
             res.status(401).json({ success: false, message: "You can't login until admin approves your request or verifies your account" });

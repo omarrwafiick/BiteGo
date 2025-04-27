@@ -59,12 +59,7 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
 
 export const getVendorProfile = async (req: Request, res: Response) : Promise<void> => {
     try {
-        const vendor = await checkUser(req, res, String(process.env.VENDOR));
-                               
-        if(!vendor){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        }            
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         res.status(200).json({success:true, message: "Vendor is created Successfully", vendor}); 
         
@@ -85,12 +80,7 @@ export const updatetVendorProfile = async (req: Request, res: Response) : Promis
                 
         const { name, phone, menu, pinCode } = req.body as UpdateVendorDto;
         
-        const vendor = await checkUser(req, res, String(process.env.VENDOR));
-                               
-        if(!vendor){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        }   
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         vendor.name = name; 
         vendor.phone = phone;
@@ -116,12 +106,7 @@ export const updatetVendorProfile = async (req: Request, res: Response) : Promis
 
 export const updateVendorService = async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const vendor = await checkUser(req, res, String(process.env.VENDOR));
-                               
-        if(!vendor){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        }   
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         vendor.serviceAvailable = !vendor.serviceAvailable; 
 
@@ -140,12 +125,7 @@ export const updateVendorService = async (req: Request, res: Response) : Promise
 
 export const updateVendorLocation = async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const vendor = await checkUser(req, res, String(process.env.VENDOR));
-                               
-        if(!vendor){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        }   
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         const vendorData = plainToClass(UpdateLocationDto, req.body);
         const errors = await validate(vendorData, { skipMissingProperties: false });

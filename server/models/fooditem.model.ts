@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document, Types } from "mongoose"; 
 
 export interface IFoodItem extends Document { 
-  name: string;
+  _id: Types.ObjectId;
+  name: string; 
   description: string;
   price: Types.Decimal128;
   category: "Fast Food" | "Dessert" | "Beverage" | "Main Course" | "UnKnown";

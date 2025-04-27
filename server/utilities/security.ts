@@ -43,9 +43,7 @@ export const setCookie = (res: Response, token: string) : void => {
 
 export const clearCookie = (res: Response): void =>{
     res.clearCookie('token');
-};
-
-export const  generateOfferCode = (): string => randomBytes(length).toString('hex').slice(0, length).toUpperCase();
+}; 
 
  
   

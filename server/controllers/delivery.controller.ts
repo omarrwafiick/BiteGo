@@ -54,13 +54,8 @@ export const CreateDelivey = async (req: Request, res: Response): Promise<void> 
 
 export const getDeliveryProfile = async (req: Request, res: Response): Promise<void> => {
      try {     
-            const profile = await checkUser(req, res, String(process.env.DELIVERY))
-    
-            if(!profile){
-                res.status(404).json({ success: false, message: 'User was not found'});
-                return;
-            }; 
-      
+            const profile = await checkUser(req, res, String(process.env.DELIVERY)) 
+
             res.status(200).json({ success: true, profile});
     
         } catch (error) {
@@ -71,12 +66,7 @@ export const getDeliveryProfile = async (req: Request, res: Response): Promise<v
 
 export const updateDeliveryProfile = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const profile = await checkUser(req, res, String(process.env.DELIVERY))
-    
-        if(!profile){
-            res.status(404).json({ success: false, message: 'User was not found'});
-            return;
-        };     
+        const profile = await checkUser(req, res, String(process.env.DELIVERY))    
  
         const deliveryData = plainToClass(UpdateDeliveryDto, req.body);
         const errors = await validate(deliveryData, { skipMissingProperties: false });

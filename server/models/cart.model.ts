@@ -3,7 +3,7 @@ import mongoose, { Schema, Types } from "mongoose";
 export interface ICart extends Document {
   userId: mongoose.Types.ObjectId;
   items?: {
-    foodId: mongoose.Schema.Types.ObjectId,
+    foodId: Types.ObjectId,
     quantity: number,
     price: Types.Decimal128,
   }[]; 
@@ -14,7 +14,7 @@ const CartSchema = new Schema<ICart>({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   items: [
     {
-      foodId: { type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" },
+      foodId: { type: Types.ObjectId, ref: "FoodItem" },
       quantity: { type: Number, min: 1 },
       price: { type: Types.Decimal128 },
     }

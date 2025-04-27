@@ -18,3 +18,14 @@ export const findAdmin = async (id: string  = '', email:string = '') =>{
 export const findDelivery = async (id: string  = '', email:string = '') =>{
     return email ? await Delivery.findOne({email: email}) : await Delivery.findById(id);
 };
+
+export const getCurrentTime = (validToInput:string) =>{
+    const now = new Date();
+    const hours = now.getUTCHours();
+    const minutes = now.getUTCMinutes();
+    const seconds = now.getUTCSeconds();
+    const milliseconds = now.getUTCMilliseconds();
+    const fullDateTimeString = `${validToInput}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}Z`;
+    return new Date(fullDateTimeString);
+};
+

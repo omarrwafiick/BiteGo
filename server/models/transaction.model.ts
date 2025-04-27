@@ -14,7 +14,7 @@ export interface ITransaction extends mongoose.Document {
 const TransactionSchema = new Schema<ITransaction>({  
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     vendorId: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor", required: true },
-    orderId: { type: mongoose.Schema.Types.ObjectId, ref: "Order", required: true }, 
+    orderId: { type: mongoose.Schema.Types.ObjectId, ref: "Order" }, 
     offerId: { type: mongoose.Schema.Types.ObjectId, ref: "Offer" },
     orderTotalValue: { type: Types.Decimal128, required: true  },  
     orderNetValue: { type: Types.Decimal128, required: true  },  

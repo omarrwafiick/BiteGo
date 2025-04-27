@@ -7,5 +7,5 @@ export * from './cart.route';
 export * from './delivery.routes';
 export * from './auth.route';
 export * from './offers.route';
-export * from './payment.route';
+export * from './transaction.route';
 export * from './main.routes';

@@ -11,11 +11,11 @@ router.use(ValidateSignatureMiddleWare);
 router.use(RoleBasedAuthentication(String(process.env.USER)));
  
 router.post("/", addToCart);  
-
+ 
 router.get("/", getCartItems);  
 
-router.delete("/:id", deleteCartItem);  
+router.delete("/deleteitem/:id", deleteCartItem);  
 
-router.delete("/", clearCart);  
+router.delete("/clear", clearCart);  
 
 export { router as CartRoutes };

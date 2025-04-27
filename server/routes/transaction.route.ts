@@ -4,11 +4,11 @@ import { addTransaction } from "../controllers/transaction.controller";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 require('dotenv').config();
 const router = express.Router(); 
- 
+  
 router.use(ValidateSignatureMiddleWare);  
-
+ 
 router.use(RoleBasedAuthentication(String(process.env.USER)));
+ 
+router.post("/",  addTransaction); 
 
-router.post("/payment",  addTransaction);
-
-export { router as PaymentRoutes };
+export { router as TransactionRoutes };

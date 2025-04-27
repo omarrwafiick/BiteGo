@@ -1,6 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose"; 
 
-export interface IOrder extends mongoose.Document {
+export interface IOrder extends mongoose.Document {  
     userId: mongoose.Types.ObjectId; 
     vendorId: mongoose.Types.ObjectId; 
     items: {
@@ -10,7 +10,7 @@ export interface IOrder extends mongoose.Document {
     }[];
     totalAmount: Types.Decimal128;   
     remarks?: string;
-    deliveryId: mongoose.Schema.Types.ObjectId; 
+    deliveryId: Types.ObjectId; 
     readyTime: Types.Decimal128;
     status?: "Pending" | "Preparing" | "Out for Delivery" | "Delivered" | "Cancelled";
 }

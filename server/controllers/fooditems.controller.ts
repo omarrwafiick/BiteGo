@@ -11,12 +11,7 @@ import fs from 'fs';
 
 export const addFoodItem = async (req: Request, res: Response): Promise<void> => {
     try {
-        const vendor = await checkUser(req, res, String(process.env.VENDOR));
-
-        if (!vendor) { 
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return 
-        }
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         const foodData = plainToClass(CreateFoodItemDto, req.body);
         const errors = await validate(foodData, { skipMissingProperties: false });
@@ -64,7 +59,7 @@ export const addFoodItem = async (req: Request, res: Response): Promise<void> =>
           
             newFood.images = imagePaths;
             await newFood.save();
-          }
+        }
 
         await vendor.menu.push(newFood);   
         await vendor.save();
@@ -78,12 +73,7 @@ export const addFoodItem = async (req: Request, res: Response): Promise<void> =>
 
 export const getFoodItems = async (req: Request, res: Response): Promise<void>  => {
     try {  
-        const vendor = await checkUser(req, res, String(process.env.VENDOR));
-
-        if(!vendor){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        } 
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         const foodItems = await FoodItem.find({vendorId: vendor?.id});
 
@@ -199,7 +189,6 @@ export const searchFood = async (req: Request, res: Response): Promise<void> => 
         }  
 
         const foodResult:any = []; 
-
         
         result.map( (items) => { 
             if(items.menu){ 

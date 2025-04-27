@@ -99,12 +99,7 @@ export const verifyUserAccount = async (req: Request, res: Response): Promise<vo
 export const requestOtp = async (req: Request, res: Response): Promise<void> => {
     try {   
         const profile = await checkUser(req, res, String(process.env.USER));
-                       
-        if(!profile){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        }    
-
+                        
         const otp = generateOTP();
         const otpExp = new Date();
 
@@ -130,13 +125,8 @@ export const requestOtp = async (req: Request, res: Response): Promise<void> => 
  
 export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const profile = await checkUser(req, res, String(process.env.USER));
-                       
-        if(!profile){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        } 
-  
+        const profile = await checkUser(req, res, String(process.env.USER)); 
+
         res.status(200).json({ success: true, profile});
 
     } catch (error) {
@@ -147,13 +137,8 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
 
 export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
     try {   
-        const profile = await checkUser(req, res, String(process.env.USER));
-                       
-        if(!profile){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        } 
- 
+        const profile = await checkUser(req, res, String(process.env.USER)); 
+
         const userData = plainToClass(UpdateUserDto, req.body);
         const errors = await validate(userData, { skipMissingProperties: false });
 
@@ -185,13 +170,7 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
 
 export const updateUserLocation = async (req: Request, res: Response) : Promise<void> => {
     try {  
-        const user = await checkUser(req, res, String(process.env.USER));
-                       
-        if(!user){
-            res.status(401).json({ success: false, message: 'Unauthorized access' });
-            return;
-        } 
-
+        const user = await checkUser(req, res, String(process.env.USER)); 
         const userData = plainToClass(UpdateLocationDto, req.body);
             
         const errors = await validate(userData, { skipMissingProperties: false });

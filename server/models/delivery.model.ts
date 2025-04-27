@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IDelivery extends Document {
+  _id: Types.ObjectId;
   driverName: string;
   email: string;  
   password: string;  

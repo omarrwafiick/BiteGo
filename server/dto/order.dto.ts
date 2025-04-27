@@ -27,13 +27,11 @@ export class CreateOrderDto {
     @IsNotEmpty()
     transactionId: string;
     
-    @IsDecimal()
+    @IsNumber()
     readyTime: number;
 
-    @IsString()
-    @IsNotEmpty()
-    status: string;
-    
+   
+    status: string; 
 }
 
 class Items{
@@ -42,8 +40,5 @@ class Items{
     foodId: string;  
 
     @IsNumber()
-    quantity: number; 
-
-    @IsDecimal()
-    price: number;  
+    quantity: number;  
 }

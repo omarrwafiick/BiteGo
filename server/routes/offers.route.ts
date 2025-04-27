@@ -7,6 +7,11 @@ const router = express.Router();
  
 router.use(ValidateSignatureMiddleWare);
 
+//user 
+router.get("/user/:pincode", RoleBasedAuthentication(String(process.env.USER)), getUserOffers);
+
+router.get("/user/verify/:id", RoleBasedAuthentication(String(process.env.USER)), verifyUserOffer);
+
 //vendor
 router.use(RoleBasedAuthentication(String(process.env.VENDOR)));
 
@@ -14,15 +19,8 @@ router.get("/vendor", getVendorOffers);
 
 router.post("/vendor", addVendorOffers);
 
-router.put("/vendor/:id", updateOffers);
+router.put("/vendor/:id", updateOffers); 
 
 router.delete("/vendor/:id", removeVendorFromOffer);  
-
-//user
-router.use(RoleBasedAuthentication(String(process.env.USER)));
-
-router.get("/user/:pincode", getUserOffers);
-
-router.get("/user/verify/:id", verifyUserOffer);
 
 export { router as OfferRoutes };

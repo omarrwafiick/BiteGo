@@ -1,10 +1,6 @@
-import { IsDecimal, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
  
-export class CreatePaymentDto { 
-    @IsNotEmpty()
-    @IsDecimal()
-    amount: number; 
-
+export class CreateTransactionDto {  
     @IsNotEmpty()
     @IsString()
     paymentMode: string; 
@@ -16,8 +12,9 @@ export class CreatePaymentDto {
     @IsNotEmpty()
     @IsString()
     vendorId: string; 
+ 
+    orderId: string;   
 
     @IsNotEmpty()
-    @IsString()
-    orderId: string;   
+    totalAmount: number;
 }
