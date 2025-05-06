@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+*,
+*::before, 
+*::after {
+  box-sizing: border-box;
+}
+body, h1, h2, h3, h4, h5, h6, p, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit; 
+} 
+
+.font-montserrat{
+  font-family: "Montserrat", sans-serif;
+}  
+
+.bg-primary{
+	background-color:#FE7531;
+}
+
+.text-primary{
+	color:#FE7531;
+}
+
