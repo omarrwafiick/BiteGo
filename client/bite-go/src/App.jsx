@@ -7,7 +7,7 @@ import { HeadProvider } from 'react-head';
 function App() {  
   const location = useLocation();
   return (
-    <div className='font-gelasio'> 
+    <div className='font-montserrat'> 
       {location.pathname === '/' && <Header />}
       <HeadProvider>  
         <RoutesConfig />

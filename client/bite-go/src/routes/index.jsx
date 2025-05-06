@@ -18,6 +18,7 @@ import VendorProfile from '../pages/vendor/vendor-profile'
 import ManageMenu from '../pages/vendor/manage-menu'
 import ManageOffers from '../pages/vendor/manage-offers'
 import VendorManageOrders from '../pages/vendor/manage-orders'
+import NotFound from '../pages/public/not-found'
 
 const RoutesConfig  = () => ( 
   <Routes>
