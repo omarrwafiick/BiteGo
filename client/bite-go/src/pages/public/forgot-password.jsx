@@ -15,17 +15,17 @@ export default function ForgotPassword() {
           initial={{opacity: 0, y:20}}
           animate={{opacity: 1, y:0}}
           transition={{duration:0.5}} 
-          className='flex justify-center items-center flex-col w-4/12 bg-gray-200/90 rounded-2xl p-16 shadow-xl'>
+          className='flex justify-center items-center flex-col w-4/12 bg-white rounded-2xl p-16 shadow-xl'>
         <span className='m-2'>
           <Key size={55} color="#FE7531" /> 
         </span>
-        <h4 className='capitalize mb-2! text-3xl font-bold font-gelasio'>forget password ?</h4>
+        <h4 className='capitalize mb-2! text-3xl font-bold'>forget password ?</h4>
         <p className='opacity-80 mb-8!'>No worries everything is under control</p>
         <form className='w-full' onSubmit={forgetPassword}>  
           <CustomeButton name={"send me token"} />
         </form>
       </motion.div>
     </div>
-  )
+  ) 
 }
  

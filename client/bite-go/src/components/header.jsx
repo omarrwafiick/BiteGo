@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import logo from '../assets/images/logo.png';  
 import SmallButton from './small-button';
 import { Link } from 'react-router-dom';
+import { ShoppingBag } from 'lucide-react';
  
 export default function Header() {
   const [activeIndex, setActiveIndex] = useState(null);   
@@ -37,6 +38,7 @@ export default function Header() {
             </div>    
  
             <div className="items-center justify-end hidden w-full md:flex md:w-auto md:order-1 relative" id="navbar-user">
+              <ShoppingBag className='me-3' size={25} color="#FE7531" />
               <SmallButton state={true} style={'bg-white text-black! me-3! text-sm'} to="login" name={"Log In"} />
               <SmallButton state={false} style={'bg-primary text-white! text-sm'} to="signup" name={"Sign Up"} />
             </div>  

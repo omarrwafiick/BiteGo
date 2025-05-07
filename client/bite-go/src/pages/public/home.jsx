@@ -17,6 +17,7 @@ import P2 from '../../assets/images/p2.png';
 import P3 from '../../assets/images/p3.png'; 
 import CustomeInput from '../../components/custome-input';
 import CustomeButton from '../../components/custome-button';
+import Parts from '../../assets/images/parts.png'; 
 
 export default function Home() {
   const heroRef = useRef(null);  
@@ -90,11 +91,11 @@ export default function Home() {
                 </SmallButton>
               </div>
             </div>
-            <div className='flex justify-between w-full h-full mt-12'>
+            <div className='flex justify-between w-full h-full mt-22'>
               <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-5/12 me-4'} image={<img src={Image1} className="w-full h-full" alt="food image" />} />
               <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-7/12 '} image={<img src={Image2} className="w-full h-full" alt="food image" />} />
             </div>
-            <div className='flex justify-between w-full h-full mt-4'>
+            <div className='flex justify-between w-full h-full -mt-12'>
               <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-7/12 me-4'} image={<img src={Image3} className="w-full h-full" alt="food image" />} />
               <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-5/12 '} image={<img src={Image4} className="w-full h-full" alt="food image" />} />
             </div>   
@@ -102,7 +103,7 @@ export default function Home() {
 
       <motion.div ref={aboutRef} id="about" className='w-10/12 flex justify-center items-center h-screen'>
           <div className='w-6/12 h-full flex justify-center items-center'>
-            <img src={Image4} className="rounded-2xl w-full mt-12 h-auto" alt="bitego cover" />
+            <img src={Parts} className="rounded-2xl w-full mt-12 h-auto" alt="food image" />
           </div>
           <div className='w-6/12 flex flex-col justify-center items-start p-12'>
             <p className='opacity-80 uppercase mb-6!'>— about us</p> 
@@ -141,7 +142,7 @@ export default function Home() {
             <h1 className='capitalize font-medium text-5xl'>reach us and</h1>
             <h1 className='capitalize leading-20 text-5xl'><span className='font-medium'>get support{" "}</span><span className='text-primary font-bold'>now</span></h1>  
           </div>
-          <form className='bg-gray-200/90 rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
+          <form className='bg-gradient-to-br from-[#f0f0f0] via-[#d6d6d6] to-[#bebebe] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
             <CustomeInput name="subject" type="" value="" onChange style={'w-6/12!'}/>
             <CustomeInput name="message" type="" value="" onChange style={'w-6/12! mt-2! mb-6!'}/>
             <CustomeButton name="contact" styles={'w-6/12!'} onClick="" />

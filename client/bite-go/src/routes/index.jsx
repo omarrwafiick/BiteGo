@@ -5,7 +5,7 @@ import Login from '../pages/public/login'
 import Signup from '../pages/public/signup'
 import ForgotPassword from '../pages/public/forgot-password'
 import ResetPassword from '../pages/public/reset-password' 
-import RestaurantDetails from '../pages/public/restaurant-details'
+import Restaurants from '../pages/public/restaurants'
 import Home from '../pages/public/home'
 import AdminManageOrders from '../pages/admin/manage-orders'
 import HomManageUsersAndVendorse from '../pages/admin/manage-users-vendors'
@@ -23,12 +23,16 @@ import ManageOffers from '../pages/vendor/manage-offers'
 import VendorManageOrders from '../pages/vendor/manage-orders'
 import VendorSignup from '../pages/vendor/vendor-signup'
 import NotFound from '../pages/public/not-found'
-
+import VendorRouteProtector from '../components/vendor-route'
+import AdminRouteProtector from '../components/admin-route'
+import UserRouteProtector from '../components/user-route'
+import DeliveryRouteProtector from '../components/delivery-route'
+ 
 const RoutesConfig  = () => ( 
   <Routes>
     <Route path="/" element={<Home />} />  
     <Route path="/search" element={<FoodSearch />} />  
-    <Route path="/resturant-details" element={<RestaurantDetails />} />  
+    <Route path="/restaurants" element={<Restaurants />} />  
     <Route path="/forget-password" element={<ForgotPassword />} />  
     <Route path="/reset-password/:token" element={<ResetPassword />} />   
     <Route path="/signup" element={<Signup />} />  
@@ -52,4 +56,7 @@ const RoutesConfig  = () => (
   </Routes>
 );
 export default RoutesConfig; 
- 
+
+{/* <VendorRouteProtector>
+  //component
+</VendorRouteProtector>  */}
