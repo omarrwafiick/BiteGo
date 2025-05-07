@@ -17,28 +17,28 @@ export default function Header() {
             </Link> 
 
             <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
-                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border opacity-80 backdrop-blur-md bg-opacity-50 border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                    <li>
-                        <Link onClick={() => handleClick(0)} to="/#hero" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 0 ? 'text-secondary' : 'text-black'}`}  aria-current="page">Home</Link>
+                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border opacity-80 backdrop-blur-md bg-opacity-50 border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+                    <li> 
+                        <Link onClick={() => handleClick(0)} to="/#hero" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 0 ? 'text-primary' : 'text-black'}`}  aria-current="page">Home</Link>
                     </li>
                     <li>
-                        <Link onClick={() => handleClick(1)} to="/#about" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 1 ? 'text-secondary' : 'text-black'}`}>About</Link>
+                        <Link onClick={() => handleClick(1)} to="/#popular" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 1 ? 'text-primary' : 'text-black'}`}>Popular</Link>
                     </li>
                     <li>
-                        <Link onClick={() => handleClick(2)} to="/#services" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 2 ? 'text-secondary' : 'text-black'}`}>Services</Link>
+                        <Link onClick={() => handleClick(2)} to="/#about" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 2 ? 'text-primary' : 'text-black'}`}>About</Link>
                     </li>
                     <li>
-                        <Link onClick={() => handleClick(3)} to="/search" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 3 ? 'text-secondary' : 'text-black'}`}>Foods</Link>
+                        <Link onClick={() => handleClick(3)} to="/#services" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 3 ? 'text-primary' : 'text-black'}`}>Services</Link>
                     </li>
                     <li> 
-                        <Link onClick={() => handleClick(4)} to="/#contact" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 4 ? 'text-secondary' : 'text-black'}`}>Contact</Link>
+                        <Link onClick={() => handleClick(4)} to="/#contact" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 4 ? 'text-primary' : 'text-black'}`}>Contact</Link>
                     </li>
                 </ul>
             </div>    
  
             <div className="items-center justify-end hidden w-full md:flex md:w-auto md:order-1 relative" id="navbar-user">
-              <SmallButton state={true} style={'bg-white text-black! me-3!'} to="login" name={"Log In"} />
-              <SmallButton state={false} style={'bg-primary text-white!'} to="signup" name={"Sign Up"} />
+              <SmallButton state={true} style={'bg-white text-black! me-3! text-sm'} to="login" name={"Log In"} />
+              <SmallButton state={false} style={'bg-primary text-white! text-sm'} to="signup" name={"Sign Up"} />
             </div>  
         </nav>
     </header>

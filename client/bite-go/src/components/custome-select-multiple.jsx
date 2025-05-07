@@ -15,7 +15,7 @@ export default function CustomeMultipleSelect({ name, data, value, onChange }) {
         id="custome-select"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
              focus:outline-none focus:ring-2 focus:ring-[#FE7531] focus:border-[#FE7531]
-             block w-full p-2 h-40"  
+             block w-full p-2 h-40 shadow-xl"  
       >
         {data?.map((item, index) => (
           <option key={item[1]} value={item[1]}>
