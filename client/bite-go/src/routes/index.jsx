@@ -4,6 +4,7 @@ import FoodSearch from '../pages/public/food-search'
 import Login from '../pages/public/login'
 import Signup from '../pages/public/signup'
 import ForgotPassword from '../pages/public/forgot-password'
+import ResetPassword from '../pages/public/reset-password' 
 import RestaurantDetails from '../pages/public/restaurant-details'
 import Home from '../pages/public/home'
 import AdminManageOrders from '../pages/admin/manage-orders'
@@ -29,6 +30,7 @@ const RoutesConfig  = () => (
     <Route path="/search" element={<FoodSearch />} />  
     <Route path="/resturant-details" element={<RestaurantDetails />} />  
     <Route path="/forget-password" element={<ForgotPassword />} />  
+    <Route path="/reset-password/:token" element={<ResetPassword />} />   
     <Route path="/signup" element={<Signup />} />  
     <Route path="/login" element={<Login />} />  
     <Route path="/admin/orders" element={<AdminManageOrders />} />  

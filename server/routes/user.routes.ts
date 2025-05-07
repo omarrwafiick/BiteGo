@@ -13,7 +13,7 @@ router.use(ValidateSignatureMiddleWare);
 
 router.use(RoleBasedAuthentication(String(process.env.USER))); 
 
-router.post("/user", createOrder); 
+router.post("/user/order", createOrder); 
 
 router.patch("/verify-account", verifyUserAccount);
 

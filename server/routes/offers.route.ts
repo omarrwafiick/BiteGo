@@ -12,10 +12,10 @@ router.get("/user/:pincode", RoleBasedAuthentication(String(process.env.USER)), 
 
 router.get("/user/verify/:id", RoleBasedAuthentication(String(process.env.USER)), verifyUserOffer);
 
+router.get("/vendor", getVendorOffers);
+
 //vendor
 router.use(RoleBasedAuthentication(String(process.env.VENDOR)));
-
-router.get("/vendor", getVendorOffers);
 
 router.post("/vendor", addVendorOffers);
 

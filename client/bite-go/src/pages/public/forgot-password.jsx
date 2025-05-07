@@ -21,12 +21,8 @@ export default function ForgotPassword() {
         </span>
         <h4 className='capitalize mb-2! text-3xl font-bold font-gelasio'>forget password ?</h4>
         <p className='opacity-80 mb-8!'>No worries everything is under control</p>
-        <form className='w-full' onSubmit={forgetPassword}> 
-          <CustomeInput  value="" onChange="" name={"email"} type={"email"}/>  
-          <div className='w-full flex pt-2 pb-3'> 
-            <CustomeSelect data={['user', 'delivery', 'admin','vendor']} /> 
-          </div> 
-          <CustomeButton name={"submit"} />
+        <form className='w-full' onSubmit={forgetPassword}>  
+          <CustomeButton name={"send me token"} />
         </form>
       </motion.div>
     </div>

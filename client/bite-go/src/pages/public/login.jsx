@@ -6,11 +6,16 @@ import PasswordInput from '../../components/password-input'
 import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import CustomeSelect from '../../components/custome-select';
+import {passwordRegex} from '../../utils/main';
 
 export default function Login() {
   const login = ()=>{
-
-  };
+    try { 
+      passwordRegex.test();
+    } catch (error) {
+      
+    }
+  }; 
   return (
     <div className='flex justify-center items-center flex-col w-full h-dvh bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
       <motion.div

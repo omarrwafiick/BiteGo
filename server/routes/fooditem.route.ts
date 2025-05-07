@@ -14,7 +14,7 @@ const storage = multer.memoryStorage();
 
 const uploadImage = multer({ storage: storage }).array('images',5);
 
-router.post("/add-items", RoleBasedAuthentication(String(process.env.VENDOR)), uploadImage, addFoodItem);
+router.post("/add-item", RoleBasedAuthentication(String(process.env.VENDOR)), uploadImage, addFoodItem);
 
 router.use(RoleBasedAuthentication(String(process.env.USER)));
 

@@ -6,11 +6,11 @@ require('dotenv').config();
 
 const router = express.Router(); 
  
-router.post("/signup", createAdmin);
- 
 router.use(ValidateSignatureMiddleWare); 
  
 router.use(RoleBasedAuthentication(String(process.env.ADMIN)));
+ 
+router.post("/signup", createAdmin);
 
 router.get("/entity/:type", getEntity); 
 
