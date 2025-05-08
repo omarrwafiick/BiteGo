@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { EyeClosed, EyeIcon } from 'lucide-react';
 
-export default function PasswordInput({name, value, onChange}) { 
+export default function PasswordInput({name, value, onChange, style}) { 
   const [passState, setPass] = useState(false);
   return (
-    <div className="mb-4 relative">
+    <div className={`${style} mb-4 relative`}>
       <label htmlFor={name} className="block mb-2 text-sm font-medium capitalize text-gray-900 dark:text-white">{name}</label>
       <input value={value} onChange={onChange} required type={passState ? 'text' : 'password'} id={name} className="bg-gray-50 text-sm rounded-lg 
              focus:outline-none focus:ring-2 focus:ring-[#FE7531] focus:border-[#FE7531]

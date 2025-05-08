@@ -46,7 +46,7 @@ const RoutesConfig  = () => (
     <Route path="/user/cart" element={<Cart />} />  
     <Route path="/user/orders" element={<OrderHistory />} />  
     <Route path="/user/payment" element={<Payment />} />  
-    <Route path="/user/signup" element={<VendorSignup />} />  
+    <Route path="/user/signup" element={<UserSignup />} />  
     <Route path="/vendor/orders" element={<VendorManageOrders />} />  
     <Route path="/vendor/menus" element={<ManageMenu />} />  
     <Route path="/vendor/profile" element={<VendorProfile />} />  

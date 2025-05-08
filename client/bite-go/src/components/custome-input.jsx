@@ -9,5 +9,5 @@ export default function CustomeInput({name, type, value, onChange, style}) {
              w-full p-2 border-2 border-black/10`}/> 
     </div>
   )
-} 
+}  
  
