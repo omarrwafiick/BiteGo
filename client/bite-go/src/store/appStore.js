@@ -16,6 +16,8 @@ const AppStore = create((set) => ({
     setIsAuthenticated: (data) => set({ isAuthenticated: data }),
     isLoading:false,  
     setIsLoading: (data) => set({ isLoading: data }),
+    items:[],  
+    setItems: (data) => set({ items: data }),
     role: null,
     setToken: (newToken) => {
       const userRole = extractRole(newToken);

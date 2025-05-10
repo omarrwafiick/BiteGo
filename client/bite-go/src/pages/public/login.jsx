@@ -17,7 +17,7 @@ export default function Login() {
     }
   }; 
   return (
-    <div className='flex justify-center items-center flex-col w-full h-dvh bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
+    <div className='flex max-h-screen justify-center items-center flex-col w-full h-dvh bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
       <motion.div
           initial={{opacity: 0, y:20}}
           animate={{opacity: 1, y:0}}
@@ -32,7 +32,7 @@ export default function Login() {
           <CustomeInput  value="" onChange="" name={"email"} type={"email"}/> 
           <PasswordInput value="" onChange="" name={"password"} />
           <div className='w-full flex pt-2 pb-3'> 
-            <CustomeSelect data={['user', 'delivery', 'admin','vendor']} /> 
+            <CustomeSelect style={'w-full'} data={['user', 'delivery', 'admin','vendor']} /> 
           </div>
           <div className='w-full flex justify-between mb-2 mt-2'> 
             <Link className='capitalize cursor-pointer text-sm' to="/forget-password">forget password?</Link>

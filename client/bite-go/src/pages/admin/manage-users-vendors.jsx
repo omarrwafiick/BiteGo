@@ -11,6 +11,11 @@ export default function ManageUsersAndVendors() {
   const submit = ()=>{
 
   };
+  const data = [
+    {_id: '121',totalAmount: '$2121', status:'Pending', userId:'132', vendorId:'344', deliveryId:'42'},
+    {_id: '122',totalAmount: '$2121', status:'Pending', userId:'132', vendorId:'344', deliveryId:'42'},
+    {_id: '123',totalAmount: '$2121', status:'Pending', userId:'132', vendorId:'344', deliveryId:'42'}
+  ];
   return (
     <div className='flex min-h-scree justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
     <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -27,33 +32,20 @@ export default function ManageUsersAndVendors() {
       <div className='w-full mt-4 mb-4'>
           <h1 className='capitalize font-bold text-2xl'>vendors</h1>
       </div>
+
       <CustomeTable 
-        actions={
-          <>
-            <a className="bg-blue-600! text-white! px-3 py-1 rounded mx-1 cursor-pointer">approve</a>
-            <a className="bg-red-600! text-white! px-3 py-1 rounded mx-1 cursor-pointer">delete</a>
-          </> 
-        } 
-        data={[ 
-          {_id: '121',name: 'macdonalds', pinCode:'122121', address:'45 street', phone:'34323233', email:'mac232@gmail.com'},
-          {_id: '121',name: 'macdonalds', pinCode:'122121', address:'45 street', phone:'34323233', email:'mac232@gmail.com'},
-          {_id: '121',name: 'macdonalds', pinCode:'122121', address:'45 street', phone:'34323233', email:'mac232@gmail.com'}
-        ]} 
-        colsNames={['_id','name','pinCode','address','phone','email','actions']} />
+            colsNames={ Object.keys(data[0]) } 
+            isDelete={true} 
+            data={data}/>
 
       <div className='w-full mt-10 mb-4'>
           <h1 className='capitalize font-bold text-2xl'>users</h1>
       </div>
       <CustomeTable 
-        actions={
-          <a className="bg-red-600! text-white! px-3 py-1 rounded hover:bg-blue-700 mx-1">delete</a>
-        } 
-        data={[
-          {_id: '1212',firstName: 'omar', lastName:'mohamed', email:'mo@gmail.com', phone:'+201212134342', address:'45 street'},
-          {_id: '1212',firstName: 'omar', lastName:'mohamed', email:'mo@gmail.com', phone:'+201212134342', address:'45 street'},
-          {_id: '1212',firstName: 'omar', lastName:'mohamed', email:'mo@gmail.com', phone:'+201212134342', address:'45 street'}
-        ]} 
-        colsNames={['_id','firstName','lastName','email','phone','address','actions']} />  
+            colsNames={ Object.keys(data[0]) } 
+            isDelete={true} 
+            isEdit={true}
+            data={data}/> 
     </div>
     {showAdminPopup && (
       <div onClick={() => setShowAdminPopup(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">

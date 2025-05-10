@@ -142,9 +142,9 @@ export default function Home() {
             <h1 className='capitalize font-medium text-5xl'>reach us and</h1>
             <h1 className='capitalize leading-20 text-5xl'><span className='font-medium'>get support{" "}</span><span className='text-primary font-bold'>now</span></h1>  
           </div>
-          <form className='bg-gradient-to-br from-[#f0f0f0] via-[#d6d6d6] to-[#bebebe] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
-            <CustomeInput name="subject" type="" value="" onChange style={'w-6/12!'}/>
-            <CustomeInput name="message" type="" value="" onChange style={'w-6/12! mt-2! mb-6!'}/>
+          <form className='bg-gradient-to-br from-[#f0f0f0] via-[#e7e7e7] to-[#d5d5d5] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
+            <CustomeInput titleStyle={'text-black!'} name="subject" type="" value="" onChange style={'w-6/12!'}/>
+            <CustomeInput titleStyle={'text-black!'} name="message" type="" value="" onChange style={'w-6/12! mt-2! mb-6!'}/>
             <CustomeButton name="contact" styles={'w-6/12!'} onClick="" />
           </form>
       </motion.div>

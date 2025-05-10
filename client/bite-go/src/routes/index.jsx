@@ -23,6 +23,7 @@ import ManageOffers from '../pages/vendor/manage-offers'
 import VendorManageOrders from '../pages/vendor/manage-orders'
 import VendorSignup from '../pages/vendor/vendor-signup'
 import NotFound from '../pages/public/not-found'
+import ItemDetails from '../pages/vendor/item-details'  
 import VendorRouteProtector from '../components/vendor-route'
 import AdminRouteProtector from '../components/admin-route'
 import UserRouteProtector from '../components/user-route'
@@ -52,6 +53,7 @@ const RoutesConfig  = () => (
     <Route path="/vendor/profile" element={<VendorProfile />} />  
     <Route path="/vendor/offers" element={<ManageOffers />} />  
     <Route path="/vendor/signup" element={<VendorSignup />} />  
+     <Route path="/item-details" element={<ItemDetails />} />  
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

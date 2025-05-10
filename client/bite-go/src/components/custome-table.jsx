@@ -1,40 +1,47 @@
-export default function CustomeTable({ colsNames, data, actions }) {
+export default function CustomeTable({ colsNames, data, isDelete = false, isEdit = false, onDelete, onEdit }) {
   return (
     <div className="relative w-full overflow-x-auto">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-lg text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            {colsNames?.map((col, index) => (
+            {colsNames.map((col, index) => (
               <th key={index} className="px-6 py-3 capitalize">{col}</th>
             ))}
+            {(isEdit || isDelete) && <th className="px-6 py-3">Actions</th>}
           </tr>
         </thead>
         <tbody>
-          {data?.map((row, rowIndex) => (
+          {data.map((row, rowIndex) => (
             <tr key={rowIndex} className="bg-white dark:bg-gray-800 border-b">
-              {colsNames.map((col, colIndex) => {
-                  const key = normalizeKey(col); 
-                  if (key === 'actions') {
-                    return (
-                      <td key={colIndex} className="px-6 py-4 capitalize">
-                        {typeof actions === 'function' ? action(row) : actions}
-                      </td>
-                    );
-                  } 
-                  return (
-                    <td key={colIndex} className="px-6 py-4 capitalize">
-                      {row[key] ?? '—'}
-                    </td>
-                  );
-                })}
+              {colsNames.map((col, colIndex) => (
+                <td key={colIndex} className="px-6 py-4 capitalize">
+                  {row[col] ?? '—'}
+                </td>
+              ))}
+              {(isEdit || isDelete) && (
+                <td className="px-6 py-4">
+                  {isEdit && (
+                    <a
+                      onClick={() => onEdit?.(row)}
+                      className="bg-blue-600 text-white! px-3 py-1 rounded mx-1 cursor-pointer"
+                    >
+                      edit
+                    </a>
+                  )}
+                  {isDelete && (
+                    <a
+                      onClick={() => onDelete?.(row)}
+                      className="bg-red-600 text-white! px-3 py-1 rounded mx-1 cursor-pointer"
+                    >
+                      delete
+                    </a>
+                  )}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-}
- 
-function normalizeKey(label) {
-  return label;    
 }
