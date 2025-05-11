@@ -1,24 +1,38 @@
-import React from 'react'
+import { Minus, Plus } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 
-export default function Item({image, name, price, quantity}) {
+export default function Item({id, image, name, price, quantity: initialQty, onQuantityChange  }) {
+  const [quantity, setQuantity] = useState(initialQty); 
+  useEffect(() => {
+    onQuantityChange(id, quantity);
+  }, [quantity]); 
+
+  const increase = () => setQuantity(quantity + 1);
+  const decrease = () => quantity === 0 ? setQuantity(0) : setQuantity(quantity - 1);
   return (
-    <div className='w-full flex justify-center items-start bg-amber-300 p-4'>
-      <div className='flex justify-center items-center w-3/12'>
-        {image}
-      </div>
-      <div className='flex flex-col  justify-center items-between w-3/12'>
-        <h1 className='='>product</h1>
-        <h3 className=''>{name}</h3>
-        <h3>{price}</h3>
-      </div>
-      <div className='flex flex-col w-3/12'>
-        <h1>quantity</h1>
-        <h3>{quantity}</h3> 
-      </div>
-      <div className='flex flex-col w-3/12'>
-        <h1>total</h1>
-        <h3>{price * quantity}</h3> 
-      </div>
-    </div>
+           <tr className="bg-white border-b border-gray-200">
+                      <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        <div className='flex justify-start items-center'> 
+                          {image}
+                          <span className='flex flex-col ms-4!'>
+                            <a className='capitalize text-lg opacity-75'>name :</a>
+                            <a className='capitalize font-bold mt-2! text-xl'>{name}</a>
+                          </span>
+                        </div>
+                      </th>
+                      <td className="px-6 py-4 capitalize">
+                          {price}
+                      </td>
+                      <td class="px-6 py-4 capitalize">
+                        <div className='flex w-full'> 
+                          <Minus onClick={decrease} className='border-2 rounded-sm cursor-pointer' />
+                          <a className='ms-2 me-2'>{quantity}</a>
+                          <Plus onClick={increase} className='border-2 rounded-sm cursor-pointer' />
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 capitalize">
+                          ${quantity*price}
+                      </td>
+                  </tr> 
   )
 }

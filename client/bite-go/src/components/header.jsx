@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import logo from '../assets/images/logo.png';  
 import SmallButton from './small-button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
  
 export default function Header() {
   const [activeIndex, setActiveIndex] = useState(null);   
+  const navigate = useNavigate();
   const handleClick = (index) => {
     setActiveIndex(index);  
   }; 
@@ -35,10 +36,10 @@ export default function Header() {
                         <Link onClick={() => handleClick(4)} to="/#contact" className={`px-4 py-2 rounded-md font-medium ${activeIndex === 4 ? 'text-primary' : 'text-black'}`}>Contact</Link>
                     </li>
                 </ul>
-            </div>    
- 
+            </div>     
+
             <div className="items-center justify-end hidden w-full md:flex md:w-auto md:order-1 relative" id="navbar-user">
-              <ShoppingBag className='me-3' size={25} color="#FE7531" />
+              <ShoppingBag onClick={()=> navigate('/user/cart')} className='me-3 cursor-pointer hover:scale-115 duration-100' size={25} color="#000000" />
               <SmallButton state={true} style={'bg-white text-black! me-3! text-sm'} to="login" name={"Log In"} />
               <SmallButton state={false} style={'bg-primary text-white! text-sm'} to="signup" name={"Sign Up"} />
             </div>  

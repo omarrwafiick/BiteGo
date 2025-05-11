@@ -18,12 +18,12 @@ import ManageMenu from '../pages/vendor/manage-menu'
 import ManageOffers from '../pages/vendor/manage-offers'
 import VendorSignup from '../pages/vendor/vendor-signup'
 import NotFound from '../pages/public/not-found'
-import ItemDetails from '../pages/vendor/item-details'  
 import VendorRouteProtector from '../components/vendor-route'
 import AdminRouteProtector from '../components/admin-route'
 import UserRouteProtector from '../components/user-route'
 import DeliveryRouteProtector from '../components/delivery-route'
- 
+import Menu from '../pages/public/menu';
+
 const RoutesConfig  = () => ( 
   <Routes>
     <Route path="/" element={<Home />} />  
@@ -35,6 +35,7 @@ const RoutesConfig  = () => (
     <Route path="/login" element={<Login />} />  
     <Route path="/profile" element={<Profile />} />  
     <Route path="/orders" element={<ManageOrders />} />  
+    <Route path="/menu" element={<Menu />} />   
     <Route path="/admin/users" element={<AdminManageUsersAndVendorse />} />   
     <Route path="/delivery/signup" element={<DeliverySignup />} />   
     <Route path="/user/cart" element={<Cart />} />   
@@ -42,8 +43,7 @@ const RoutesConfig  = () => (
     <Route path="/user/signup" element={<UserSignup />} />   
     <Route path="/vendor/menus" element={<ManageMenu />} />   
     <Route path="/vendor/offers" element={<ManageOffers />} />  
-    <Route path="/vendor/signup" element={<VendorSignup />} />  
-     <Route path="/item-details" element={<ItemDetails />} />  
+    <Route path="/vendor/signup" element={<VendorSignup />} />   
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

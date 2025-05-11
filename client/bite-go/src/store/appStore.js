@@ -22,7 +22,9 @@ const AppStore = create((set) => ({
     setToken: (newToken) => {
       const userRole = extractRole(newToken);
       set({ token: newToken, role: userRole, isAuthenticated: true });
-    }
+    },
+    discount:2,
+    setDiscount: (data) => set({ discount: data }),
 }));
   
 export default AppStore;

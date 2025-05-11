@@ -86,18 +86,18 @@ export default function Home() {
                 </p> 
               </div>
               <div>
-                <SmallButton style={'bg-primary text-white! p-4!'} to="">
+                <SmallButton style={'bg-primary text-white! p-4!'} to="restaurants">
                     View All <span className="text-2xl rounded-full">{"  "}→</span>
                 </SmallButton>
               </div>
             </div>
             <div className='flex justify-between w-full h-full mt-22'>
               <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-5/12 me-4'} image={<img src={Image1} className="w-full h-full" alt="food image" loading='lazy' />} />
-              <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-7/12 '} image={<img src={Image2} className="w-full h-full" alt="food image" loading='lazy' />} />
+              <Popular title={'meat balls'} description={'free delivery for first order'} width={'w-7/12 '} image={<img src={Image2} className="w-full h-full" alt="food image" loading='lazy' />} />
             </div>
             <div className='flex justify-between w-full h-full -mt-12'>
-              <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-7/12 me-4'} image={<img src={Image3} className="w-full h-full" alt="food image" loading='lazy' />} />
-              <Popular title={'cheese pizza'} description={'free delivery for first order'} width={'w-5/12 '} image={<img src={Image4} className="w-full h-full" alt="food image" loading='lazy' />} />
+              <Popular title={'stake meal'} description={'free delivery for first order'} width={'w-7/12 me-4'} image={<img src={Image3} className="w-full h-full" alt="food image" loading='lazy' />} />
+              <Popular style={'bg-black/10!'} title={'hot dog'} description={'free delivery for first order'} width={'w-5/12 '} image={<img src={Image4} className="w-full h-full" alt="food image" loading='lazy' />} />
             </div>   
       </motion.div>
 
@@ -130,9 +130,9 @@ export default function Home() {
             </p>
           </div>
           <div className='w-full flex justify-evenly items-center mt-12'>
-            <Service btnStyle={'bg-yellow-400'} title={'Pizza'} image={<img src={P1} className="w-58 h-58" alt="food image" loading='lazy' />} />
+            <Service btnStyle={'bg-yellow-400'} title={'Stake'} image={<img src={P1} className="w-58 h-58" alt="food image" loading='lazy' />} />
             <Service btnStyle={'bg-cyan-400'} title={'Meat balls'} image={<img src={P2} className="w-58 h-58" alt="food image" loading='lazy' />} />
-            <Service btnStyle={'bg-green-400'} title={'Stake'} image={<img src={P3} className="w-58 h-58" alt="food image" loading='lazy' />} />
+            <Service btnStyle={'bg-green-400'} title={'Pizza'} image={<img src={P3} className="w-58 h-58" alt="food image" loading='lazy' />} />
           </div>
       </motion.div>
 
@@ -145,7 +145,7 @@ export default function Home() {
           <form className='bg-gradient-to-br from-[#f0f0f0] via-[#e7e7e7] to-[#d5d5d5] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
             <CustomeInput titleStyle={'text-black!'} name="subject" type="" value="" onChange style={'w-6/12!'}/>
             <CustomeInput titleStyle={'text-black!'} name="message" type="" value="" onChange style={'w-6/12! mt-2! mb-6!'}/>
-            <CustomeButton name="contact" styles={'w-6/12!'} onClick="" />
+            <CustomeButton name="contact" styles={'w-6/12! '} onClick="" />
           </form>
       </motion.div>
     </div>
