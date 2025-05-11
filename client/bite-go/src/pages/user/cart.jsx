@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import Item from '../../components/item'
-import Image from '../../assets/images/item.png'; 
+import CartItem from '../../components/cart-item'
 import { ShoppingBag } from 'lucide-react';
 import CustomeButton from '../../components/custome-button'
 import { useNavigate } from 'react-router-dom';
 import AppStore from '../../store/appStore';
 
-export default function Cart() { 
-  var data = [
-    { id:'212', name:"burger", price:12, quantity:2, image: Image },
-    { id:'213', name:"burger", price:42, quantity:4, image: Image },
-    { id:'214', name:"burger", price:14, quantity:7, image: Image },
-  ]; 
-  const [items, setItems] = useState(data);  
+export default function Cart(){
+  //const cartItems = AppStore(state => state.cartItems); // subscribes to changes
+  var { cartItems, discount } = AppStore();
+  const [items, setItems] = useState(cartItems);  
   const navigate = useNavigate(); 
-  var { discount } = AppStore();
-  var [total, setTotal] = useState(0);
-  var [discountt, setDiscount] = useState(discount);
-
+  var [total, setTotal] = useState(0); 
+ 
   useEffect(() => {
+    console.log(cartItems)
     const calculatedTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotal(calculatedTotal);
   }, [items]);
@@ -26,17 +21,12 @@ export default function Cart() {
   const handleQuantityChange = (itemId, newQuantity) => {
     const updatedItems = items.map(item =>
       item.id === itemId ? { ...item, quantity: newQuantity } : item
-    );
-
-    setItems(updatedItems);
-
-    const newTotal = updatedItems.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
-
+    ); 
+    setItems(updatedItems); 
+    const newTotal = updatedItems.reduce((acc, item) => acc + item.price * item.quantity,0); 
     setTotal(newTotal);
   };
+  
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex flex-col justify-center items-center w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -65,7 +55,7 @@ export default function Cart() {
                   </thead>
                   <tbody className='text-md'>
                      {items.map(item => (
-                                  <Item
+                                  <CartItem
                                     key={item.id}
                                     id={item.id}
                                     name={item.name}
@@ -87,7 +77,7 @@ export default function Cart() {
                       <h4 className='capitalize text-md font-semibold w-full'>cart subtotal</h4>
                       <span>{total}</span>
                     </div>
-                    <div className='w-full flex justify-between items-center mt-2'>
+                    <div className='w-full flex justify-between items-center mt-4'>
                       <h4 className='capitalize text-md font-semibold w-full'>discount</h4>
                       <span>{discount}%</span>
                     </div>

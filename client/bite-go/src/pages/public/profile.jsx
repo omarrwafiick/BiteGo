@@ -5,8 +5,7 @@ import { User } from 'lucide-react'
 import AppStore from '../../store/appStore'  
 
 export default function Profile() {
-  //const { role } = AppStore();
-  const role = "user";
+  const { role } = AppStore();
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -55,7 +54,7 @@ export default function Profile() {
                       </>
                   :
                       <> 
-                        <h1 className='text-2xl capitalize font-bold'>sorry there is nothing to show</h1>
+                        <h1 className='text-lg capitalize font-bold'>sorry there is nothing to show</h1>
                       </>
                 }
               </div>
@@ -66,7 +65,7 @@ export default function Profile() {
               </div>
               <div className='w-full grid grid-cols-3 gap-8 mt-6'>
                 {
-                  role === "user" || "delivery" || "vendor" ? 
+                  role === "user" || role === "delivery" || role === "vendor" ? 
                   <> 
                     <InfoBox title={'country'} value={'egypt'} />
                     <InfoBox title={'city'} value={'alexandria'} />
@@ -74,7 +73,7 @@ export default function Profile() {
                   </>
                   :
                   <> 
-                    <h1 className='text-2xl capitalize font-bold'>sorry there is nothing to show</h1>
+                    <h1 className='text-lg capitalize font-bold'>sorry there is nothing to show</h1>
                   </>
                 }
               </div>

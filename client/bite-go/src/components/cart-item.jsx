@@ -1,7 +1,7 @@
 import { Minus, Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
-export default function Item({id, image, name, price, quantity: initialQty, onQuantityChange  }) {
+export default function CartItem({id, image, name, price, quantity: initialQty, onQuantityChange  }) {
   const [quantity, setQuantity] = useState(initialQty); 
   useEffect(() => {
     onQuantityChange(id, quantity);

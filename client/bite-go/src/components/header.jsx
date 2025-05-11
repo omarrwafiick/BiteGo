@@ -3,10 +3,12 @@ import logo from '../assets/images/logo.png';
 import SmallButton from './small-button';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
- 
+import AppStore from '../store/appStore';
+
 export default function Header() {
+  const { cartItems } = AppStore();    
   const [activeIndex, setActiveIndex] = useState(null);   
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const handleClick = (index) => {
     setActiveIndex(index);  
   }; 
@@ -39,7 +41,13 @@ export default function Header() {
             </div>     
 
             <div className="items-center justify-end hidden w-full md:flex md:w-auto md:order-1 relative" id="navbar-user">
-              <ShoppingBag onClick={()=> navigate('/user/cart')} className='me-3 cursor-pointer hover:scale-115 duration-100' size={25} color="#000000" />
+              <div className='relative'>
+                <ShoppingBag onClick={()=> navigate('/user/cart')} className='me-3 cursor-pointer hover:scale-115 duration-100' size={25} color="#000000" />
+                {
+                    cartItems.length > 0 ? <span className='w-3 h-3 top-0 right-2 bg-orange-500 rounded-full absolute'></span> : <></>
+                }
+              </div>
+              
               <SmallButton state={true} style={'bg-white text-black! me-3! text-sm'} to="login" name={"Log In"} />
               <SmallButton state={false} style={'bg-primary text-white! text-sm'} to="signup" name={"Sign Up"} />
             </div>  

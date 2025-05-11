@@ -14,7 +14,7 @@ export default function Payment() {
           <h4 className='capitalize mb-2! text-4xl font-bold'>payment</h4>
           <p className='opacity-80 mb-8! mt-2! text-center text-md'>You can pay here easily via our platform to facilitate the process and enhance security.</p>
           <form className='w-full flex justify-center' onSubmit={submit}>
-              <CustomeButton styles={'w-4/12'} name={"submi"} />
+              <CustomeButton styles={'w-4/12'} name={"submit"} />
           </form>
         </div>
     </div>

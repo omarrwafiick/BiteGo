@@ -7,10 +7,12 @@ import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import CustomeSelect from '../../components/custome-select';
 import {passwordRegex} from '../../utils/main';
+import AppStore from '../../store/appStore'  
 
 export default function Login() {
+  const { setToken } = AppStore();
   const login = ()=>{
-    try { 
+    try {  
       passwordRegex.test();
     } catch (error) {
       
