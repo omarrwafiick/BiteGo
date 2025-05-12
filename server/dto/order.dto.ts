@@ -29,8 +29,7 @@ export class CreateOrderDto {
     
     @IsNumber()
     readyTime: number;
-
-   
+ 
     status: string; 
 }
 

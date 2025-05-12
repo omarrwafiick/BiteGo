@@ -37,7 +37,7 @@ export default function Cart(){
           <div className='flex w-full'>
             <div className='w-8/12 h-full'>
                 <table className="w-full text-left rtl:text-right text-gray-500">
-                  <thead className="text-lg text-gray-700 uppercase bg-gray-100">
+                  <thead className="text-lg text-gray-700 uppercase bg-gray-200/80 mt-3">
                       <tr>
                           <th scope="col" className="px-6 py-3 capitalize">
                               product 
@@ -70,7 +70,7 @@ export default function Cart(){
             </div>
             <div className='w-4/12 h-full '>
                 <div className='flex flex-col justify-start items-center'>
-                  <h2 className='capitalize text-center text-xl font-bold px-6! py-3! w-full bg-gray-100'>calculated total price</h2>
+                  <h2 className='capitalize text-center text-xl font-bold px-6! py-3! w-full bg-gray-200/80 mt-3'>calculated total price</h2>
                   <p className='text-sm opacity-75 w-10/12 mt-6!'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat molestiae suscipit assumenda obcaecati corporis. Quas accusamus ipsa laborum doloremque sint vitae non laboriosam, itaque fugiat dolores libero maiores quod! Deserunt?</p>
                   <div className='w-10/12 mt-8'>
                     <div className='w-full flex justify-between items-center'>

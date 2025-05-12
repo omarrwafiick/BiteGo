@@ -1,5 +1,5 @@
 import { Request, Response } from "express"; 
-import { CreateFoodItemDto } from "../dto/foodItem.dto";
+import { FoodItemDto } from "../dto/foodItem.dto";
 import { FoodItem } from "../models/fooditem.model";
 import { Vendor } from "../models/vendor.model";
 import { plainToClass } from "class-transformer";
@@ -8,12 +8,13 @@ import { IFoodItem } from "../models/fooditem.model";
 import { checkUser } from "../utilities/getUser"; 
 import path from 'path';
 import fs from 'fs';
+import { Types } from "mongoose";
 
 export const addFoodItem = async (req: Request, res: Response): Promise<void> => {
     try {
         const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
-        const foodData = plainToClass(CreateFoodItemDto, req.body);
+        const foodData = plainToClass(FoodItemDto, req.body);
         const errors = await validate(foodData, { skipMissingProperties: false });
         
         if (errors.length > 0) {
@@ -21,7 +22,7 @@ export const addFoodItem = async (req: Request, res: Response): Promise<void> =>
             return 
         }
 
-        const { name, description, price, category, available, readyTime } = req.body as CreateFoodItemDto;
+        const { name, description, price, category, available, readyTime } = req.body as FoodItemDto;
         
         const exists = await FoodItem.find({ name, category, vendorId: vendor._id });
         if (exists.length > 0) {
@@ -219,6 +220,43 @@ export const getResturantById = async (req: Request, res: Response): Promise<voi
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
+    }
+    return;
+};
+
+export const updatetVendorMenu = async (req: Request, res: Response) : Promise<void> => {
+    try {
+        const vendorData = plainToClass(FoodItemDto, req.body);
+        const errors = await validate(vendorData, { skipMissingProperties: true });
+        if(errors.length > 0){
+            res.status(400).json({ success: false, message: 'All fields are required', errors });
+            return;
+        };
+                
+        const { name, description, price, category, available, readyTime } = req.body as FoodItemDto;
+
+        const id = req.params.id; 
+
+        const foodItem = await FoodItem.findById({_id: id});
+
+        if(!foodItem){
+            res.status(404).json({ success: false, message: 'Nothing was not found'});
+            return;
+        }      
+ 
+        foodItem.name= name;  
+        foodItem.description= description;    
+        foodItem.price = Types.Decimal128.fromString(price.toString());    
+        foodItem.category= category;    
+        foodItem.available= available;      
+        foodItem.readyTime= Types.Decimal128.fromString(readyTime.toString());      
+
+        await foodItem.save();
+
+        res.status(200).json({success:true, message: "Vendor was updated successfully"});   
+        
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error});
     }
     return;
 };

@@ -1,6 +1,6 @@
 import { Length, IsString, IsNotEmpty, IsBoolean, IsNumber } from 'class-validator'; 
 
-export class CreateFoodItemDto {
+export class FoodItemDto {
     @IsString()
     @IsNotEmpty()
     name: string;
@@ -20,3 +20,4 @@ export class CreateFoodItemDto {
  
     readyTime: number;
 }
+ 

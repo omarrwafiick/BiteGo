@@ -6,13 +6,30 @@ import CustomeInput from '../../components/custome-input';
 import PasswordInput from '../../components/password-input' 
 import CustomeButton from '../../components/custome-button'
 import AppStore from '../../store/appStore'  
+import ConfirmAction from '../../components/confirm-action';
 
 export default function ManageUsersAndVendors() {
   const { users, vendors } = AppStore(); 
-  const [showAdminPopup, setShowAdminPopup] = useState(false);
-  const submit = ()=>{
+  const [showAdminPopup, setShowAdminPopup] = useState(false); 
+  const [showConfirm, setShowConfirm] = useState(false);
 
+  const submit = ()=>{ 
   }; 
+
+  const handlePageButtonClick = () => {
+    setShowConfirm(true);
+  };
+
+  const handleConfirmResult = (confirmed) => {
+    setShowConfirm(false);
+    if (confirmed) {
+      //send request
+      console.log("User confirmed the action"); 
+    } else {
+      //do nothing
+      console.log("User cancelled the action");
+    }
+  };
   return (
     <div className='flex min-h-scree justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
     <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -33,6 +50,7 @@ export default function ManageUsersAndVendors() {
       <CustomeTable 
             colsNames={ Object.keys(vendors[0]) } 
             isDelete={true}
+            onDelete={handlePageButtonClick}
             isEdit={true}
             //onEdit={()=>request}
             nameEdit={'approve'} 
@@ -44,11 +62,12 @@ export default function ManageUsersAndVendors() {
       <CustomeTable 
             colsNames={ Object.keys(users[0]) } 
             isDelete={true} 
+            onDelete={handlePageButtonClick}
             data={users}/> 
     </div>
     {showAdminPopup && (
       <div onClick={() => setShowAdminPopup(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-        <form onSubmit={submit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-9/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly  w-6/12'>
+        <form onSubmit={submit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly  w-6/12'>
             <X size={55} color="#FF0000" onClick={() => setShowAdminPopup(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
             <h2 className="text-2xl font-bold mb-6! capitalize">add new admin</h2> 
             <CustomeInput value="" onChange="" name={"fullname"} type={"text"}/>
@@ -58,6 +77,7 @@ export default function ManageUsersAndVendors() {
         </form>
       </div>      
     )}
+    <ConfirmAction visible={showConfirm} result={handleConfirmResult} />
 </div>
   )
 }

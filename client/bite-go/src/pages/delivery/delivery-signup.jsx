@@ -7,11 +7,13 @@ import PasswordInput from '../../components/password-input'
 import { Link } from 'react-router-dom';
 import { Truck } from 'lucide-react'; 
 import {passwordRegex} from '../../utils/main';
+import AppStore from '../../store/appStore'    
 
 export default function DeliverySignup() {
-  const signup = ()=>{
+  const { pinCodes } = AppStore();
+  const signup = ()=>{ 
     try { 
-      passwordRegex.test();
+      passwordRegex.test(); 
     } catch (error) {
       
     }
@@ -34,15 +36,15 @@ export default function DeliverySignup() {
                   <CustomeInput style='w-10/12'  value="" onChange="" name={"driverName"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value="" onChange="" name={"owner name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value="" onChange="" name={"email"} type={"email"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"pinCode"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value="" onChange="" name={"address"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value="" onChange="" name={"phone"} type={"text"}/> 
+                  <CustomeSelect style='w-10/12' titleStyle={'text-black!'} value="" onChange="" data={pinCodes} name={"pincode"} />  
                 </div>
                 <div className='flex flex-col items-center justify-center w-6/12'>
                   <CustomeSelect style='w-10/12' value="" onChange="" name={"latitude"} data={["Bike", "Car", "Van"]} />
                   <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"longitude"} type={"text"}/>   
+                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"number"}/> 
+                  <CustomeInput style='w-10/12' value="" onChange="" name={"longitude"} type={"number"}/>   
                   <PasswordInput style='w-10/12' value="" onChange="" name={"password"} />
                   <PasswordInput style='w-10/12' value="" onChange="" name={"confirm password"} />  
                 </div> 

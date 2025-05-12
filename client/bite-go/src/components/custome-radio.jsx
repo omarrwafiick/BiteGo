@@ -10,7 +10,7 @@ export default function CustomRadio({role, onChange}) {
             value={role}
             onChange={onChange}
             className="w-4 h-4 text-primary bg-gray-100 border-gray-300 focus:ring-2" />
-        <label htmlFor="default-radio-1" className="ms-2 text-md font-medium text-gray-900 dark:text-gray-300 capitalize">{role}</label>
+        <label htmlFor="default-radio-1" className="ms-2 text-md font-medium text-black-gray-900 dark:text-gray-300 capitalize">{role}</label>
     </div>
   )
 }

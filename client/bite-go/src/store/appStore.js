@@ -1,6 +1,7 @@
 import { create } from 'zustand';  
 import Image from '../assets/images/item.png'; 
- 
+ import ImageRest from '../assets/images/mac-logo.png'; 
+
 const extractRole = (token)=>{
   const payloadBase64 = token.split('.')[1];
   const payloadJson = atob(payloadBase64);  
@@ -10,7 +11,7 @@ const extractRole = (token)=>{
 
 const AppStore = create((set) => ({ 
     user:null,
-    setUser: (data) => set({ user: data }),
+    setUser: (data) => set({ user: data }), 
     token:'',
     setToken: (data) => set({ token: data }),
     isAuthenticated:false,
@@ -64,9 +65,10 @@ const AppStore = create((set) => ({
     ],
     setOffers: (data) => set({ offers: data }),
     restaurants:[
-        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
-        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
-        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'}
+        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate', image: ImageRest},
+        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate', image: ImageRest},
+        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate', image: ImageRest},
+        { name:'mcdonald\'s', pinCode: '23522', phone:'+0221600377', rating:5, email:'mcdonald@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate', image: ImageRest}
     ],
     setRestaurants: (data) => set({ restaurants: data }),
     users:[
@@ -76,7 +78,59 @@ const AppStore = create((set) => ({
     vendors:[
         { name:'mcdonald\'s', pinCode: '23322', phone:'+0221600337', rating:5, email:'wafick@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
      ],
-    setVendors: (data) => set({ vendors: data })
+    setVendors: (data) => set({ vendors: data }),
+    pinCodes:[
+        "11511", // Downtown Cairo
+        "21519", // Al Attarin, Alexandria
+        "12511", // Giza
+        "13411", // Shubra El-Kheima
+        "42511", // Port Said
+        "43511", // Suez
+        "85951", // Luxor
+        "35511", // Mansoura
+        "31511", // Tanta
+        "71511", // Asyut
+        "11865", // Nasr City, Cairo
+        "12655", // Mohandessin, Giza
+        "23512", // Smouha, Alexandria
+        "41618", // Ismailia
+        "83511", // Aswan
+        "81511", // Minya
+        "63511", // Hurghada
+        "67111", // Sohag
+        "62111", // Qena
+        "64111", // Beni Suef
+        "11311", // Heliopolis, Cairo
+        "12211", // Dokki, Giza
+        "22511", // Damanhour
+        "23311", // Kafr El Dawwar
+        "82611", // Kom Ombo, Aswan
+        "83512", // Edfu, Aswan
+        "73711", // Fayoum
+        "73511", // Beni Suef (Secondary)
+        "43811", // Damietta
+        "64112", // Al Wasta, Beni Suef
+        "62511", // Quseer, Red Sea
+        "82711", // Daraw, Aswan
+        "23711", // Rosetta
+        "35611", // Kafr El-Sheikh
+        "21711", // Sporting, Alexandria
+        "12556", // Haram, Giza
+        "62211", // New Valley
+        "11765", // Maadi, Cairo
+        "11111", // Garden City, Cairo
+        "11341", // Zamalek, Cairo
+        "11668", // Mokattam, Cairo
+        "44611", // Sharkia
+        "23522", // Alexandria, Montazah
+        "52711", // Shebin El Kom
+        "42522", // Port Fouad
+        "12311", // Agouza, Giza
+        "63512", // El Gouna, Red Sea
+        "42711", // Manshiyat Naser
+        "63711", // Safaga, Red Sea
+        "24611"  // Marsa Matruh
+        ]
 }));
   
 export default AppStore;

@@ -36,12 +36,12 @@ export default function UserSignup() {
                   <CustomeInput style='w-10/12' value="" onChange="" name={"address"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value="" onChange="" name={"phone"} type={"text"}/> 
                 </div>
-                <div className='flex flex-col items-center justify-center w-6/12'>
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"longitude"} type={"text"}/>   
+                <div className='flex flex-col items-center justify-start w-6/12'>
+                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"number"}/> 
+                  <CustomeInput style='w-10/12' value="" onChange="" name={"longitude"} type={"number"}/>   
                   <PasswordInput style='w-10/12' value="" onChange="" name={"password"} />
                   <PasswordInput style='w-10/12' value="" onChange="" name={"confirm password"} />   
-                  <CustomeButton styles={'w-10/12'} name={"signup"} />
+                  <CustomeButton styles={'w-10/12 mt-3'} name={"signup"} />
                 </div> 
               </div> 
             </form>

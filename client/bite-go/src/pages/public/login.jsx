@@ -34,7 +34,7 @@ export default function Login() {
           <CustomeInput  value="" onChange="" name={"email"} type={"email"}/> 
           <PasswordInput value="" onChange="" name={"password"} />
           <div className='w-full flex pt-2 pb-3'> 
-            <CustomeSelect style={'w-full'} data={['user', 'delivery', 'admin','vendor']} /> 
+            <CustomeSelect style={'w-full'} data={['user', 'delivery', 'admin','vendor']} name={'role'} /> 
           </div>
           <div className='w-full flex justify-between mb-2 mt-2'> 
             <Link className='capitalize cursor-pointer text-sm' to="/forget-password">forget password?</Link>
