@@ -8,9 +8,18 @@ import { User } from 'lucide-react';
 import {passwordRegex} from '../../utils/main';
 
 export default function UserSignup() {
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState(''); 
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0); 
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); 
   const signup = ()=>{
     try { 
-      passwordRegex.test();
+      passwordRegex.test(password);
     } catch (error) {
       
     }
@@ -30,18 +39,18 @@ export default function UserSignup() {
             <form className='flex flex-col  items-center w-full' onSubmit={signup}> 
               <div className='flex justify-center w-full'> 
                 <div className='flex flex-col items-center justify-center w-6/12'> 
-                  <CustomeInput style='w-10/12'  value="" onChange="" name={"firstName"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"lastName"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"email"} type={"email"}/>  
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"address"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"phone"} type={"text"}/> 
+                  <CustomeInput style='w-10/12'  value={fName} onChange={(e)=> setFName(e.target.value)} name={"first name"} type={"text"}/> 
+                  <CustomeInput style='w-10/12' value={lName} onChange={(e)=> setLName(e.target.value)} name={"last name"} type={"text"}/> 
+                  <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/>  
+                  <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                  <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 
                 </div>
                 <div className='flex flex-col items-center justify-start w-6/12'>
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"number"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"longitude"} type={"number"}/>   
-                  <PasswordInput style='w-10/12' value="" onChange="" name={"password"} />
-                  <PasswordInput style='w-10/12' value="" onChange="" name={"confirm password"} />   
-                  <CustomeButton styles={'w-10/12 mt-3'} name={"signup"} />
+                  <CustomeInput style='w-10/12' value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
+                  <CustomeInput style='w-10/12' value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/>   
+                  <PasswordInput style='w-10/12' value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
+                  <PasswordInput style='w-10/12' value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />   
+                  <CustomeButton styles='w-10/12 mt-3' name={"signup"} />
                 </div> 
               </div> 
             </form>

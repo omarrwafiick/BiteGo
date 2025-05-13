@@ -1,15 +1,13 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button'
-import CustomeInput from '../../components/custome-input' 
 import { Key } from 'lucide-react';
-import CustomeSelect from '../../components/custome-select';
-
+ 
 export default function ForgotPassword() {
   const forgetPassword = ()=>{
 
   };
-  return (
+  return ( 
     <div className='flex max-h-screen justify-center items-center flex-col w-full h-dvh bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
       <motion.div
           initial={{opacity: 0, y:20}}

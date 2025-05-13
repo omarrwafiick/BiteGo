@@ -31,7 +31,7 @@ const DeliverySchema = new Schema<IDelivery>({
   phone: { type: String, required: true, unique: true },
   pincode:{ type : String, required: true },
   vehicleType: { type: String, enum: ["Bike", "Car", "Van"], required: true },
-  status: { type: Boolean, default: false }, 
+  status: { type: Boolean, default: true }, 
   estimatedTime: { type: Types.Decimal128, default: 0  }, 
   isApproved: { type: Boolean, default: false },
   latitude: { type: Types.Decimal128, default: 0 }, 

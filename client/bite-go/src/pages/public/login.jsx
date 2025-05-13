@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button'
 import CustomeInput from '../../components/custome-input'
@@ -6,14 +6,16 @@ import PasswordInput from '../../components/password-input'
 import { Link } from 'react-router-dom';
 import { Home } from 'lucide-react';
 import CustomeSelect from '../../components/custome-select';
-import {passwordRegex} from '../../utils/main';
 import AppStore from '../../store/appStore'  
 
 export default function Login() {
   const { setToken } = AppStore();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [type, setType] = useState('');
+
   const login = ()=>{
-    try {  
-      passwordRegex.test();
+    try {   
     } catch (error) {
       
     }
@@ -31,10 +33,10 @@ export default function Login() {
         <h4 className='capitalize mb-2! text-3xl font-bold'>welcome back!</h4>
         <p className='opacity-80 mb-8!'>We are so happy to have you back</p>
         <form className='w-full' onSubmit={login}> 
-          <CustomeInput  value="" onChange="" name={"email"} type={"email"}/> 
-          <PasswordInput value="" onChange="" name={"password"} />
+          <CustomeInput  value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/> 
+          <PasswordInput value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
           <div className='w-full flex pt-2 pb-3'> 
-            <CustomeSelect style={'w-full'} data={['user', 'delivery', 'admin','vendor']} name={'role'} /> 
+            <CustomeSelect value={type} onChange={(e)=> setType(e.target.value)} style={'w-full'} data={['user', 'delivery', 'admin','vendor']} name={'role'} /> 
           </div>
           <div className='w-full flex justify-between mb-2 mt-2'> 
             <Link className='capitalize cursor-pointer text-sm' to="/forget-password">forget password?</Link>

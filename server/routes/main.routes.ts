@@ -4,6 +4,7 @@ import { cancelOrder } from "../controllers/order.controller";
 import { getImageFromServer, uploadAccountImage } from "../controllers/images.controller";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 
+
 const router = express.Router();
 
 router.use(ValidateSignatureMiddleWare); 
@@ -16,6 +17,6 @@ router.get("/:filename", getImageFromServer);
  
 router.patch("/upload-images/:type", uploadImage, uploadAccountImage);  
  
-router.delete("/order/:id/:type", cancelOrder); 
+router.delete("/order/:id/:type", cancelOrder);
 
 export { router as MainRoutes };

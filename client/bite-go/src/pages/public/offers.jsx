@@ -6,8 +6,7 @@ import OfferCard from '../../components/offer-card';
 export default function Offers() {
   const { offers, setDiscount, discount } = AppStore();  
   const addDiscount = (num)=>{
-    setDiscount(num);
-    console.log(discount);
+    setDiscount(num); 
   }
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 

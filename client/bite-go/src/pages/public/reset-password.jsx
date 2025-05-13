@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button' 
 import PasswordInput from '../../components/password-input'  
@@ -6,10 +6,12 @@ import { CreditCard } from 'lucide-react';
 import {passwordRegex} from '../../utils/main';
 
 export default function ResetPassword() {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); 
   const reserPassword = ()=>{
     try { 
-      passwordRegex.test();
-    } catch (error) {
+      passwordRegex.test(password);
+    } catch (error) { 
       
     }
   }; 
@@ -26,8 +28,8 @@ export default function ResetPassword() {
         <h4 className='capitalize mb-2! text-3xl font-bold'>reset password</h4>
         <p className='opacity-80 mb-8!'>Be sure to remember it back</p>
         <form className='w-full' onSubmit={reserPassword}>  
-          <PasswordInput value="" onChange="" name={"password"} />
-          <PasswordInput value="" onChange="" name={"confirm password"} />  
+          <PasswordInput value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
+          <PasswordInput value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />  
           <CustomeButton name={"reset"} />
         </form> 
       </motion.div>

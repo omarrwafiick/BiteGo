@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
@@ -11,9 +11,21 @@ import AppStore from '../../store/appStore'
 
 export default function DeliverySignup() {
   const { pinCodes } = AppStore();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [estimatedTime, setEstimatedTime] = useState(0);
+  const [pincode, setPincode] = useState('');
+  const [vehicleType, setVehicleType] = useState('');
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const [status, setStatus] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); 
   const signup = ()=>{ 
     try { 
-      passwordRegex.test(); 
+      passwordRegex.test(password); 
     } catch (error) {
       
     }
@@ -33,20 +45,20 @@ export default function DeliverySignup() {
             <form className='flex flex-col  items-center w-full' onSubmit={signup}> 
               <div className='flex justify-center w-full'> 
                 <div className='flex flex-col items-center justify-center w-6/12'> 
-                  <CustomeInput style='w-10/12'  value="" onChange="" name={"driverName"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"owner name"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"email"} type={"email"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"address"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"phone"} type={"text"}/> 
-                  <CustomeSelect style='w-10/12' titleStyle={'text-black!'} value="" onChange="" data={pinCodes} name={"pincode"} />  
-                </div>
+                  <CustomeInput style='w-10/12'  value={name} onChange={(e)=> setName(e.target.value)} name={"driverName"} type={"text"}/>  
+                  <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/> 
+                  <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                  <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 
+                  <CustomeInput style='w-10/12' value={estimatedTime} onChange={(e)=> setEstimatedTime(e.target.value)} name={"estimated time"} type={"number"}/> 
+                  <CustomeSelect style='w-10/12' value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
+                </div> 
                 <div className='flex flex-col items-center justify-center w-6/12'>
-                  <CustomeSelect style='w-10/12' value="" onChange="" name={"latitude"} data={["Bike", "Car", "Van"]} />
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"latitude"} type={"number"}/> 
-                  <CustomeInput style='w-10/12' value="" onChange="" name={"longitude"} type={"number"}/>   
-                  <PasswordInput style='w-10/12' value="" onChange="" name={"password"} />
-                  <PasswordInput style='w-10/12' value="" onChange="" name={"confirm password"} />  
+                  <CustomeSelect style='w-10/12' value={vehicleType} onChange={(e)=> setVehicleType(e.target.value)} name={"vehicle type"} data={["Bike", "Car", "Van"]} />
+                  <CustomeSelect style='w-10/12' value={status} onChange={(e)=> setStatus(e.target.value)} name={"status"} data={["available", "not available"]} />
+                  <CustomeInput style='w-10/12' value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
+                  <CustomeInput style='w-10/12' value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/>   
+                  <PasswordInput style='w-10/12' value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
+                  <PasswordInput style='w-10/12' value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />  
                 </div> 
               </div>
               <div className='w-11/12 mt-4'> 

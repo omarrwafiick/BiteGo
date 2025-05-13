@@ -73,13 +73,17 @@ const AppStore = create((set) => ({
     ],
     setRestaurants: (data) => set({ restaurants: data }),
     users:[
-        { name:'omar', pinCode: '23522', phone:'+0221600377', email:'omar@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
+        { firstName: 'omar', lastName :'wafick', pinCode: '23522', phone:'+0221600377', email:'omar@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
     ],
     setUsers: (data) => set({ users: data }),
     vendors:[
-        { name:'mcdonald\'s', pinCode: '23322', phone:'+0221600337', rating:5, email:'wafick@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
+        { name:'mcdonald\'s', pinCode: '23322', phone:'+0221600337', approved: false, rating:5, email:'wafick@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
      ],
     setVendors: (data) => set({ vendors: data }),
+    deliveries:[
+        { driverName:'samir sambo', vehicleType:'Bike',estimatedTime:12, approved: false, pinCode: '23322', phone:'+0221600337', email:'wafick@gmail.com', address:'نادي سموحة, Victor Amannuel St., Semouha Club, Victor Amanoiel Square, Alexandria Governorate'},
+    ],
+    setDeliveries: (data) => set({ vendors: data }),
     pinCodes:[
         "11511", // Downtown Cairo
         "21519", // Al Attarin, Alexandria
@@ -112,7 +116,7 @@ const AppStore = create((set) => ({
         "43811", // Damietta
         "64112", // Al Wasta, Beni Suef
         "62511", // Quseer, Red Sea
-        "82711", // Daraw, Aswan
+        "82711", // Daraw, Aswan 
         "23711", // Rosetta
         "35611", // Kafr El-Sheikh
         "21711", // Sporting, Alexandria

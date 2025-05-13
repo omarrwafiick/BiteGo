@@ -1,13 +1,9 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import SmallButton from '../../components/small-button' 
-import { Link } from 'react-router-dom';
 import { PackagePlusIcon } from 'lucide-react'; 
 
 export default function Signup() {
-  const signup = ()=>{
-
-  };
   return (
     <div className='flex min-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
       <motion.div

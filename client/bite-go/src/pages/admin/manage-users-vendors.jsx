@@ -7,20 +7,28 @@ import PasswordInput from '../../components/password-input'
 import CustomeButton from '../../components/custome-button'
 import AppStore from '../../store/appStore'  
 import ConfirmAction from '../../components/confirm-action';
-import { tr } from 'framer-motion/client';
 
 export default function ManageUsersAndVendors() {
-  const { users, vendors } = AppStore(); 
+  const { users, vendors, deliveries } = AppStore(); 
   const [showAdminPopup, setShowAdminPopup] = useState(false); 
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showEditUser, setShowEditUser] = useState(false); 
-  const [user, setUser] = useState(false); 
-
+  const [showEditUser, setShowEditUser] = useState(false);  
+  const [adminEmail, setAdminEmail] = useState(''); 
+  const [adminName, setAdminName] = useState(''); 
+  const [adminPassword, setAdminPassword] = useState('');  
+  const [userFName, setUserFName] = useState(''); 
+  const [userLName, setUserLName] = useState(''); 
+  const [userPhone, setUserPhone] = useState(''); 
+  const [userAddress, setUserAddress] = useState(''); 
   const submit = ()=>{ 
   }; 
 
-  const setData = (data)=>{ 
-    setUser(data);
+  const setData = (data)=>{  
+    setShowEditUser(true);
+    setUserFName(data.firstName);
+    setUserLName(data.lastName);
+    setUserPhone(data.phone);
+    setUserAddress(data.address);
   }; 
 
   const handlePageButtonClick = () => {
@@ -39,7 +47,15 @@ export default function ManageUsersAndVendors() {
   };
 
   const submitEditUser = ()=>{ 
-    //use data from user state to set fields state like last name
+    //send request
+  }
+
+  const approveVendor = (vendor)=>{ 
+    //send request
+  }; 
+
+  const approveDelivery = (delivery)=>{ 
+    //send request
   }; 
 
   return (
@@ -64,10 +80,22 @@ export default function ManageUsersAndVendors() {
             isDelete={true}
             onDelete={handlePageButtonClick}
             isEdit={true}
-            onEdit={()=>setShowEditUser(true)}
-            setData={setData}
+            onEdit={approveVendor}
             nameEdit={'approve'} 
             data={vendors}/>
+
+      <div className='w-full mb-4'>
+          <h1 className='capitalize font-bold text-2xl'>deliveries</h1>
+      </div>
+
+      <CustomeTable 
+            colsNames={ Object.keys(deliveries[0]) } 
+            isDelete={true}
+            onDelete={handlePageButtonClick}
+            isEdit={true}
+            onEdit={approveDelivery}
+            nameEdit={'approve'} 
+            data={deliveries}/>
 
       <div className='w-full mt-10 mb-4'>
           <h1 className='capitalize font-bold text-2xl'>users</h1>
@@ -76,6 +104,8 @@ export default function ManageUsersAndVendors() {
             colsNames={ Object.keys(users[0]) } 
             isDelete={true} 
             onDelete={handlePageButtonClick}
+            isEdit={true}
+            onEdit={setData} 
             data={users}/> 
     </div>
     {showAdminPopup && (
@@ -83,22 +113,22 @@ export default function ManageUsersAndVendors() {
         <form onSubmit={submit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly  w-6/12'>
             <X size={55} color="#FF0000" onClick={() => setShowAdminPopup(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
             <h2 className="text-2xl font-bold mb-6! capitalize">add new admin</h2> 
-            <CustomeInput value="" onChange="" name={"fullname"} type={"text"}/>
-            <CustomeInput value="" onChange="" name={"email"} type={"email"}/> 
-            <PasswordInput value="" onChange="" name={"password"} />
+            <CustomeInput value={adminName} onChange={(e) => setAdminName(e.target.value)} name={"fullname"} type={"text"}/>
+            <CustomeInput value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} name={"email"} type={"email"}/> 
+            <PasswordInput value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} name={"password"} />
             <CustomeButton name={"submit"} />
         </form>
       </div>      
     )}
     {showEditUser && (
               <div onClick={() => setShowEditUser(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-                <form onSubmit={submitEditUser} onClick={(e) => e.stopPropagation()} className='relative bg-white h-7/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+                <form onSubmit={submitEditUser} onClick={(e) => e.stopPropagation()} className='relative bg-white h-9/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEditUser(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
-                    <h2 className="text-2xl font-bold mb-6! capitalize">edit user</h2> 
-                    <CustomeInput value="" onChange="" name={"first name"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"last name"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"phone number"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"address"} type={"text"}/> 
+                    <h2 className="text-2xl font-bold mb-6! mt-2! capitalize">edit user</h2> 
+                    <CustomeInput value={userFName} onChange={(e) => setUserFName(e.target.value)} name={"first name"} type={"text"}/> 
+                    <CustomeInput value={userLName} onChange={(e) => setUserLName(e.target.value)} name={"last name"} type={"text"}/> 
+                    <CustomeInput value={userPhone} onChange={(e) => setUserPhone(e.target.value)} name={"phone number"} type={"text"}/> 
+                    <CustomeInput value={userAddress} onChange={(e) => setUserAddress(e.target.value)} name={"address"} type={"text"}/> 
                     <CustomeButton name={"submit"} />
                 </form>
               </div>      

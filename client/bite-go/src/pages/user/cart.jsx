@@ -71,7 +71,7 @@ export default function Cart(){
             <div className='w-4/12 h-full '>
                 <div className='flex flex-col justify-start items-center'>
                   <h2 className='capitalize text-center text-xl font-bold px-6! py-3! w-full bg-gray-200/80 mt-3'>calculated total price</h2>
-                  <p className='text-sm opacity-75 w-10/12 mt-6!'>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat molestiae suscipit assumenda obcaecati corporis. Quas accusamus ipsa laborum doloremque sint vitae non laboriosam, itaque fugiat dolores libero maiores quod! Deserunt?</p>
+                  <p className='text-sm opacity-75 w-10/12 mt-6!'>final price you will pay if there is any discount/offer it will be used and deduct the total price</p>
                   <div className='w-10/12 mt-8'>
                     <div className='w-full flex justify-between items-center'>
                       <h4 className='capitalize text-md font-semibold w-full'>cart subtotal</h4>
@@ -88,7 +88,7 @@ export default function Cart(){
                   </div>  
                   <CustomeButton onClick={()=> navigate('/user/payment')} styles={'w-10/12 mt-2'} name={"payment"} />
                 </div>
-            </div>
+            </div> 
           </div>
           
         </div> 

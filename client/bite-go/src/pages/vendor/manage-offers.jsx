@@ -11,7 +11,10 @@ export default function ManageOffers() {
   var { offers } = AppStore(); 
   const [showConfirm, setShowConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-    
+  const [discount, setDiscount] = useState('');
+  const [validTo, setValidTo] = useState(Date.UTC);
+  const [isActive, setIsActive] = useState(false); 
+
   const handlePageButtonClick = () => {
     setShowConfirm(true);
   };
@@ -26,6 +29,13 @@ export default function ManageOffers() {
       console.log("User cancelled the action");
     }
   };
+
+  const offerEdit = (data)=>{
+    setDiscount(data.discount);
+    setIsActive(data.isActive);
+    setValidTo(data.validTo);
+    setShowEdit(true);
+  }
 
   const offerEditSubmit = ()=>{
     //request
@@ -43,18 +53,18 @@ export default function ManageOffers() {
             isDelete={true}
             onDelete={handlePageButtonClick}
             isEdit={true}
-            onEdit={()=> setShowEdit(true)}
+            onEdit={offerEdit}
             data={offers}/> 
-        </div>
+        </div> 
         <ConfirmAction visible={showConfirm} result={handleConfirmResult} />
          {showEdit && (
               <div onClick={() => setShowEdit(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
                 <form onSubmit={offerEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! capitalize">edit order</h2> 
-                    <CustomeInput value="" onChange="" name={"discountPercentage"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"validTo"} type={"date"}/> 
-                    <CustomeSelect value="" onChange="" data={['yes', 'no']} name={"isActive"} />  
+                    <CustomeInput value={discount} onChange={(e)=> setDiscount(e.target.value)} name={"discountPercentage"} type={"text"}/> 
+                    <CustomeInput value={validTo} onChange={(e)=> setValidTo(e.target.value)} name={"validTo"} type={"date"}/> 
+                    <CustomeSelect value={isActive} onChange={(e)=> setIsActive(e.target.value)} data={['yes', 'no']} name={"isActive"} />  
                     <CustomeButton name={"submit"} />
                 </form>
               </div>      

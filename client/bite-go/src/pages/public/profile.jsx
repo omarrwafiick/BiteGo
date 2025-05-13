@@ -1,4 +1,4 @@
-import React, { useState } from 'react' 
+import React, { useEffect, useState } from 'react' 
 import SmallButtonSimple from '../../components/small-button-simple'
 import InfoBox from '../../components/info-box'
 import { User, X } from 'lucide-react'
@@ -8,8 +8,49 @@ import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
 
 export default function Profile() {
-  const { role, pinCodes } = AppStore();
-  const [showEdit, setShowEdit] = useState(false);
+  const { role, pinCodes} = AppStore();
+  const [showEdit, setShowEdit] = useState(false);  
+  //common 
+  const [data, setData] = useState(null);  
+  const [name, setName] = useState('');  
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState(''); 
+  const [pincode, setPincode] = useState(''); 
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0); 
+  //user
+  const [lName, setLName] = useState('');  
+  //vendor
+  const [oName, setOName] = useState('');
+  const [status, setStatus] = useState('');
+  //delivery
+  const [estimatedTime, setEstimatedTime] = useState(0);
+  const [vehicle, setVehicle] = useState('');
+
+  useEffect(()=>{
+    if(showEdit){
+      if(role === "user" ){ 
+        setName(data.firstName); 
+        setLName(data.lastName);
+      }
+      if(role === "vendor" ){
+        setName(data.name); 
+        setOName(data.ownerName);
+        setStatus(data.status);
+      }
+      if(role === "delivery" ){
+        setName(data.driverName); 
+        setEstimatedTime(data.estimatedTime);
+        setVehicle(data.vehicleType);
+      }
+      setPhone(data.phone);
+      setAddress(data.address);
+      setPincode(data.pincode);
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+    }
+  },[showEdit]);
+
   const userEditSubmit = ()=>{
     if(role === "user"){
 
@@ -40,7 +81,7 @@ export default function Profile() {
               <div className='w-full grid grid-cols-3 gap-8 mt-6'>
                 {
                   role === "user" ?  
-                      <>  
+                      <>   
                         <InfoBox title={'_id'} value={'1212'} />
                         <InfoBox title={'first name'} value={'omar'} />
                         <InfoBox title={'last name'} value={'wafick'} />  
@@ -62,11 +103,11 @@ export default function Profile() {
                   role === "delivery" ?
                       <> 
                         <InfoBox title={'_id'} value={'1212'} />
-                        <InfoBox title={'driverName'} value={'omar wafick'} /> 
-                        <InfoBox title={'created at'} value={'14/01/2002'} />
+                        <InfoBox title={'driverName'} value={'omar wafick'} />   
                         <InfoBox title={'email'} value={'waficko12@bitego.com'} />
                         <InfoBox title={'phone number'} value={'+20 128 331 1566'} />
                         <InfoBox title={'estimatedTime'} value={'40m'} /> 
+                        <InfoBox title={'isApproved'} value={'true'} />
                       </>
                   :
                       <> 
@@ -100,12 +141,12 @@ export default function Profile() {
                 <form onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! mt-20! capitalize">edit profile</h2> 
-                    <CustomeInput value="" onChange="" name={"first name"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"last name"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"phone number"} type={"text"}/>   
-                    <CustomeInput value="" onChange="" name={"address"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"latitude"} type={"number"}/> 
-                    <CustomeInput value="" onChange="" name={"longitude"} type={"number"}/> 
+                    <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"first name"} type={"text"}/> 
+                    <CustomeInput value={lName} onChange={(e)=> setLName(e.target.value)} name={"last name"} type={"text"}/> 
+                    <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
+                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                    <CustomeInput value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
+                    <CustomeInput value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/> 
                     <CustomeButton name={"submit"} />
                 </form>
               </div>      
@@ -115,16 +156,16 @@ export default function Profile() {
                 <form onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! mt-60! capitalize">edit profile</h2> 
-                    <CustomeInput value="" onChange="" name={"name"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"owner name"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"phone number"} type={"text"}/>   
-                    <CustomeInput value="" onChange="" name={"address"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"latitude"} type={"number"}/> 
-                    <CustomeInput value="" onChange="" name={"longitude"} type={"number"}/> 
-                    <CustomeSelect value="" onChange="" data={["available", "not available"]} name={"service available"} />  
-                    <CustomeSelect value="" onChange="" data={pinCodes} name={"pincode"} />  
+                    <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"name"} type={"text"}/> 
+                    <CustomeInput value={oName} onChange={(e)=> setOName(e.target.value)} name={"owner name"} type={"text"}/> 
+                    <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
+                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                    <CustomeInput value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
+                    <CustomeInput value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/> 
+                    <CustomeSelect value={status} onChange={(e)=> setStatus(e.target.value)} data={["available", "not available"]} name={"service available"} />  
+                    <CustomeSelect value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
                     <CustomeButton name={"submit"} />
-                </form>
+                </form> 
               </div>      
         )}
         {showEdit && role === "delivery" && (
@@ -132,15 +173,15 @@ export default function Profile() {
                 <form onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! mt-80! capitalize">edit profile</h2> 
-                    <CustomeInput value="" onChange="" name={"driver name"} type={"text"}/> 
-                    <CustomeSelect value="" onChange="" data={["Bike", "Car", "Van"]} name={"vehicle type"} />  
-                    <CustomeInput value="" onChange="" name={"phone number"} type={"text"}/>   
-                    <CustomeInput value="" onChange="" name={"address"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"estimated time"} type={"number"}/>  
-                    <CustomeInput value="" onChange="" name={"latitude"} type={"number"}/> 
-                    <CustomeInput value="" onChange="" name={"longitude"} type={"number"}/> 
-                    <CustomeSelect value="" onChange="" data={["available", "not available"]} name={"status"} />  
-                    <CustomeSelect value="" onChange="" data={pinCodes} name={"pincode"} />  
+                    <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"driver name"} type={"text"}/> 
+                    <CustomeSelect value={vehicle} onChange={(e)=> setVehicle(e.target.value)} data={["Bike", "Car", "Van"]} name={"vehicle type"} />  
+                    <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
+                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                    <CustomeInput value={estimatedTime} onChange={(e)=> setEstimatedTime(e.target.value)} name={"estimated time"} type={"number"}/>  
+                    <CustomeInput value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
+                    <CustomeInput value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/> 
+                    <CustomeSelect value={status} onChange={(e)=> setStatus(e.target.value)} data={["available", "not available"]} name={"status"} />  
+                    <CustomeSelect value={pinCodes} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
                     <CustomeButton name={"submit"} />
                 </form>
               </div>      

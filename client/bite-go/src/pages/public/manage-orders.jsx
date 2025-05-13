@@ -10,6 +10,9 @@ export default function ManageOrders() {
   const { role,  orders} = AppStore(); 
   const [showConfirm, setShowConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [type, setType] = useState('');
+  const [remarks, setRemarks] = useState('');
+  const [readyTime, setReadyTime] = useState(0);
     
   const handlePageButtonClick = () => {
     setShowConfirm(true);
@@ -25,6 +28,12 @@ export default function ManageOrders() {
       console.log("User cancelled the action");
     }
   };
+
+  const setOrderData = (data)=>{
+    setRemarks(data.remarks);
+    setReadyTime(data.readyTime);
+    setShowEdit(true);
+  }
 
   const orderEditSubmit = ()=>{
     //request
@@ -68,9 +77,9 @@ export default function ManageOrders() {
                                 isDelete={true} 
                                 onDelete={handlePageButtonClick}
                                 isEdit={true}
-                                onEdit={()=> setShowEdit(true)}
+                                onEdit={setOrderData} 
                                 nameDelete={'cancel'} 
-                                data={orders}/> 
+                                data={orders}/>  
                       </>
                 }
         </div>
@@ -80,8 +89,8 @@ export default function ManageOrders() {
                 <form onSubmit={orderEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-7/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! capitalize">edit order</h2> 
-                    <CustomeInput value="" onChange="" name={"remarks"} type={"text"}/> 
-                    <CustomeInput value="" onChange="" name={"ready time"} type={"text"}/> 
+                    <CustomeInput value={remarks} onChange={(e) => setRemarks(e.target.value)} name={"remarks"} type={"text"}/> 
+                    <CustomeInput value={readyTime} onChange={(e) => setReadyTime(e.target.value)} name={"ready time"} type={"text"}/> 
                     <CustomeButton name={"submit"} />
                 </form>
               </div>      

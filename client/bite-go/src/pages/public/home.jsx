@@ -1,4 +1,4 @@
-import React ,{useLayoutEffect} from 'react'
+import React ,{useLayoutEffect, useState} from 'react'
 import { motion } from "framer-motion";  
 import { Title, Meta } from 'react-head';
 import { useRef } from 'react';
@@ -10,7 +10,7 @@ import Image2 from '../../assets/images/f2.png';
 import Image3 from '../../assets/images/f3.png'; 
 import Image4 from '../../assets/images/f4.png'; 
 import Popular from '../../components/popular';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react'; 
 import Service from '../../components/service';
 import P1 from '../../assets/images/p1.png'; 
 import P2 from '../../assets/images/p2.png'; 
@@ -23,7 +23,11 @@ export default function Home() {
   const aboutRef = useRef(null);   
   const contactRef = useRef(null);  
   const location = useLocation();
+  const [message, setMessage] = useState('');
+  const [subject, setSubject] = useState('');
 
+  const contact = ()=>{}
+  
   useLayoutEffect(() => { 
       if(location.hash === '#about'){
         aboutRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -130,10 +134,10 @@ export default function Home() {
             <h1 className='capitalize font-medium text-5xl'>reach us and</h1>
             <h1 className='capitalize leading-20 text-5xl'><span className='font-medium'>get support{" "}</span><span className='text-primary font-bold'>now</span></h1>  
           </div>
-          <form className='bg-gradient-to-br from-[#f0f0f0] via-[#e7e7e7] to-[#d5d5d5] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
-            <CustomeInput titleStyle={'text-black!'} name="subject" type="" value="" onChange style={'w-6/12!'}/>
-            <CustomeInput titleStyle={'text-black!'} name="message" type="" value="" onChange style={'w-6/12! mt-2! mb-6!'}/>
-            <CustomeButton name="contact" styles={'w-6/12! '} onClick="" />
+          <form onSubmit={contact} className='bg-gradient-to-br from-[#f0f0f0] via-[#e7e7e7] to-[#d5d5d5] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
+            <CustomeInput titleStyle={'text-black!'} name="subject" type="text" value={subject} onChange={(e)=> setSubject(e.target.value)} style={'w-6/12!'}/>
+            <CustomeInput titleStyle={'text-black!'} name="message" type="text" value={message} onChange={(e)=> setMessage(e.target.value)} style={'w-6/12! mt-2! mb-6!'}/>
+            <CustomeButton name="contact" styles={'w-6/12!'} />
           </form>
       </motion.div>
     </div>

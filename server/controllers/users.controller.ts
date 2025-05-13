@@ -7,6 +7,8 @@ import { User } from "../models/user.model";
 import { sendOtp } from "../utilities/notification";
 import { UpdateLocationDto } from "../dto/main.dto"; 
 import { checkUser } from "../utilities/getUser";
+import { Contact } from "../models/contact.model";
+import { ContactDto } from "../dto/contact.dto";
    
 export const CreateUser = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -192,6 +194,33 @@ export const updateUserLocation = async (req: Request, res: Response) : Promise<
         await user.save();
         
         res.status(200).json({success:true, message: "User location status was updated successfully"});  
+         
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error'});
+    }
+    return;
+};
+
+export const contact = async (req: Request, res: Response) : Promise<void> => {
+    try {  
+        const user = await checkUser(req, res, String(process.env.USER)); 
+        const contactData = plainToClass(ContactDto, req.body);
+            
+        const errors = await validate(contactData, { skipMissingProperties: false });
+        if(errors.length > 0){
+            res.status(400).json({ success: false, message: 'All fields are required', errors });
+            return;
+        };
+
+        const { subject, message } = contactData; 
+      
+        const result = await Contact.create({
+             message,
+             subject,
+             userId: user._id
+        }); 
+        
+        res.status(201).json({success:true, message: "Contact message was created successfully"});  
          
     } catch (error) {
         res.status(500).json({ message: 'Internal server error'});
