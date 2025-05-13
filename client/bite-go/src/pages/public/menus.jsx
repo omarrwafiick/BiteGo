@@ -15,6 +15,10 @@ export default function Menus() {
     setShowDetails(true);
   }    
   var [itemQuantity, setItemQuantity] = useState(0);
+  const addToCartItem = (item)=>{
+    addCartItem(item);
+    setShowDetails(false);
+  }
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex flex-col justify-center items-center w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -51,7 +55,7 @@ export default function Menus() {
                           <a className='ms-2 me-2 font-bold'>{itemQuantity}</a>
                           <Plus size={35} onClick={()=>setItemQuantity(itemQuantity++)} className='border-2 border-black/20 rounded-full cursor-cell!' />
                       </div>
-                      <CustomeButton onClick={()=> addCartItem(item)} styles={'w-8/12 cursor-progress!'} name={"add to cart"} /> 
+                      <CustomeButton onClick={()=> addToCartItem(item)} styles={'w-8/12 cursor-progress!'} name={"add to cart"} /> 
                     </div>
                   </div>
                 </div> 

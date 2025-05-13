@@ -23,6 +23,7 @@ import AdminRouteProtector from '../components/admin-route'
 import UserRouteProtector from '../components/user-route'
 import DeliveryRouteProtector from '../components/delivery-route'
 import Menus from '../pages/public/menus';
+import Offers from '../pages/public/offers';
 
 const RoutesConfig  = () => ( 
   <Routes>
@@ -36,6 +37,7 @@ const RoutesConfig  = () => (
     <Route path="/profile" element={<Profile />} />  
     <Route path="/orders" element={<ManageOrders />} />  
     <Route path="/menus" element={<Menus />} />   
+    <Route path="/offers" element={<Offers />} />   
     <Route path="/admin/users" element={<AdminManageUsersAndVendorse />} />   
     <Route path="/delivery/signup" element={<DeliverySignup />} />   
     <Route path="/user/cart" element={<Cart />} />   

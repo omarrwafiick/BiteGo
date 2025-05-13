@@ -1,7 +1,6 @@
 import React from 'react'
 import SearchType from '../../components/search-type'
-import { Clock11Icon, DatabaseZap, Flame, IdCard, MapPinCheck, Search, SearchIcon, SearchSlashIcon } from 'lucide-react'
-import CustomeInput from '../../components/custome-input'
+import { Clock11Icon, DatabaseZap, Flame, MapPinCheck, SearchSlashIcon } from 'lucide-react'
 
 export default function FoodSearch() {
   return (
@@ -9,7 +8,7 @@ export default function FoodSearch() {
       <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
         <span className='m-2'>
           <SearchSlashIcon size={55} color="#FE7531" /> 
-        </span>
+        </span> 
         <h4 className='capitalize mb-2! text-4xl font-bold'>search food</h4>
         <p className='opacity-80 mb-8! mt-2! text-center text-md'>Search and get all waht you want in one click by choosing search type.</p> 
       
@@ -17,7 +16,6 @@ export default function FoodSearch() {
           <SearchType type={'Available'} icon={<DatabaseZap color='#FE7531' size={45} />} />
           <SearchType type={'Top Resturants'} icon={<Flame color='#FE7531' size={45} />} />
           <SearchType type={'In 30 Minute'} icon={<Clock11Icon color='#FE7531' size={45} />} /> 
-          <SearchType element={<CustomeInput style={'w-full'}/>} type={'Restaurant ID'} icon={<IdCard color='#FE7531' size={45} />} />
           <SearchType type={'PinCode'} icon={<MapPinCheck color='#FE7531' size={45} />} />
         </div>
 

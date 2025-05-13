@@ -1,6 +1,6 @@
 import { create } from 'zustand';  
 import Image from '../assets/images/item.png'; 
- import ImageRest from '../assets/images/mac-logo.png'; 
+import ImageRest from '../assets/images/mac-logo.png'; 
 
 const extractRole = (token)=>{
   const payloadBase64 = token.split('.')[1];
@@ -13,12 +13,13 @@ const AppStore = create((set) => ({
     user:null,
     setUser: (data) => set({ user: data }), 
     token:'',
-    setToken: (data) => set({ token: data }),
+    removeToken: () => set({ token: null }),
     isAuthenticated:false,
     setIsAuthenticated: (data) => set({ isAuthenticated: data }),
     isLoading:false,    
     setIsLoading: (data) => set({ isLoading: data }), 
-    role: "user",
+    role: "user",    
+    removeRole: () => set({ token: '' }),
     setToken: (newToken) => {
       const userRole = extractRole(newToken);
       set({ token: newToken, role: userRole, isAuthenticated: true });
@@ -52,16 +53,16 @@ const AppStore = create((set) => ({
 
             return { cartItems: [...state.cartItems, newItem] };
         }), 
-    orders:[
+    orders:[ 
         {_id: '121',totalAmount: '$2121', status:'Pending', userId:'132', vendorId:'344', deliveryId:'42'},
         {_id: '122',totalAmount: '$2121', status:'Pending', userId:'132', vendorId:'344', deliveryId:'42'},
         {_id: '123',totalAmount: '$2121', status:'Pending', userId:'132', vendorId:'344', deliveryId:'42'},  
     ],
     setOrders: (data) => set({ orders: data }),
     offers:[
-        {_id: '121',discountPercentage: '3', pinCode:'121212', validFrom:'24/4/2025', validTo:'24/7/2025', isActive:'true'},
-        {_id: '121',discountPercentage: '3', pinCode:'121212', validFrom:'24/4/2025', validTo:'24/7/2025', isActive:'true'},
-        {_id: '121',discountPercentage: '3', pinCode:'121212', validFrom:'24/4/2025', validTo:'24/7/2025', isActive:'true'},
+        {_id: '121',discountPercentage: '3', pinCode:'121212', validFrom:'24/4/2025', validTo:'24/7/2025', isActive:true},
+        {_id: '121',discountPercentage: '3', pinCode:'121212', validFrom:'24/4/2025', validTo:'24/7/2025', isActive:false},
+        {_id: '121',discountPercentage: '3', pinCode:'121212', validFrom:'24/4/2025', validTo:'24/7/2025', isActive:true},
     ],
     setOffers: (data) => set({ offers: data }),
     restaurants:[

@@ -19,37 +19,25 @@ import CustomeInput from '../../components/custome-input';
 import CustomeButton from '../../components/custome-button';
 import Parts from '../../assets/images/parts.png'; 
 
-export default function Home() {
-  const heroRef = useRef(null);  
-  const popularRef = useRef(null);  
-  const aboutRef = useRef(null);  
-  const servicesRef = useRef(null);  
+export default function Home() { 
+  const aboutRef = useRef(null);   
   const contactRef = useRef(null);  
   const location = useLocation();
 
-  useLayoutEffect(() => {
-      if(location.hash === '#hero'){
-        heroRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }
-      if(location.hash === '#popular'){
-        popularRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }
+  useLayoutEffect(() => { 
       if(location.hash === '#about'){
         aboutRef.current?.scrollIntoView({ behavior: 'smooth' });
       }
       if(location.hash === '#contact'){
         contactRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }
-      if(location.hash === '#services'){
-        servicesRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }
+      } 
     }, [location]);
 
   return (
     <div className='w-full flex flex-col justify-center items-center'>  
       <Title>BiteGo - Home</Title>
       <Meta name="description" content="" />
-      <motion.div ref={heroRef} id="hero"
+      <motion.div
           variants={{
             hidden:{opacity:0, y:75},
             visible:{opacity:1, y:0},
@@ -67,8 +55,8 @@ export default function Home() {
                     enjoy fresh, flavorful meals made with the finest ingredients, delivered straight to your door, every time.
                 </p> 
                 <div className='flex justify-start items-center w-full mt-8'> 
-                    <SmallButton name="Order Now" style={'bg-primary text-white!'} to=""/>
-                    <SmallButton name="Learn More" style={'bg-secondary ms-3!'} to=""/>
+                    <SmallButton name="Order Now" style={'bg-primary text-white!'} to="restaurants"/>
+                    <SmallButton name="Learn More" style={'bg-secondary ms-3!'} to="#about"/>
                 </div> 
               </div>  
             </div>
@@ -77,7 +65,7 @@ export default function Home() {
             </div>
       </motion.div>
 
-      <motion.div ref={popularRef} id="popular" className='w-10/12 flex flex-col justify-center items-center h-screen'>
+      <motion.div className='w-10/12 flex flex-col justify-center items-center h-screen'>
             <div className='w-full flex justify-between items-center'>
               <div className='flex flex-col justify-center items-start'> 
                 <h1 className='text-5xl capitalize font-medium'>our <a className='text-primary font-bold!'>popular</a> items</h1>
@@ -86,7 +74,7 @@ export default function Home() {
                 </p> 
               </div>
               <div>
-                <SmallButton style={'bg-primary text-white! p-4!'} to="restaurants">
+                <SmallButton style={'bg-primary text-white! p-4!'} to="menus">
                     View All <span className="text-2xl rounded-full">{"  "}→</span>
                 </SmallButton>
               </div>
@@ -120,7 +108,7 @@ export default function Home() {
           </div>
       </motion.div>
 
-      <motion.div ref={servicesRef} id="services" className='w-10/12 flex flex-col justify-center items-center h-screen'>
+      <motion.div className='w-10/12 flex flex-col justify-center items-center h-screen'>
           <div className='w-full flex flex-col justify-center items-center'>
             <p className='opacity-80 uppercase mb-6!'>— our services</p> 
             <h1 className='capitalize font-medium text-5xl'>bring quality and</h1>

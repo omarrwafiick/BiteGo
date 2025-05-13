@@ -7,13 +7,20 @@ import PasswordInput from '../../components/password-input'
 import CustomeButton from '../../components/custome-button'
 import AppStore from '../../store/appStore'  
 import ConfirmAction from '../../components/confirm-action';
+import { tr } from 'framer-motion/client';
 
 export default function ManageUsersAndVendors() {
   const { users, vendors } = AppStore(); 
   const [showAdminPopup, setShowAdminPopup] = useState(false); 
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showEditUser, setShowEditUser] = useState(false); 
+  const [user, setUser] = useState(false); 
 
   const submit = ()=>{ 
+  }; 
+
+  const setData = (data)=>{ 
+    setUser(data);
   }; 
 
   const handlePageButtonClick = () => {
@@ -30,6 +37,11 @@ export default function ManageUsersAndVendors() {
       console.log("User cancelled the action");
     }
   };
+
+  const submitEditUser = ()=>{ 
+    //use data from user state to set fields state like last name
+  }; 
+
   return (
     <div className='flex min-h-scree justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
     <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -52,7 +64,8 @@ export default function ManageUsersAndVendors() {
             isDelete={true}
             onDelete={handlePageButtonClick}
             isEdit={true}
-            //onEdit={()=>request}
+            onEdit={()=>setShowEditUser(true)}
+            setData={setData}
             nameEdit={'approve'} 
             data={vendors}/>
 
@@ -77,6 +90,19 @@ export default function ManageUsersAndVendors() {
         </form>
       </div>      
     )}
+    {showEditUser && (
+              <div onClick={() => setShowEditUser(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
+                <form onSubmit={submitEditUser} onClick={(e) => e.stopPropagation()} className='relative bg-white h-7/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+                    <X size={55} color="#FF0000" onClick={() => setShowEditUser(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
+                    <h2 className="text-2xl font-bold mb-6! capitalize">edit user</h2> 
+                    <CustomeInput value="" onChange="" name={"first name"} type={"text"}/> 
+                    <CustomeInput value="" onChange="" name={"last name"} type={"text"}/> 
+                    <CustomeInput value="" onChange="" name={"phone number"} type={"text"}/> 
+                    <CustomeInput value="" onChange="" name={"address"} type={"text"}/> 
+                    <CustomeButton name={"submit"} />
+                </form>
+              </div>      
+    )} 
     <ConfirmAction visible={showConfirm} result={handleConfirmResult} />
 </div>
   )

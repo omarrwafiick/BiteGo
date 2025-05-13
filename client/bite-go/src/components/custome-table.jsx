@@ -1,4 +1,4 @@
-export default function CustomeTable({ colsNames, data, nameEdit=null, nameDelete=null, isDelete = false, isEdit = false, onDelete, onEdit }) {
+export default function CustomeTable({ colsNames, data, nameEdit=null, nameDelete=null, isDelete = false, isEdit = false, onDelete, onEdit, setData }) {
   return (
     <div className="relative w-full overflow-x-auto rounded-sm">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -22,7 +22,7 @@ export default function CustomeTable({ colsNames, data, nameEdit=null, nameDelet
                 <td className="px-6 py-4">
                   {isEdit && (
                     <a
-                      onClick={() => onEdit?.(row)}
+                      onClick={() => onEdit ? onEdit(row) : setData(row)}
                       className="bg-blue-600 text-white! px-3 py-1 rounded mx-1 cursor-pointer capitalize"
                     >
                       { nameEdit && nameEdit.trim() !== '' ? nameEdit : 'edit' }
