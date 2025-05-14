@@ -1,7 +1,7 @@
 import api from './api';
 const domain = "/vendor";
  
-export const createVendor = async (data) => api.post(domain+`/signup`, data);
+export const sigupVendor = async (data) => api.post(domain+`/signup`, data);
 
 export const getVendorProfile = async () => api.get(domain+`/profile`);
  

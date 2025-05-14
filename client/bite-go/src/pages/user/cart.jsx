@@ -4,18 +4,23 @@ import { ShoppingBag } from 'lucide-react';
 import CustomeButton from '../../components/custome-button'
 import { useNavigate } from 'react-router-dom';
 import AppStore from '../../store/appStore';
+import { getCartItems } from '../../services/cart';
 
-export default function Cart(){
-  //const cartItems = AppStore(state => state.cartItems); // subscribes to changes
-  var { cartItems, discount } = AppStore();
-  const [items, setItems] = useState(cartItems);  
-  const navigate = useNavigate(); 
+export default function Cart(){ 
+  var { discount, setTotalPrice } = AppStore();
+  const [items, setItems] = useState([]);  
+  const navigate = useNavigate();  
   var [total, setTotal] = useState(0); 
  
-  useEffect(() => {
-    console.log(cartItems)
+  const fetchData = async ()=>{
+    setItems((await getCartItems()).data);
+  };
+
+  useEffect(() => { 
+    fetchData();
     const calculatedTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotal(calculatedTotal);
+    setTotalPrice(calculatedTotal);
   }, [items]);
 
   const handleQuantityChange = (itemId, newQuantity) => {

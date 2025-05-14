@@ -1,5 +1,5 @@
 import express from "express";   
-import { addFoodItem, getFoodItems, getFoodAvailable, getFoodIn30Minute, getResturantById, getTopResturant, searchFood } from "../controllers/fooditems.controller";
+import { addFoodItem, getFoodItems, getFoodAvailable, getFoodIn30Minute, getResturantById, getTopResturant, searchFood, removeFoodItems } from "../controllers/fooditems.controller";
 import multer from "multer";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
@@ -16,6 +16,8 @@ const uploadImage = multer({ storage: storage }).array('images',5);
 
 router.post("/add-item", RoleBasedAuthentication(String(process.env.VENDOR)), uploadImage, addFoodItem);
 
+router.get("/remove-item/:id", RoleBasedAuthentication(String(process.env.VENDOR)), removeFoodItems);
+
 router.use(RoleBasedAuthentication(String(process.env.USER)));
 
 router.get("/available/:pincode", getFoodAvailable);
@@ -27,5 +29,6 @@ router.get("/availablein30min/:pincode", getFoodIn30Minute);
 router.get("/search/:pincode", searchFood);
 
 router.get("/resturant/:id", getResturantById);
+
 
 export { router as FoodItemsRoute };

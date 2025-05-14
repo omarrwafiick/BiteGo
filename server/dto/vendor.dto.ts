@@ -12,7 +12,7 @@ class MainEntity{
     name:string;
 
     @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty() 
     pinCode:string;
 
     menu: IFoodItem[];
@@ -36,6 +36,12 @@ export class CreateVendorDto extends MainEntity{
     password:string;
       
     orders: IOrder[];
+    
+    @IsNotEmpty()
+    latitude: number;
+    
+    @IsNotEmpty()
+    longitude: number;
 }
 
 

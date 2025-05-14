@@ -10,7 +10,7 @@ export default function Menus() {
   const [menus, setMenus] = useState([]); 
 
   const fetchData = async ()=>{
-    setMenus(await getFoodItems());
+    setMenus(await getFoodItems().data);
   };
   
   useEffect(()=>{

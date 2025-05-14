@@ -261,4 +261,25 @@ export const updatetVendorMenu = async (req: Request, res: Response) : Promise<v
     return;
 };
 
+export const removeFoodItems = async (req: Request, res: Response): Promise<void>  => {
+    try {  
+        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
+
+        const itemId = req.params.id;
+
+        const foodItems = await FoodItem.findOneAndDelete({vendorId: vendor?.id, _id: itemId});
+
+        if(!foodItems){
+            res.status(404).json({ success: false, message: 'Nothing was not found'});
+            return;
+        }       
+  
+        res.status(200).json({ success: true });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+    return;
+};
+
 

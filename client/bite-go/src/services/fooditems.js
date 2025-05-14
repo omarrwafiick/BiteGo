@@ -14,4 +14,7 @@ export const getFoodIn30Minute = async (pincode) => api.get(domain+`/availablein
 export const searchFood = async (pincode) => api.get(domain+`/search/${pincode}`);
 //vendor === resturant
 export const getResturantById = async (id) => api.get(domain+`/resturant/${id}`);
+
+export const removeFoodItem = async (id) => api.delete(domain+`/remove-item/${id}`);
+
   

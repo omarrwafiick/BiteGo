@@ -20,7 +20,7 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
         
-        const { email, password, firstName, lastName, phone, address } = userData;
+        const { email, password, firstName, lastName, phone, address, latitude, longitude } = userData;
 
         const exists = await User.findOne({ email: email });
         if (exists) {
@@ -41,6 +41,8 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
             lastName: lastName,
             phone: phone,
             address: address,
+            latitude,
+            longitude,
             salt: salt,
             otp: otp,
             otpExp: otpExp

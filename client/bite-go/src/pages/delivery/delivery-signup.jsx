@@ -53,7 +53,7 @@ export default function DeliverySignup() {
         throw new Error(`Request failed with status ${response.status}`);
       }
       toaster.success("Request was sent successfully");
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       toaster.error(`Error : ${error}`);
       form.current.reset();

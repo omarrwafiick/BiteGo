@@ -17,7 +17,7 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
         return;
     };    
     
-    const { name, ownerName, pinCode, address, phone, email, password } = <CreateVendorDto>req.body; 
+    const { name, ownerName, pinCode, address, phone, email, password, longitude, latitude } = <CreateVendorDto>req.body; 
  
     const exists = await findVendor('', email);
 
@@ -41,6 +41,8 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
         salt: salt,
         serviceAvailable: false,
         coverImages: [], 
+        latitude,
+        longitude,
         isApproved: false
     });
      

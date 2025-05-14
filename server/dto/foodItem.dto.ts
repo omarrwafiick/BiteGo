@@ -9,7 +9,7 @@ export class FoodItemDto {
     @Length(12, 155)
     @IsNotEmpty()
     description: string;
- 
+  
     price: number;
 
     @IsString()

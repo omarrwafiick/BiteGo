@@ -8,7 +8,7 @@ export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]); 
   
   const fetchData = async ()=>{
-    setRestaurants(await getAllEntities('vendor'));
+    setRestaurants((await getAllEntities('vendor')).data);
   };
   
   useEffect(()=>{

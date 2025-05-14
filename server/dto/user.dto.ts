@@ -28,6 +28,12 @@ export class CreateUserDto extends MainEntity {
 
   @Length(6, 12)
   password: string;  
+
+  @IsNotEmpty()
+  latitude: number;
+  
+  @IsNotEmpty()
+  longitude: number;
   
 };
 

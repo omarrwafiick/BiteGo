@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button'
 import CustomeInput from '../../components/custome-input'
@@ -6,8 +6,11 @@ import PasswordInput from '../../components/password-input'
 import { Link } from 'react-router-dom';
 import { User } from 'lucide-react'; 
 import {passwordRegex} from '../../utils/main';
+import { signupUser } from '../../services/user';
+import toaster from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
-export default function UserSignup() {
+export default function UserSignup() { 
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,13 +20,42 @@ export default function UserSignup() {
   const [longitude, setLongitude] = useState(0); 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
-  const signup = ()=>{
-    try { 
-      passwordRegex.test(password);
+  const form = useRef();  
+  const [disable, setDisable] = useState(false);
+  const navigate = useNavigate();
+
+  const signupSubmit = async (e)=>{ 
+     try {
+      e.preventDefault();  
+      setDisable(true) 
+      if(!passwordRegex.test(password)){
+        toaster.error("Password is very week");
+        return;
+      } 
+      const response = await signupUser(
+        { 
+          firstName: fName,
+          lastName: lName,
+          address: address,
+          phone: phone,  
+          email: email,
+          password: password,
+          longitude,
+          latitude
+        }
+      );
+      if(!response.ok()){
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      toaster.success("Request was sent successfully");
+      navigate('/login');
     } catch (error) {
-      
+      toaster.error(`Error : ${error}`);
+      form.current.reset();
     }
+    setDisable(false)
   };
+  
   return (
     <div className='flex min-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
           <motion.div
@@ -36,7 +68,7 @@ export default function UserSignup() {
             </span>
             <h4 className='capitalize mb-2! text-3xl font-bold'>welcome to biteGo</h4>
             <p className='opacity-80 mb-8!'>We are so pleased to begin our journey with you.</p>
-            <form className='flex flex-col  items-center w-full' onSubmit={signup}> 
+            <form ref={form} className='flex flex-col  items-center w-full' onSubmit={signupSubmit}> 
               <div className='flex justify-center w-full'> 
                 <div className='flex flex-col items-center justify-center w-6/12'> 
                   <CustomeInput style='w-10/12'  value={fName} onChange={(e)=> setFName(e.target.value)} name={"first name"} type={"text"}/> 
@@ -50,7 +82,7 @@ export default function UserSignup() {
                   <CustomeInput style='w-10/12' value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/>   
                   <PasswordInput style='w-10/12' value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
                   <PasswordInput style='w-10/12' value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />   
-                  <CustomeButton styles='w-10/12 mt-3' name={"signup"} />
+                  <CustomeButton disable={disable} styles='w-10/12 mt-3' name={"signup"} />
                 </div> 
               </div> 
             </form>

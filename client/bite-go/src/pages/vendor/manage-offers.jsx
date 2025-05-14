@@ -6,28 +6,48 @@ import ConfirmAction from '../../components/confirm-action'
 import CustomeInput from '../../components/custome-input'
 import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
+import { updateOffers, getVendorOffers, removeVendorFromOffer } from '../../services/offer'; 
+import toaster from 'react-hot-toast'; 
 
 export default function ManageOffers() {
-  var { offers } = AppStore(); 
+  var { user } = AppStore();
+  const [offers, setOffers] = useState([]);
+
+  const fetchData = async ()=>{
+    setOffers((await getVendorOffers(user._id)).data); 
+  };
+
+  useEffect(()=>{
+    fetchData();
+  },[]); 
+
+  const [offer, setOffer] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [discount, setDiscount] = useState('');
   const [validTo, setValidTo] = useState(Date.UTC);
   const [isActive, setIsActive] = useState(false); 
+  const form = useRef();  
+  const [disable, setDisable] = useState(false);
 
-  const handlePageButtonClick = () => {
-    setShowConfirm(true);
+  const handlePageButtonClick = (data) => {
+    setOffer(data);
+    setShowConfirm(true); 
   };
 
-  const handleConfirmResult = (confirmed) => {
+  const handleConfirmResult = async (confirmed) => {
     setShowConfirm(false);
     if (confirmed) {
-      //send request
-      console.log("User confirmed the action"); 
-    } else {
-      //do nothing
-      console.log("User cancelled the action");
-    }
+      try {
+      const response = await removeVendorFromOffer(offer._id);
+      if(!response.ok()){
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      toaster.success("Request was sent successfully");
+    } catch (error) {
+      toaster.error(`Error : ${error}`);
+     } 
+    } 
   };
 
   const offerEdit = (data)=>{
@@ -37,9 +57,29 @@ export default function ManageOffers() {
     setShowEdit(true);
   }
 
-  const offerEditSubmit = ()=>{
-    //request
-  }
+  const offerEditSubmit = async (e)=>{ 
+     try {
+      e.preventDefault();  
+      setDisable(true)  
+      const response = await updateOffers(
+        { 
+          discountPercentage: discount,
+          validTo,
+          isActive
+        },
+        offer._id
+      );
+      if(!response.ok()){
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      toaster.success("Request was sent successfully"); 
+    } catch (error) {
+      toaster.error(`Error : ${error}`);
+      form.current.reset();
+    }
+    setDisable(false)
+  };
+
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -59,13 +99,13 @@ export default function ManageOffers() {
         <ConfirmAction visible={showConfirm} result={handleConfirmResult} />
          {showEdit && (
               <div onClick={() => setShowEdit(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-                <form onSubmit={offerEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+                <form ref={form} onSubmit={offerEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! capitalize">edit order</h2> 
                     <CustomeInput value={discount} onChange={(e)=> setDiscount(e.target.value)} name={"discountPercentage"} type={"text"}/> 
                     <CustomeInput value={validTo} onChange={(e)=> setValidTo(e.target.value)} name={"validTo"} type={"date"}/> 
                     <CustomeSelect value={isActive} onChange={(e)=> setIsActive(e.target.value)} data={['yes', 'no']} name={"isActive"} />  
-                    <CustomeButton name={"submit"} />
+                    <CustomeButton disable={disable} name={"submit"} />
                 </form>
               </div>      
           )} 

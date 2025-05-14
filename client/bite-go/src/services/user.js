@@ -1,7 +1,7 @@
 import api from './api';
 const domain = "/user";
  
-export const CreateUser = async (data) => api.post(domain+`/signup`,data);
+export const signupUser = async (data) => api.post(domain+`/signup`,data);
 
 export const createOrder = async (data) => api.post(domain+`/user/order`,data);
  

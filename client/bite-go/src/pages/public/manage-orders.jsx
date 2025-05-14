@@ -15,13 +15,13 @@ export default function ManageOrders() {
 
   const fetchData = async ()=>{
       if(role === 'user'){
-          setOrders(await getUserOrders());
+          setOrders(await getUserOrders().data);
       }
       if(role === 'vendor'){
-          setOrders(await getVendorOrders());
+          setOrders(await getVendorOrders().data);
       }
       if(role === 'delivery'){
-          setOrders(await getDeliveryOrders());
+          setOrders(await getDeliveryOrders().data);
       }
   };
 

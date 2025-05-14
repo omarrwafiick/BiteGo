@@ -11,20 +11,20 @@ import { getVendorProfile, updatetVendorProfile } from '../../services/vendor';
 import { getUserProfile, updateUserProfile } from '../../services/user';
 import toaster from 'react-hot-toast';
 
-export default function Profile() {
+export default function Profile() { 
   const [data, setData] = useState(null);
   const form = useRef();  
   const [disable, setDisable] = useState(false);
 
   const fetchData = async ()=>{
     if(role === "user"){
-      setData(await getUserProfile());
+      setData(await getUserProfile().data);
     }
     if(role === "vendor"){
-      setData(await getVendorProfile());
+      setData(await getVendorProfile().data);
     }
     if(role === "delivery"){
-      setData(await getDeliveryProfile());
+      setData(await getDeliveryProfile().data);
     }
   };
 
@@ -128,36 +128,36 @@ export default function Profile() {
                 {
                   role === "user" ?  
                       <>   
-                        <InfoBox title={'_id'} value={'1212'} />
-                        <InfoBox title={'first name'} value={'omar'} />
-                        <InfoBox title={'last name'} value={'wafick'} />  
-                        <InfoBox title={'email'} value={'omarwafick@bitego.com'} />
-                        <InfoBox title={'phone number'} value={'+20 128 331 1566'} />
-                        <InfoBox title={'verified'} value={'true'} />
+                        <InfoBox title={'id'} value={data._id} />
+                        <InfoBox title={'first name'} value={data.firstName} />
+                        <InfoBox title={'last name'} value={data.lastName} />  
+                        <InfoBox title={'email'} value={data.email} />
+                        <InfoBox title={'phone number'} value={data.phone} />
+                        <InfoBox title={'is verified'} value={data.verified} />
                       </> 
                   : 
                   role === "vendor" ?
                       <> 
-                        <InfoBox title={'_id'} value={'1212'} />
-                        <InfoBox title={'name'} value={'macdonald\'s'} />
-                        <InfoBox title={'ownerName'} value={'omar wafick'} />  
-                        <InfoBox title={'email'} value={'macdonald12k@bitego.com'} />
-                        <InfoBox title={'phone number'} value={'+20 128 331 1566'} /> 
-                        <InfoBox title={'isApproved'} value={'true'} />
+                        <InfoBox title={'_id'} value={data._id} />
+                        <InfoBox title={'name'} value={data.name} />
+                        <InfoBox title={'owner name'} value={data.ownerName} />  
+                        <InfoBox title={'email'} value={data.email} />
+                        <InfoBox title={'phone number'} value={data.phone} /> 
+                        <InfoBox title={'is approved'} value={data.isApproved} />
                       </>
                   :
                   role === "delivery" ?
                       <> 
-                        <InfoBox title={'_id'} value={'1212'} />
-                        <InfoBox title={'driverName'} value={'omar wafick'} />   
-                        <InfoBox title={'email'} value={'waficko12@bitego.com'} />
-                        <InfoBox title={'phone number'} value={'+20 128 331 1566'} />
-                        <InfoBox title={'estimatedTime'} value={'40m'} /> 
-                        <InfoBox title={'isApproved'} value={'true'} />
+                        <InfoBox title={'_id'} value={data._id} />
+                        <InfoBox title={'driver name'} value={data.driverName} />   
+                        <InfoBox title={'email'} value={data.email} />
+                        <InfoBox title={'phone number'} value={data.phone} />
+                        <InfoBox title={'estimated time'} value={data.estimatedTime} /> 
+                        <InfoBox title={'is approved'} value={data.isApproved} />
                       </>
                   :
                       <> 
-                        <h1 className='text-lg capitalize font-bold'>sorry there is nothing to show</h1>
+                        <h1 className='text-lg capitalize font-bold'>*sorry there is nothing to show</h1>
                       </>
                 }
               </div>
@@ -166,13 +166,11 @@ export default function Profile() {
               <div className='border-b-2 border-b-black/10 w-full'>
                 <h1 className='text-xl capitalize font-semibold mb-4!'>address</h1> 
               </div>
-              <div className='w-full grid grid-cols-3 gap-8 mt-6'>
+              <div className='w-full flex justify-start items-center mt-6'>
                 {
                   role === "user" || role === "delivery" || role === "vendor" ? 
                   <> 
-                    <InfoBox title={'country'} value={'egypt'} />
-                    <InfoBox title={'city'} value={'alexandria'} />
-                    <InfoBox title={'pincode'} value={'12133'} /> 
+                    <InfoBox title={'address'} value={data.address} /> 
                   </>
                   :
                   <> 
