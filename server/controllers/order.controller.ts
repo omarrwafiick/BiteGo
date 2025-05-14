@@ -114,6 +114,23 @@ export const getVendorOrders = async (req: Request, res: Response): Promise<void
     return;
 };
 
+export const getDeliveryOrders = async (req: Request, res: Response): Promise<void> => { 
+    try {     
+        const orders = await Delivery.findById(req.user?.id).populate('orders');
+        
+        if(!orders){
+            res.status(404).json({ success: false, message: 'No order was found'});
+            return;
+        }
+  
+        res.status(200).json({ success: true, orders});
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+    return;
+};
+
 export const getOrderDetails = async (req: Request, res: Response): Promise<void> => { 
     try {    
         const orderId = req.params.id;

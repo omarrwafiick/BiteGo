@@ -1,15 +1,25 @@
 import { Scroll, X } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppStore from '../../store/appStore';
-import MenuItem from '../../components/menu-item';
-import Image from '../../assets/images/item.png'; 
+import MenuItem from '../../components/menu-item'; 
 import { Minus, Plus } from 'lucide-react';
 import CustomeButton from '../../components/custome-button';
+import { getFoodItems } from '../../services/fooditems';
 
-export default function Menus() {    
+export default function Menus() {  
+  const [menus, setMenus] = useState([]); 
+
+  const fetchData = async ()=>{
+    setMenus(await getFoodItems());
+  };
+  
+  useEffect(()=>{
+    fetchData();
+  },[]);
+  
   const [showDetails, setShowDetails] = useState(false); 
   const [item, setItem] = useState(null); 
-  var { menus, addCartItem, cartItems  } = AppStore();   
+  var { addCartItem } = AppStore();   
   const showItem = (itemSent)=>{
     setItem(itemSent);
     setShowDetails(true);

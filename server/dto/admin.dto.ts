@@ -1,10 +1,9 @@
 import { IsEmail, Length, IsString } from 'class-validator';
 
 export class CreateAdminDto {
-  
   @IsString()
   @IsEmail()
-  email: string; 
+  email: string;  
 
   @IsString()
   @Length(6, 12)

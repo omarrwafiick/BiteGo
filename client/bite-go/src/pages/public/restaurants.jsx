@@ -1,16 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import RestaurantCard from '../../components/restaurant-card'
-import { StoreIcon, X } from 'lucide-react'
-import AppStore from '../../store/appStore'   
+import { StoreIcon, X } from 'lucide-react' 
 import SmallButton from '../../components/small-button';
+import { getAllEntities } from '../../services/admin';
 
 export default function Restaurants() {
+  const [restaurants, setRestaurants] = useState([]); 
+  
+  const fetchData = async ()=>{
+    setRestaurants(await getAllEntities('vendor'));
+  };
+  
+  useEffect(()=>{
+    fetchData();
+  },[]);
+
   const [showDetails, setShowDetails] = useState(false); 
-  const [restaurant, setRestaurant] = useState(null); 
-  const { restaurants } = AppStore();  
+  const [restaurant, setRestaurant] = useState(null);  
   const showResturant = (restaurantSent)=>{
     setRestaurant(restaurantSent);
-    setShowDetails(true);
+    setShowDetails(true); 
   }   
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 

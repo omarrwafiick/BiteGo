@@ -76,7 +76,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
  
         setCookie(res, token);
         
-        res.status(200).json({ success: true, account: exists });
+        res.status(200).json({ success: true, user: exists, token});
 
     } catch (error) {  
 

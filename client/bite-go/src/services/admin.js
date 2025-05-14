@@ -14,9 +14,11 @@ export const getTransactions = async () => api.get(domain+`/transactions`);
 export const getTransactionById = async (id) => api.get(domain+`/transactions/${id}}`);
 
 export const approveAccount = async (id, type) => api.patch(domain+`/approve-account/${id}/${type}}`);
-
+ 
 export const getOrder = async () => api.get(domain+`/order}`);
 
 export const getOrderById = async (id) => api.get(domain+`/order/${id}}`);
 
 export const deleteOrderById = async (id) => api.delete(domain+`/order/${id}}`);
+
+export const updateUser = async (data) => api.patch(domain+`/update-user`,data);

@@ -16,3 +16,4 @@ export const updateUserProfile = async (data) => api.patch(domain+`/update-profi
 export const updateUserLocation = async (data) => api.patch(domain+`/update-location`,data);
 
 export const contact = async (data) => api.post(domain+`/contact`, data);
+ 

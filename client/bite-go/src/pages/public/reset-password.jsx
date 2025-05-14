@@ -4,17 +4,46 @@ import CustomeButton from '../../components/custome-button'
 import PasswordInput from '../../components/password-input'  
 import { CreditCard } from 'lucide-react'; 
 import {passwordRegex} from '../../utils/main';
+import { resetPassword } from '../../services/auth';
+import toaster from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
-  const reserPassword = ()=>{
-    try { 
-      passwordRegex.test(password);
-    } catch (error) { 
-      
+  const form = useRef();  
+  const [disable, setDisable] = useState(false);
+  const navigate = useNavigate(); 
+  
+  const resetPasswordSubmit = async (e)=>{ 
+     try {
+      e.preventDefault();  
+      setDisable(true) 
+      if(!passwordRegex.test(password)){
+        toaster.error("Password is very week");
+        return;
+      } 
+      const location = useLocation();
+      const params = new URLSearchParams(location.search);
+      const token = params.get("token");
+      const response = await resetPassword(
+        {  
+          password: password
+        },
+        token
+      );
+      if(!response.ok()){
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      toaster.success("Request was sent successfully");
+      navigate('/login');
+    } catch (error) {
+      toaster.error(`Error : ${error}`);
+      form.current.reset();
     }
-  }; 
+    setDisable(false)
+  };
   return (
     <div className='flex max-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
       <motion.div
@@ -27,10 +56,10 @@ export default function ResetPassword() {
         </span>
         <h4 className='capitalize mb-2! text-3xl font-bold'>reset password</h4>
         <p className='opacity-80 mb-8!'>Be sure to remember it back</p>
-        <form className='w-full' onSubmit={reserPassword}>  
+        <form ref={form} className='w-full' onSubmit={resetPasswordSubmit}>  
           <PasswordInput value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
           <PasswordInput value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />  
-          <CustomeButton name={"reset"} />
+          <CustomeButton disable={disable} name={"reset"} />
         </form> 
       </motion.div>
     </div>

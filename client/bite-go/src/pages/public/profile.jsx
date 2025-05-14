@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react' 
+import React, { useEffect, useRef, useState } from 'react' 
 import SmallButtonSimple from '../../components/small-button-simple'
 import InfoBox from '../../components/info-box'
 import { User, X } from 'lucide-react'
@@ -6,26 +6,31 @@ import AppStore from '../../store/appStore'
 import CustomeInput from '../../components/custome-input'
 import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
+import { getDeliveryProfile, updateDeliveryProfile } from '../../services/delivery';
+import { getVendorProfile, updatetVendorProfile } from '../../services/vendor';
+import { getUserProfile, updateUserProfile } from '../../services/user';
+import toaster from 'react-hot-toast';
 
 export default function Profile() {
-  const { role, pinCodes} = AppStore();
-  const [showEdit, setShowEdit] = useState(false);  
-  //common 
-  const [data, setData] = useState(null);  
-  const [name, setName] = useState('');  
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState(''); 
-  const [pincode, setPincode] = useState(''); 
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0); 
-  //user
-  const [lName, setLName] = useState('');  
-  //vendor
-  const [oName, setOName] = useState('');
-  const [status, setStatus] = useState('');
-  //delivery
-  const [estimatedTime, setEstimatedTime] = useState(0);
-  const [vehicle, setVehicle] = useState('');
+  const [data, setData] = useState(null);
+  const form = useRef();  
+  const [disable, setDisable] = useState(false);
+
+  const fetchData = async ()=>{
+    if(role === "user"){
+      setData(await getUserProfile());
+    }
+    if(role === "vendor"){
+      setData(await getVendorProfile());
+    }
+    if(role === "delivery"){
+      setData(await getDeliveryProfile());
+    }
+  };
+
+  useEffect(()=>{
+    fetchData();
+  },[data]);
 
   useEffect(()=>{
     if(showEdit){
@@ -51,18 +56,59 @@ export default function Profile() {
     }
   },[showEdit]);
 
-  const userEditSubmit = ()=>{
-    if(role === "user"){
+  const { role, pinCodes} = AppStore();
+  const [showEdit, setShowEdit] = useState(false);  
+  //common 
+  const [name, setName] = useState('');  
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState(''); 
+  const [pincode, setPincode] = useState('');  
+  //user
+  const [lName, setLName] = useState('');   
+  //delivery 
+  const [vehicle, setVehicle] = useState('');
 
-    }
-    if(role === "vendor"){
- 
-    }
-    if(role === "delivery"){
+  const userEditSubmit = async (e)=>{ 
+     try {
+      e.preventDefault();  
+      setDisable(true);
+      let response = null;
+      if(role === "user"){
+        response = await updateUserProfile({
+          firstName: name,
+          lastName: lName,
+          phone: phone,
+          address: address
+        });
+      }
+      if(role === "vendor"){
+        response = await updatetVendorProfile({
+          phone: phone,
+          name:name, 
+          pinCode:pincode
+        });
+      }
+      if(role === "delivery"){
+        response = await updateDeliveryProfile({
+          driverName: name, 
+          phone: phone,
+          address: address, 
+          pincode: pincode,
+          vehicleType: vehicle 
+        });
+      } 
 
+      if(!response.ok()){
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      toaster.success("Request was sent successfully");
+    } catch (error) {
+      toaster.error(`Error : ${error}`);
+      form.current.reset();
     }
-    //request
-  }
+    setDisable(false)
+  };
+  
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -138,51 +184,40 @@ export default function Profile() {
         </div>
         {showEdit && role === "user" && (
               <div onClick={() => setShowEdit(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-                <form onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+                <form ref={form} onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! mt-20! capitalize">edit profile</h2> 
                     <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"first name"} type={"text"}/> 
                     <CustomeInput value={lName} onChange={(e)=> setLName(e.target.value)} name={"last name"} type={"text"}/> 
                     <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
-                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
-                    <CustomeInput value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
-                    <CustomeInput value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/> 
-                    <CustomeButton name={"submit"} />
+                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>   
+                    <CustomeButton disable={disable} name={"submit"} />
                 </form>
               </div>      
         )}
         {showEdit && role === "vendor" && (
               <div onClick={() => setShowEdit(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-                <form onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+                <form ref={form} onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! mt-60! capitalize">edit profile</h2> 
-                    <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"name"} type={"text"}/> 
-                    <CustomeInput value={oName} onChange={(e)=> setOName(e.target.value)} name={"owner name"} type={"text"}/> 
-                    <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
-                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
-                    <CustomeInput value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
-                    <CustomeInput value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/> 
-                    <CustomeSelect value={status} onChange={(e)=> setStatus(e.target.value)} data={["available", "not available"]} name={"service available"} />  
+                    <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"name"} type={"text"}/>  
+                    <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>    
                     <CustomeSelect value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
-                    <CustomeButton name={"submit"} />
+                    <CustomeButton disable={disable} name={"submit"} />
                 </form> 
               </div>      
         )}
         {showEdit && role === "delivery" && (
               <div onClick={() => setShowEdit(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-                <form onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+                <form ref={form} onSubmit={userEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-11/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-2xl font-bold mb-6! mt-80! capitalize">edit profile</h2> 
                     <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"driver name"} type={"text"}/> 
                     <CustomeSelect value={vehicle} onChange={(e)=> setVehicle(e.target.value)} data={["Bike", "Car", "Van"]} name={"vehicle type"} />  
                     <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
-                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
-                    <CustomeInput value={estimatedTime} onChange={(e)=> setEstimatedTime(e.target.value)} name={"estimated time"} type={"number"}/>  
-                    <CustomeInput value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
-                    <CustomeInput value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/> 
-                    <CustomeSelect value={status} onChange={(e)=> setStatus(e.target.value)} data={["available", "not available"]} name={"status"} />  
+                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>                       
                     <CustomeSelect value={pinCodes} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
-                    <CustomeButton name={"submit"} />
+                    <CustomeButton disable={disable} name={"submit"} />
                 </form>
               </div>      
         )}

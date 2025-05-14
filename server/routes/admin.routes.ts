@@ -2,6 +2,7 @@ import express from "express";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 import { approveAccount, createAdmin, deleteEntityById, deleteOrder, getEntity, getEntityById, getOrderById, getOrders, getTransactionById, getTransactions } from "../controllers/admins.controller";
+import { updateUserProfile } from "../controllers/users.controller";
 require('dotenv').config();
 
 const router = express.Router(); 
@@ -27,6 +28,8 @@ router.patch("/approve-account/:id/:type", approveAccount);
 router.get("/order", getOrders); 
 
 router.get("/order/:id", getOrderById); 
+
+router.patch("/update-user", updateUserProfile); 
  
 router.delete("/order/:id", deleteOrder);  
 

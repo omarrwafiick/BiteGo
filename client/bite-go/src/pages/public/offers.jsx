@@ -1,10 +1,25 @@
 import { HandshakeIcon } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AppStore from '../../store/appStore'   
 import OfferCard from '../../components/offer-card';
+import { getUserOffers } from '../../services/offer';
+import CustomeSelect from '../../components/custome-select'
 
 export default function Offers() {
-  const { offers, setDiscount, discount } = AppStore();  
+  const [offers, setOffers] = useState([]); 
+  const [pincode, setPincode] = useState('');
+
+  const fetchData = async ()=>{
+    if(pincode!==''){
+      setOffers(await getUserOffers(pincode));
+    }
+  };
+  
+  useEffect(()=>{
+    fetchData();
+  },[]);
+  
+  const { setDiscount, pinCodes } = AppStore();  
   const addDiscount = (num)=>{
     setDiscount(num); 
   }
@@ -15,7 +30,10 @@ export default function Offers() {
             <HandshakeIcon size={55} color="#FE7531" /> 
           </span>
           <h4 className='capitalize mb-2! text-4xl font-bold'>offers</h4>
-          <p className='opacity-80 mb-8! mt-2! text-center text-md'>Pick the offer and use it to get lower prices.</p>
+          <p className='opacity-80 mb-8! mt-2! text-center text-md'>Pick the offer and use it to get lower prices by using a pincode.</p>
+          <div className='w-full flex '>
+              <CustomeSelect style='w-6/12' value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />
+          </div>
             <div className='grid grid-cols-4 gap-14 w-full'>
             {
               offers?.map((item, index)=>( 
