@@ -24,6 +24,7 @@ import UserRouteProtector from '../components/user-route'
 import DeliveryRouteProtector from '../components/delivery-route'
 import Menus from '../pages/public/menus';
 import Offers from '../pages/public/offers';
+import Order from '../pages/user/order';
 
 const RoutesConfig  = () => ( 
   <Routes>
@@ -36,11 +37,12 @@ const RoutesConfig  = () => (
     <Route path="/login" element={<Login />} />  
     <Route path="/profile" element={<Profile />} />  
     <Route path="/orders" element={<ManageOrders />} />  
-    <Route path="/menus" element={<Menus />} />   
+    <Route path="/menus/:vendorid" element={<Menus />} />   
     <Route path="/offers" element={<Offers />} />   
     <Route path="/admin/users" element={<AdminManageUsersAndVendorse />} />   
     <Route path="/delivery/signup" element={<DeliverySignup />} />   
     <Route path="/user/cart" element={<Cart />} />   
+    <Route path="/user/order" element={<Order />} />  
     <Route path="/user/payment" element={<Payment />} />  
     <Route path="/user/signup" element={<UserSignup />} />   
     <Route path="/vendor/menus" element={<ManageMenu />} />   

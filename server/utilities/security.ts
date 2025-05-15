@@ -34,7 +34,7 @@ export const generateOrderID = (): string =>  generateOTP().toString();
 
 export const setCookie = (res: Response, token: string) : void => { 
     res.cookie("token", token, {
-        httpOnly: true,        
+        httpOnly: false,        
         secure: process.env.NODE_ENV === 'production',
         sameSite: "strict",     
         maxAge: 3 * 24 * 60 * 60 * 1000 

@@ -9,25 +9,36 @@ import { checkAuth } from './services/auth';
 import { useNavigate } from 'react-router-dom';
 
 function App() {  
-  const { setIsAuthenticated, setUser, role } = AppStore();
+  const { setIsAuthenticated, setUser, role, setToken } = AppStore();
   const navigate = useNavigate();
 
-  const AuthUser = async ()=>{
-    try {
-      const response = await checkAuth(role);
-      if(!response.ok()){
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-      setIsAuthenticated(response.data.authenticated);
-      setUser(response.data.user);
-    } catch (error) {
-      navigate('/');
-    }
-  };
+  // const AuthUser = async ()=>{
+  //   try {
+  //     const response = await checkAuth(role);
+  //     if(!response.ok()){
+  //       throw new Error(`Request failed with status ${response.status}`);
+  //     }
+  //     setIsAuthenticated(response.data.authenticated);
+  //     setUser(response.data.user);
+  //   } catch (error) {
+  //     navigate('/');
+  //   }
+  // };
 
-  useEffect(()=>{
-    AuthUser();
-  },[]);
+  // const manageToken = ()=>{
+  //   const token = Cookies.get('token');
+  //   if(!token){
+  //     navigate('/login');
+  //   }
+  //   else{
+  //     setToken(token);
+  //   }
+  // };
+
+  // useEffect(()=>{
+  //   AuthUser();
+  //   manageToken();
+  // },[]);
 
   const location = useLocation();
   return (

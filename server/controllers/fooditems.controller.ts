@@ -224,7 +224,7 @@ export const getResturantById = async (req: Request, res: Response): Promise<voi
     return;
 };
 
-export const updatetVendorMenu = async (req: Request, res: Response) : Promise<void> => {
+export const updateVendorMenu = async (req: Request, res: Response) : Promise<void> => {
     try {
         const vendorData = plainToClass(FoodItemDto, req.body);
         const errors = await validate(vendorData, { skipMissingProperties: true });
@@ -282,4 +282,22 @@ export const removeFoodItems = async (req: Request, res: Response): Promise<void
     return;
 };
 
+export const getVendorMenu = async (req: Request, res: Response) : Promise<void> => {
+    try {  
+        const vendorid = req.params.vendorid; 
+
+        const foodItems= await FoodItem.findById({vendorid});
+
+        if(!foodItems){
+            res.status(404).json({ success: false, message: 'Nothing was not found'});
+            return;
+        }       
+
+        res.status(200).json({success:true, foodItems});   
+        
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error});
+    }
+    return;
+};
 

@@ -3,9 +3,11 @@ import RestaurantCard from '../../components/restaurant-card'
 import { StoreIcon, X } from 'lucide-react' 
 import SmallButton from '../../components/small-button';
 import { getAllEntities } from '../../services/admin';
+import { useNavigate } from 'react-router-dom';
 
 export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]); 
+  const navigate = useNavigate();
   
   const fetchData = async ()=>{
     setRestaurants((await getAllEntities('vendor')).data);
@@ -21,6 +23,10 @@ export default function Restaurants() {
     setRestaurant(restaurantSent);
     setShowDetails(true); 
   }   
+
+  const navigateToMenu = ()=>{
+    navigate(`menu/${restaurant._id}`)
+  }
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -55,7 +61,7 @@ export default function Restaurants() {
                     <h3 className='mt-2! capitalize text-lg'><a className='font-semibold'>phone :</a> {restaurant.phone}$</h3> 
                     <h3 className='mt-2! capitalize text-lg'><a className='font-semibold'>email:</a> {restaurant.email}</h3> 
                     <h3 className='mt-2! capitalize text-lg w-10/12 text-center'><a className='font-semibold'>address:</a> {restaurant.address}</h3> 
-                    <SmallButton name="View Menus" style={'bg-primary text-white! rounded-md! w-10/12 text-lg mt-4'} to="menus"/>
+                    <SmallButton onClick={navigateToMenu} name="View Menus" style={'bg-primary text-white! rounded-md! w-10/12 text-lg mt-4'}/>
                   </div>
                 </div> 
             </div>

@@ -1,9 +1,15 @@
 import { DollarSign } from 'lucide-react';
-import React from 'react'
+import React, { useState } from 'react'
 import CustomeButton from '../../components/custome-button'
-export default function Payment() {
-  const submit = ()=>{
+import { useNavigate } from 'react-router-dom';
 
+export default function Payment() {
+  const navigate = useNavigate();
+  const [payed, setPayed] = useState(false);
+  const submit = ()=>{
+    if(payed){
+      navigate('/user/order');
+    }
   };
   return (
     <div className='flex min-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 

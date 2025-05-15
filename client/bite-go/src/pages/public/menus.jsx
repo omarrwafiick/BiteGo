@@ -4,15 +4,17 @@ import AppStore from '../../store/appStore';
 import MenuItem from '../../components/menu-item'; 
 import { Minus, Plus } from 'lucide-react';
 import CustomeButton from '../../components/custome-button';
-import { getFoodItems } from '../../services/fooditems';
+import { getVendorMenu } from '../../services/vendor'; 
 
 export default function Menus() {  
   const [menus, setMenus] = useState([]); 
 
   const fetchData = async ()=>{
-    setMenus(await getFoodItems().data);
+    const params = new URLSearchParams(location.search);
+    const vendorId = params.get("vendorid");
+    setMenus(await getVendorMenu(vendorId).data);
   };
-  
+   
   useEffect(()=>{
     fetchData();
   },[]);

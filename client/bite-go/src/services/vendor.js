@@ -11,5 +11,6 @@ export const updateVendorService = async (data) => api.patch(domain+`/update-ser
 
 export const updateVendorLocation = async (data) => api.patch(domain+`/update-location`, data);
 
-export const updatetVendorMenu = async (data, id) => api.patch(domain+`/update-menu/${id}`, data);
-  
+export const updateVendorMenu = async (data, id) => api.patch(domain+`/update-menu/${id}`, data);
+   
+export const getVendorMenu = async (vendorid) => api.get(domain+`/vendor-menu/${vendorid}`);

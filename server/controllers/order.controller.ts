@@ -22,7 +22,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
             return;
         };       
     
-        const { transactionId, userId, vendorId, items, remarks, deliveryId, appliedOffers, readyTime,  status} = orderData;
+        const { transactionId, userId, vendorId, items, remarks, appliedOffers, readyTime,  status} = orderData;
         
         const transaction = await Transaction.findById(transactionId);
 
@@ -46,8 +46,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
             vendorId: vendorId,
             items: items,
             totalAmount: transaction.orderNetValue, 
-            remarks: remarks,
-            deliveryId: deliveryId,
+            remarks: remarks, 
             appliedOffers: appliedOffers, 
             readyTime : readyTime,
             status: statusNow

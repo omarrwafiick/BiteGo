@@ -9,7 +9,7 @@ export class CreateTransactionDto {
     @IsString()
     offerId: string; 
 
-    @IsNotEmpty()
+    @IsNotEmpty() 
     @IsString()
     vendorId: string; 
  

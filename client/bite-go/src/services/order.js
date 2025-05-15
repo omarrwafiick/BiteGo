@@ -5,7 +5,7 @@ export const getOrderDetails = async (id) => api.get(domain+`/${id}`);
    
 //for user   
 export const createOrder = async (data) => api.post(domain+`/user`, data);
- 
+  
 export const getUserOrders = async () => api.get(domain+`/user/all`);
 
 //for vendor  

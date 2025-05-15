@@ -6,7 +6,7 @@ import ConfirmAction from '../../components/confirm-action'
 import CustomeInput from '../../components/custome-input'
 import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
-import { updatetVendorMenu } from '../../services/vendor';
+import { updateVendorMenu } from '../../services/vendor';
 import { getResturantById, removeFoodItem } from '../../services/fooditems';
 import toaster from 'react-hot-toast'; 
 
@@ -70,7 +70,7 @@ export default function ManageMenu() {
      try {
       e.preventDefault();  
       setDisable(true)  
-      const response = await updatetVendorMenu(
+      const response = await updateVendorMenu(
         { 
           name,
           description,
