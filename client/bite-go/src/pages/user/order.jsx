@@ -2,25 +2,17 @@ import { Clock } from 'lucide-react'
 import React, { useEffect, useState } from 'react' 
 import toaster from 'react-hot-toast';
 import { createOrder } from '../../services/order';
-import { addTransaction } from '../../services/transaction';
 import AppStore from '../../store/appStore';
 
 export default function Order() {
-  var { totalPrice, paymentMode, offerId, vendorId, orderId, orderDetails, user } = AppStore();
+  var { offerId, vendorId, orderId, orderDetails, user, transactionId } = AppStore();
   const [percent, setPercent] = useState(0);
   const [endProgress, setEndProgress] = useState(false);
   const [textFade, setTextFade] = useState('opacity-100');
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
  
   const transactionRequest = async () => {
-    try {
-        const transactionResult = await addTransaction({
-            paymentMode, 
-            offerId,
-            vendorId, 
-            orderId, 
-            totalAmount: totalPrice
-        });
+    try { 
         setPercent(0);
         setTextFade('opacity-100');
 
@@ -48,12 +40,7 @@ export default function Order() {
         await delay(600);
         setTextFade('opacity-0');
         await delay(300);
-        setPercent(90);
-    
-        if(!transactionResult.ok()){
-            throw new Error(`Request failed with status ${response.status}`);
-        }
-        const transactionID = transactionResult.data.transactionId;
+        setPercent(90); 
 
         const items = orderDetails.items.map( (item) => ({foodId: item._id, quantity: item.quantity}) );
 
@@ -63,7 +50,7 @@ export default function Order() {
             items: items, 
             remarks: orderDetails.remarks,  
             appliedOffers: offerId.length > 0,   
-            transactionId: transactionID, 
+            transactionId: transactionId, 
             readyTime: orderDetails.readyTime, 
             status: orderDetails.status
         });

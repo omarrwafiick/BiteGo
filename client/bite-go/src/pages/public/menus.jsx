@@ -5,6 +5,8 @@ import MenuItem from '../../components/menu-item';
 import { Minus, Plus } from 'lucide-react';
 import CustomeButton from '../../components/custome-button';
 import { getVendorMenu } from '../../services/vendor'; 
+import { addToCart, deleteCartItem } from '../../services/cart'; 
+import toaster from 'react-hot-toast';
 
 export default function Menus() {  
   const [menus, setMenus] = useState([]); 
@@ -27,9 +29,23 @@ export default function Menus() {
     setShowDetails(true);
   }    
   var [itemQuantity, setItemQuantity] = useState(0);
-  const addToCartItem = (item)=>{
-    addCartItem(item);
-    setShowDetails(false);
+  const addToCartItem =  async(item)=>{
+    try { 
+      const response = await addToCart(
+        {   
+          foodId: item._id,
+          quantity: itemQuantity
+        }
+      );
+      if(!response.ok()){
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      addCartItem(item);
+      setShowDetails(false);
+      toaster.success("Request was sent successfully");
+    } catch (error) {
+      toaster.error(`Error : ${error}`); 
+    } 
   }
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 

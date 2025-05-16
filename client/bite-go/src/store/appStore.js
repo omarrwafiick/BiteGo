@@ -124,6 +124,8 @@ const AppStore = create((set) => ({
     orderId: "",
     setOrderId: (data) => set({ orderId: data }),
     orderDetails:null,
+    transactionId:"", 
+    setTransactionId: (data) => set({ transactionId: data }),
     setOrderDetails: (data) => set({ orderDetails: data }),
     dialog : [ 
       {"How do I place an order?":"You can check resturants we have that may have offers at the time then check there menu and after choosing an item and place item to cart you can check out and pay for it then order will be in progress within the estimated time."},

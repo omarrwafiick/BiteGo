@@ -8,7 +8,7 @@ export interface ITransaction extends mongoose.Document {
   orderTotalValue:Types.Decimal128;
   orderNetValue:Types.Decimal128;
   status?: boolean; 
-  paymentMethod: "Card" | "Strip" | "Cash"; 
+  paymentMethod: "Paypal" | "Strip" | "Cash" | "Card"; 
 }
 
 const TransactionSchema = new Schema<ITransaction>({  
@@ -19,7 +19,7 @@ const TransactionSchema = new Schema<ITransaction>({
     orderTotalValue: { type: Types.Decimal128, required: true  },  
     orderNetValue: { type: Types.Decimal128, required: true  },  
     status: { type: Boolean, default: false },
-    paymentMethod: { type: String, enum: ["Card", "Strip", "Cash"], required: true },
+    paymentMethod: { type: String, enum: ["Paypal", "Strip", "Cash","Card"], required: true },
   }, {
     toJSON:{
         transform(doc, ret){ 

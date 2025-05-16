@@ -15,6 +15,6 @@ export const getVendorOrders = async () => api.get(domain+`/vendor/all`);
  
 export const updateVendorOrder = async (id) => api.put(domain+`/vendor/${id}/process`);  
 
-//for delivery
+//for delivery 
 
 export const getDeliveryOrders = async () => api.get(domain+`/delivery/all`);
