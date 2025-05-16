@@ -7,10 +7,7 @@ export class CreateOrderDto {
 
     @IsString()
     @IsNotEmpty()
-    vendorId: string;
- 
-    @IsNotEmpty()
-    items: Items; 
+    vendorId: string; 
 
     @IsString()
     @IsNotEmpty()
@@ -32,12 +29,4 @@ export class CreateOrderDto {
  
     status: string; 
 }
-
-class Items{
-    @IsString() 
-    @IsNotEmpty()
-    foodId: string;  
-
-    @IsNumber()
-    quantity: number;  
-}
+ 

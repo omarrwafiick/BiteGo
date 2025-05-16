@@ -11,7 +11,7 @@ export interface IFoodItem extends Document {
   vendorId: mongoose.Types.ObjectId;
   images: string[] | any; 
   rating?: Types.Decimal128;
-};
+}; 
 
 const FoodItemSchema = new Schema<IFoodItem>({
   vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
@@ -22,7 +22,7 @@ const FoodItemSchema = new Schema<IFoodItem>({
   images: { type: [String], required: true  },
   available: { type: Boolean, default: true }, 
   rating: { type: Types.Decimal128, default: 0 },
-  readyTime: { type: Types.Decimal128 }
+  readyTime: { type: Types.Decimal128 } 
 },{
   toJSON:{
       transform(doc, ret){ 

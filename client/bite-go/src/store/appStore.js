@@ -112,7 +112,7 @@ const AppStore = create((set) => ({
         "42711", // Manshiyat Naser
         "63711", // Safaga, Red Sea
         "24611"  // Marsa Matruh
-    ],
+    ], 
     totalPrice: 0,
     setTotalPrice: (data) => set({ totalPrice: data }),
     paymentMode: "", 
@@ -124,6 +124,7 @@ const AppStore = create((set) => ({
     orderId: "",
     setOrderId: (data) => set({ orderId: data }),
     orderDetails:null,
+    setOrderDetails: (data) => set({ orderDetails: data }),
     transactionId:"", 
     setTransactionId: (data) => set({ transactionId: data }),
     setOrderDetails: (data) => set({ orderDetails: data }),

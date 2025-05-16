@@ -13,7 +13,7 @@ export interface ICart extends Document {
 const CartSchema = new Schema<ICart>({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   items: [
-    {
+    { 
       foodId: { type: Types.ObjectId, ref: "FoodItem" },
       quantity: { type: Number, min: 1 },
       price: { type: Types.Decimal128 },

@@ -120,8 +120,8 @@ export default function Header() {
                         <X size={55} color="#FF0000" onClick={() => setShowCart(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                         <h2 className="text-xl font-bold mt-16! mb-3! capitalize text-center">recently cart items ({items.length})</h2>   
                         <hr className='mb-2 opacity-15' />
-                        {
-                            items?.map((item, index)=>(
+                        {   items.length > 0 ?
+                            items.map((item, index)=>(
                                 <div className='w-full flex justify-between items-center rounded-lg bg-gray-200/80 mt-3 shadow'>
                                     <div className='flex w-3/12'>
                                         <img src={item.image} className="w-20 h-20"/>
@@ -136,13 +136,13 @@ export default function Header() {
                                     </div>
                                 </div>
                             ))
+                            :
+                            <h3 className='w-full capitalize'>*no item is added to display</h3>
                         }
                         <SmallButtonSimple style={'capitalize bg-primary text-white! rounded-lg mt-3'} onClick={()=>navigateToCart()} name={"check out"} />
                     </div> 
                 :
-                <>
-                    <h3 className='w-full capitalize'>*no item is added to display</h3>
-                </>
+                <></>
             )}
             {showProfile && !showCart && ( 
                 <div ref={profileRef} onClick={(e) => e.stopPropagation()} className='absolute flex flex-col justify-start items-center right-26 top-16 bg-white max-h-96 overflow-auto scroll-auto p-6 rounded-lg shadow-lg w-2/12'>

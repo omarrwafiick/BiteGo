@@ -5,7 +5,7 @@ import { createOrder } from '../../services/order';
 import AppStore from '../../store/appStore';
 
 export default function Order() {
-  var { offerId, vendorId, orderId, orderDetails, user, transactionId } = AppStore();
+  var { offerId, vendorId, orderDetails, user, transactionId } = AppStore();
   const [percent, setPercent] = useState(0);
   const [endProgress, setEndProgress] = useState(false);
   const [textFade, setTextFade] = useState('opacity-100');
@@ -40,14 +40,11 @@ export default function Order() {
         await delay(600);
         setTextFade('opacity-0');
         await delay(300);
-        setPercent(90); 
-
-        const items = orderDetails.items.map( (item) => ({foodId: item._id, quantity: item.quantity}) );
+        setPercent(90);  
 
         const orderResult = await createOrder({
             userId: user._id, 
-            vendorId, 
-            items: items, 
+            vendorId,  
             remarks: orderDetails.remarks,  
             appliedOffers: offerId.length > 0,   
             transactionId: transactionId, 

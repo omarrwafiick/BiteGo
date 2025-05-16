@@ -10,6 +10,7 @@ import { findVendor } from "../utilities/helper.methods";
 import { Delivery } from "../models/delivery.model";
 import { checkUser } from "../utilities/getUser"; 
 import { Vendor } from "../models/vendor.model";
+import { Cart } from "../models/cart.model";
    
 export const createOrder = async (req: Request, res: Response): Promise<void> => { 
     try {   
@@ -21,8 +22,10 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
             res.status(400).json({ success: false, message: 'All fields are required', errors });
             return;
         };       
-    
-        const { transactionId, userId, vendorId, items, remarks, appliedOffers, readyTime,  status} = orderData;
+     
+        const { transactionId, userId, vendorId, remarks, appliedOffers, readyTime,  status} = orderData;
+
+        const cartItems = (await Cart.find({userId: profile._id})).filter(x=>x.items);
         
         const transaction = await Transaction.findById(transactionId);
 
@@ -44,7 +47,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
             id: orderId,
             userId: userId,
             vendorId: vendorId,
-            items: items,
+            items: cartItems,
             totalAmount: transaction.orderNetValue, 
             remarks: remarks, 
             appliedOffers: appliedOffers, 
@@ -239,7 +242,6 @@ export const cancelOrder = async (req: Request, res: Response): Promise<void> =>
     }
     return;
 };
-
 
 export const getOrderStatus = async (req: Request, res: Response): Promise<void> => { 
     try {      

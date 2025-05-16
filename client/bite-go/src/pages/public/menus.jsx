@@ -23,12 +23,15 @@ export default function Menus() {
   
   const [showDetails, setShowDetails] = useState(false); 
   const [item, setItem] = useState(null); 
-  var { addCartItem } = AppStore();   
+  var { addCartItem, setOrderDetails } = AppStore();  
+
   const showItem = (itemSent)=>{
     setItem(itemSent);
     setShowDetails(true);
   }    
+
   var [itemQuantity, setItemQuantity] = useState(0);
+
   const addToCartItem =  async(item)=>{
     try { 
       const response = await addToCart(
@@ -41,12 +44,14 @@ export default function Menus() {
         throw new Error(`Request failed with status ${response.status}`);
       }
       addCartItem(item);
+      setOrderDetails({ remarks: 'none.', readyTime: item.readyTime, status: item.available });
       setShowDetails(false);
       toaster.success("Request was sent successfully");
     } catch (error) {
       toaster.error(`Error : ${error}`); 
     } 
-  }
+  };
+
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex flex-col justify-center items-center w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -60,7 +65,7 @@ export default function Menus() {
               menus?.map((item, index)=>( 
                 <MenuItem onClick={showItem} key={index} data={item} />
               ))
-            }
+            } 
           </div> 
         </div>  
         {showDetails && (

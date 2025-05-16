@@ -4,7 +4,7 @@ import { ShoppingBag } from 'lucide-react';
 import CustomeButton from '../../components/custome-button'
 import { useNavigate } from 'react-router-dom';
 import AppStore from '../../store/appStore';
-import { getCartItems } from '../../services/cart';
+import { getCartItems, updateCart } from '../../services/cart';
 
 export default function Cart(){ 
   var { discount, setTotalPrice } = AppStore();
@@ -16,7 +16,13 @@ export default function Cart(){
     setItems((await getCartItems()).data);
   };
 
+  const updateData = async ()=>{
+    const cartItems = items.filter(item => ({foodId: item._id, quantity: item.quantity, price: item.price}))
+    await updateCart(cartItems);
+  };
+ 
   useEffect(() => { 
+    updateData();
     fetchData();
     const calculatedTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     setTotal(calculatedTotal);

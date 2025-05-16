@@ -1,5 +1,5 @@
 import express from "express"; 
-import { addToCart, deleteCartItem, getCartItems, clearCart } from "../controllers/cart.controller";
+import { manageCart, deleteCartItem, getCartItems, clearCart, updateCart } from "../controllers/cart.controller";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 require('dotenv').config();
@@ -9,8 +9,10 @@ const router = express.Router();
 router.use(ValidateSignatureMiddleWare);
 
 router.use(RoleBasedAuthentication(String(process.env.USER)));
+
+router.put("/", updateCart);   
  
-router.post("/", addToCart);  
+router.post("/", manageCart);  
  
 router.get("/", getCartItems);  
 
