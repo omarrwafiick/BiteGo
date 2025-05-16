@@ -1,6 +1,4 @@
-import { create } from 'zustand';  
-import Image from '../assets/images/item.png'; 
-import ImageRest from '../assets/images/mac-logo.png'; 
+import { create } from 'zustand';   
 
 const extractRole = (token)=>{
   const payloadBase64 = token.split('.')[1];
@@ -127,6 +125,14 @@ const AppStore = create((set) => ({
     setOrderId: (data) => set({ orderId: data }),
     orderDetails:null,
     setOrderDetails: (data) => set({ orderDetails: data }),
+    dialog : [ 
+      {"How do I place an order?":"You can check resturants we have that may have offers at the time then check there menu and after choosing an item and place item to cart you can check out and pay for it then order will be in progress within the estimated time."},
+      {"What payment methods are supported?":"At the momemnt online payment is our main method using paypal but we will expand soon and include other methods like other gateways and cash"},
+      {"Can I cancel an order?":"You can press profile button at the navbar and navigate to your orders table then press cancel and that's it"},
+      {"What are your delivery hours?":"We are 24/7 available but it depends on the vendor/restaurant you can check if available through restaurant card"},
+      {"How do I update my profile?":"You can press profile button at the navbar and navigate to your profile that display your information then press edit button and submit, that's it"},
+      {"What is my latest order status?": ''}
+    ]
 }));
   
 export default AppStore;

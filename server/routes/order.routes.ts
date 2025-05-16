@@ -1,5 +1,5 @@
 import express from "express";   
-import { getOrderDetails, getUserOrders, getVendorOrders, updateVendorOrder, createOrder, getDeliveryOrders } from "../controllers/order.controller"; 
+import { getOrderDetails, getUserOrders, getVendorOrders, updateVendorOrder, createOrder, getDeliveryOrders, getOrderStatus } from "../controllers/order.controller"; 
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 require('dotenv').config();
@@ -19,9 +19,11 @@ router.put("/vendor/:id/process", updateVendorOrder);
 //user 
 router.use(RoleBasedAuthentication(String(process.env.USER)));
 
-router.post("/user", createOrder);  
+router.post("/user", createOrder);
 
 router.get("/user/all", getUserOrders);  
+
+router.get("user/status", getOrderStatus);  
 
 //delivery 
 router.use(RoleBasedAuthentication(String(process.env.DELIVERY)));

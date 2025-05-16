@@ -33,8 +33,20 @@ a {
 .bg-primary{
 	background-color:#FE7531;
 }
-
+ 
 .text-primary{
 	color:#FE7531;
 }
- 
+  
+.loader {
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+}
+@keyframes l5 {
+  0%   { box-shadow: 20px 0 #ff935e, -20px 0 #FE7531; background: #ff935e; }
+  33%  { box-shadow: 20px 0 #ff874b, -20px 0 #ff7f3f; background: #ff874b; }
+  66%  { box-shadow: 20px 0 #ff7f3f, -20px 0 #ff874b; background: #ff7f3f; }
+  100% { box-shadow: 20px 0 #FE7531, -20px 0 #ff935e; background: #FE7531; }
+}

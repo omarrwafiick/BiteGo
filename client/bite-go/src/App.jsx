@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import AppStore from './store/appStore'    
 import { checkAuth } from './services/auth';
 import { useNavigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast'
+
 
 function App() {  
   const { setIsAuthenticated, setUser, role, setToken } = AppStore();
@@ -46,6 +48,7 @@ function App() {
       {location.pathname === '/' && <Header />}
       <HeadProvider>  
         <RoutesConfig />
+        <Toaster />
       </HeadProvider>
       {location.pathname === '/' && <Footer />}
     </div> 

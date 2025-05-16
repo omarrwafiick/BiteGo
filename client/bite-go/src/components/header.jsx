@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import logo from '../assets/images/logo.png';  
 import SmallButton from './small-button';
 import { Link, useNavigate } from 'react-router-dom';
@@ -45,7 +45,28 @@ export default function Header() {
     removeToken();
     removeRole();
     navigate('/')
-  }
+  };
+
+  const cartRef = useRef();
+  const profileRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cartRef.current && !cartRef.current.contains(event.target) || profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowCart(false);
+        setShowProfile(false);
+      }
+    };
+
+    if (showCart || showProfile) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCart, showProfile]);
+
   return (
     <header className='w-full absolute top-0 left-0 z-50 flex justify-center items-center pt-4 pb-4'>   
         <nav className="flex items-center justify-between w-10/12 border-gray-200">
@@ -95,7 +116,7 @@ export default function Header() {
         </nav>
             {showCart && !showProfile && ( 
                 items.length() > 0 ?
-                    <div onClick={(e) => e.stopPropagation()} className='absolute right-6 top-16 bg-white h-96 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-3/12'>
+                    <div ref={cartRef} onClick={(e) => e.stopPropagation()} className='absolute right-6 top-16 bg-white h-96 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-3/12'>
                         <X size={55} color="#FF0000" onClick={() => setShowCart(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                         <h2 className="text-xl font-bold mt-16! mb-3! capitalize text-center">recently cart items ({items.length})</h2>   
                         <hr className='mb-2 opacity-15' />
@@ -124,7 +145,7 @@ export default function Header() {
                 </>
             )}
             {showProfile && !showCart && ( 
-                <div onClick={(e) => e.stopPropagation()} className='absolute flex flex-col justify-start items-center right-26 top-16 bg-white max-h-96 overflow-auto scroll-auto p-6 rounded-lg shadow-lg w-2/12'>
+                <div ref={profileRef} onClick={(e) => e.stopPropagation()} className='absolute flex flex-col justify-start items-center right-26 top-16 bg-white max-h-96 overflow-auto scroll-auto p-6 rounded-lg shadow-lg w-2/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowProfile(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
                     <h2 className="text-xl font-bold mt-4! mb-3! capitalize border-b-2 border-black/10 pb-3! w-full">user options</h2>    
                     <h1 onClick={()=>navigate('/profile')} className='text-lg w-full capitalize mb-2! cursor-pointer hover:text-black/70 duration-200'>

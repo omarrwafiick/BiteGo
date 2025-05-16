@@ -79,8 +79,7 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 }; 
 
 export const getUserOrders = async (req: Request, res: Response): Promise<void> => { 
-    try {     
-        console.log("user id ; "+ req.user?.id)
+    try {      
         const orders = await User.findById(req.user?.id).populate('orderHistory');
          
         if(!orders){
@@ -240,3 +239,24 @@ export const cancelOrder = async (req: Request, res: Response): Promise<void> =>
     }
     return;
 };
+
+
+export const getOrderStatus = async (req: Request, res: Response): Promise<void> => { 
+    try {      
+        const user = await checkUser(req, res, String(process.env.USER));       
+ 
+        const orders = await Order.find({userId: user._id});
+        
+        if(!orders){
+            res.status(404).json({ success: false, message: 'No order was found'});
+            return;
+        }  
+
+        res.status(200).json({ success: true, status: orders[orders.length - 1].status});
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+    return;
+};
+

@@ -1,4 +1,4 @@
-import React ,{useLayoutEffect, useState} from 'react'
+import React ,{useEffect, useLayoutEffect, useState} from 'react'
 import { motion } from "framer-motion";  
 import { Title, Meta } from 'react-head';
 import { useRef } from 'react';
@@ -10,25 +10,96 @@ import Image2 from '../../assets/images/f2.png';
 import Image3 from '../../assets/images/f3.png'; 
 import Image4 from '../../assets/images/f4.png'; 
 import Popular from '../../components/popular';
-import { CheckCircle } from 'lucide-react'; 
+import { CheckCircle, Dot, MessageCircleMore, Send, X } from 'lucide-react'; 
 import Service from '../../components/service';
 import P1 from '../../assets/images/p1.png'; 
-import P2 from '../../assets/images/p2.png'; 
+import P2 from '../../assets/images/p2.png';  
 import P3 from '../../assets/images/p3.png'; 
 import CustomeInput from '../../components/custome-input';
 import CustomeButton from '../../components/custome-button';
 import Parts from '../../assets/images/parts.png'; 
 import toaster from 'react-hot-toast';
 import { contact } from '../../services/user';
+import AppStore from '../../store/appStore';
+import Icon from '../../assets/images/icon.png';  
+import { getOrderStatus } from '../../services/order';
 
 export default function Home() { 
-  const aboutRef = useRef(null);   
+  const { dialog } = AppStore();
+  const aboutRef = useRef(null);    
   const contactRef = useRef(null);  
   const location = useLocation();
   const [message, setMessage] = useState('');
   const [subject, setSubject] = useState('');
   const form = useRef();  
   const [disable, setDisable] = useState(false);
+  const [showChat, setShowChat] = useState(false)
+  const [chatMessage, setChatMessage] = useState('')
+  const [hold, setHold] = useState(false)
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+  const messages = useRef(null); 
+  const messagesInput = useRef(null); 
+
+  const findDialogAnswer = (questionKey) => {
+    const item = dialog.find(obj => obj.hasOwnProperty(questionKey));
+    return item ? item[questionKey] : null;
+  };
+
+  const submitChatMessage = async ()=>{
+    const content = document.createElement('div');
+    content.className = 'ms-12 text-sm bg-gray-200 rounded-2xl p-2 mt-4';
+    setHold(true);  
+    await delay(800)
+    if(chatMessage.toLowerCase().includes('profile') || chatMessage == 5){   
+       content.textContent = findDialogAnswer('How do I update my profile?');
+    }
+    else if(chatMessage.toLowerCase().includes('delivery') || chatMessage == 4){   
+       content.textContent = findDialogAnswer('What are your delivery hours'); 
+    }
+    else if(chatMessage.toLowerCase().includes('cancel') || chatMessage == 3){   
+       content.textContent = findDialogAnswer('Can I cancel an order?');
+    }
+    else if(chatMessage.toLowerCase().includes('payment') || chatMessage == 2){   
+       content.textContent = findDialogAnswer('What payment methods are supported?');
+    }
+    else if(chatMessage.toLowerCase().includes('order') || chatMessage == 1){   
+      content.textContent = findDialogAnswer('How do I place an order?');
+    }
+    else if(chatMessage.toLowerCase().includes('status') || chatMessage == 6){
+      //request to server to get order status
+      try {
+        const response = await getOrderStatus();
+        if(response.status.ok()){ 
+          content.textContent = response.data.status;
+        } 
+        else{
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+      } catch (error) {
+          toaster.error('Can\'\t fetch order status');
+          content.textContent = 'Failed to get order status due to network issues';
+      }
+    }
+    else{
+      //can't answer 
+      const questions = dialog.map(obj => Object.keys(obj)[0]);
+      const header = document.createElement('div');
+      header.className = 'font-semibold'
+      header.textContent = 'These are the questions i can answer you with confidence - choose a number.';
+      content.appendChild(header);
+      questions.map((q, i) => {
+        const ques = document.createElement('div');
+        ques.className = 'w-full text-sm mt-3 mb-3';
+        ques.textContent = i+1 + ' - ' + q;
+        content.appendChild(ques);
+      }) 
+    }
+    setHold(false); 
+    messages.current.appendChild(content);
+    setChatMessage('');
+
+    messagesInput.current.scrollIntoView({ behavior: 'smooth' });
+  }
 
   const contactSubmit = async (e)=>{ 
      try {
@@ -50,7 +121,25 @@ export default function Home() {
     }
     setDisable(false)
   };
-  
+
+  const chatRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (chatRef.current && !chatRef.current.contains(event.target)) {
+        setShowChat(false);
+      }
+    };
+
+    if (showChat) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showChat]);
+
   useLayoutEffect(() => { 
       if(location.hash === '#about'){
         aboutRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -58,7 +147,7 @@ export default function Home() {
       if(location.hash === '#contact'){
         contactRef.current?.scrollIntoView({ behavior: 'smooth' });
       } 
-    }, [location]);
+  }, [location]);
 
   return (
     <div className='w-full flex flex-col justify-center items-center'>  
@@ -157,12 +246,38 @@ export default function Home() {
             <h1 className='capitalize font-medium text-5xl'>reach us and</h1>
             <h1 className='capitalize leading-20 text-5xl'><span className='font-medium'>get support{" "}</span><span className='text-primary font-bold'>now</span></h1>  
           </div>
-          <form ref={form} onSubmit={contactSubmit} className='bg-gradient-bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
-            <CustomeInput titleStyle={'text-black!'} name="subject" type="text" value={subject} onChange={(e)=> setSubject(e.target.value)} style={'w-6/12!'}/>
-            <CustomeInput titleStyle={'text-black!'} name="message" type="text" value={message} onChange={(e)=> setMessage(e.target.value)} style={'w-6/12! mt-2! mb-6!'}/>
+          <form ref={form} onSubmit={contactSubmit} className=' bg-gradient-to-br from-[#fe8a60] via-[#ff9e69] to-[#ff7777] rounded-2xl w-full flex flex-col justify-center items-center p-16 mt-10'>
+            <CustomeInput titleStyle={'text-white!'} name="subject" type="text" value={subject} onChange={(e)=> setSubject(e.target.value)} style={'w-6/12!'}/>
+            <CustomeInput titleStyle={'text-white!'} name="message" type="text" value={message} onChange={(e)=> setMessage(e.target.value)} style={'w-6/12! mt-2! mb-6!'}/>
             <CustomeButton disable={disable} name="contact" styles={'w-6/12!'} />
           </form>
       </motion.div>
+
+      <span className='bg-white rounded-full p-3 shadow-2xl fixed bottom-6 z-20  right-12 cursor-pointer hover:scale-105 duration-100'><MessageCircleMore onClick={()=> setShowChat(true)} className='' size={45} color="#FF0000" /></span>
+      {showChat && ( 
+                    <div ref={chatRef} onClick={(e) => e.stopPropagation()} className='fixed z-30 right-6 bottom-0 bg-white h-120 overflow-auto scroll-auto pt-6 ps-6 pe-6 rounded-lg shadow-2xl flex flex-col justify-center items-evenly w-3/12'>
+                        <X size={40} color="#FF0000" onClick={() => setShowChat(false)} className="cursor-pointer absolute top-0 right-0 px-2 py-2 rounded"></X>
+                        <div className='w-full flex justify-start items-center mt-2'>
+                            <img src={Icon} className="h-6 me-2" alt="bitego icon" /> 
+                            <h2 className="text-xl font-bold capitalize text-center">biteGo chatbot</h2>   
+                        </div>
+                        <hr className='mb-2 mt-2 opacity-15' />
+                        <div className='h-full w-full scroll-auto overflow-auto flex flex-col justify-between items-center'> 
+                          <div className=''>
+                              <div ref={messages} className='relative flex flex-col justify-start mt-2'>
+                                <div className='ms-12 text-md bg-gray-200 rounded-2xl p-2'>Welcome this is bitego chatbot how can I help you.</div>
+                              </div>
+                              <span className={`ms-50 w-4/12 h-9 flex justify-center items-center mt-4 text-md bg-gray-200 rounded-2xl ${hold ? 'flex' : 'hidden'}`}>
+                                <div class="loader"></div>
+                              </span>
+                          </div>
+                          <div ref={messagesInput} className='static w-full flex justify-center items-end mt-4'>
+                              <CustomeInput inputStyle={'p-1.5!'} titleStyle={'hidden'} placeholder='Write to me here...' type="text" value={chatMessage} onChange={(e)=> setChatMessage(e.target.value)} style={'me-2 p-0! w-10/12'}/>
+                              <Send className='mb-4 cursor-pointer' size={30} color="#FF0000" onClick={submitChatMessage} />
+                          </div>
+                        </div>
+                    </div>  
+      )}
     </div>
   )
 }

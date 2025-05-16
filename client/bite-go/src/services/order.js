@@ -8,6 +8,8 @@ export const createOrder = async (data) => api.post(domain+`/user`, data);
   
 export const getUserOrders = async () => api.get(domain+`/user/all`);
 
+export const getOrderStatus = async () => api.get(domain+`/user/status`);
+
 //for vendor  
 export const getVendorOrders = async () => api.get(domain+`/vendor/all`);
  
