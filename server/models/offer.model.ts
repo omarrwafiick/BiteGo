@@ -6,16 +6,18 @@ export interface IOffer extends Document {
   validFrom: Date;
   validTo: Date;
   isActive: boolean;  
-  vendors?: Types.ObjectId[];
+  vendorId?: Types.ObjectId;
+  foodItems?: Types.ObjectId[];
 }
-
+ 
 const OfferSchema = new Schema<IOffer>({  
   discountPercentage: { type: Types.Decimal128, required: true },
   pinCode:{ type : String, required: true },
   validFrom: { type: Date, required: true },
   validTo: { type: Date, required: true },
   isActive: { type: Boolean, default: true },
-  vendors: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vendor" }],
+  foodItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }],
+  vendorId: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor" },
 }, {
   toJSON:{ 
       transform(doc, ret){ 

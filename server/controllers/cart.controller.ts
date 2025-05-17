@@ -107,7 +107,7 @@ export const getCartItems = async (req: Request, res: Response):Promise<void> =>
         
         const profile = await findUser(user.id); 
         
-        const cartItems = await Cart.findOne({userId: profile?.id}).populate('items.foodId');
+        const cartItems = await Cart.findOne({userId: profile?.id}).populate('items.foodId.offerId');
 
         if(!cartItems){
             res.status(404).json({ success: false, message: 'Item was not found'});

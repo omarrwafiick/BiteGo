@@ -24,9 +24,7 @@ const AppStore = create((set) => ({
     }, 
     menus:[
     ],  
-    setMenus: (data) => set({ menus: data }), 
-    discount:2,
-    setDiscount: (data) => set({ discount: data }),
+    setMenus: (data) => set({ menus: data }),  
     cartItems:[
     ],
     setCartItems: (data) => set({ cartItems: data }), 
@@ -116,11 +114,7 @@ const AppStore = create((set) => ({
     totalPrice: 0,
     setTotalPrice: (data) => set({ totalPrice: data }),
     paymentMode: "", 
-    setPaymentMode: (data) => set({ paymentMode: data }),
-    offerId: "",
-    setOfferId: (data) => set({ offerId: data }),
-    vendorId: "", 
-    setVendorId: (data) => set({ vendorId: data }),
+    setPaymentMode: (data) => set({ paymentMode: data }), 
     orderId: "",
     setOrderId: (data) => set({ orderId: data }),
     orderDetails:null,

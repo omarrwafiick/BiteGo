@@ -7,19 +7,21 @@ import AppStore from '../../store/appStore';
 import { getCartItems, updateCart } from '../../services/cart';
 
 export default function Cart(){ 
-  var { discount, setTotalPrice } = AppStore();
-  const [items, setItems] = useState([]);  
+  var { setTotalPrice } = AppStore();
+  const [items, setItems] = useState([]);
+  const [discount, setDiscount] = useState(0);   
   const navigate = useNavigate();  
   var [total, setTotal] = useState(0); 
  
   const fetchData = async ()=>{
     setItems((await getCartItems()).data);
+    items.map(item => setDiscount(discount + item.offerId.discountPercentage) );
   };
 
   const updateData = async ()=>{
-    const cartItems = items.filter(item => ({foodId: item._id, quantity: item.quantity, price: item.price}))
+    const cartItems = items.filter(item => ({foodId: item._id, quantity: item.quantity, price: item.price}));
     await updateCart(cartItems);
-  };
+  }; 
  
   useEffect(() => { 
     updateData();

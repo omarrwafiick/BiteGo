@@ -9,12 +9,14 @@ export interface IFoodItem extends Document {
   available: boolean;
   readyTime: Types.Decimal128;
   vendorId: mongoose.Types.ObjectId;
+  offerId? :  mongoose.Types.ObjectId;
   images: string[] | any; 
   rating?: Types.Decimal128;
 }; 
 
 const FoodItemSchema = new Schema<IFoodItem>({
   vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
+  offerId: { type: Schema.Types.ObjectId, ref: "Offer" },
   name: { type: String, required: true }, 
   description: { type: String, required: true  },
   price: { type: Types.Decimal128, required: true },

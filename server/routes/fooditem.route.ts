@@ -3,6 +3,7 @@ import { addFoodItem, getFoodItems, getFoodAvailable, getFoodIn30Minute, getRest
 import multer from "multer";
 import { ValidateSignatureMiddleWare } from "../middlewares/authenticate.middleware";
 import { RoleBasedAuthentication } from "../middlewares/RoleBasedAuth.middleware";
+import { addFoodItemToOffer } from "../controllers/offer.controller";
 require('dotenv').config();
 const router = express.Router(); 
 
@@ -17,6 +18,8 @@ const uploadImage = multer({ storage: storage }).array('images',5);
 router.post("/add-item", RoleBasedAuthentication(String(process.env.VENDOR)), uploadImage, addFoodItem);
 
 router.get("/remove-item/:id", RoleBasedAuthentication(String(process.env.VENDOR)), removeFoodItems);
+
+router.put("/add-item/:offerid/:itemid", RoleBasedAuthentication(String(process.env.VENDOR)), addFoodItemToOffer);
 
 router.use(RoleBasedAuthentication(String(process.env.USER)));
 

@@ -6,7 +6,7 @@ import ConfirmAction from '../../components/confirm-action'
 import CustomeInput from '../../components/custome-input'
 import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
-import { updateOffers, getVendorOffers, removeVendorFromOffer } from '../../services/offer'; 
+import { updateOffers, getVendorOffers, removeVendorFromOffer, addVendorOffers } from '../../services/offer'; 
 import toaster from 'react-hot-toast'; 
 
 export default function ManageOffers() {
@@ -23,12 +23,15 @@ export default function ManageOffers() {
 
   const [offer, setOffer] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
+  const [showForm, setShowForm] = useState(false); 
   const [discount, setDiscount] = useState('');
   const [validTo, setValidTo] = useState(Date.UTC);
+  const [itemId, setItemId] = useState('');
   const [isActive, setIsActive] = useState(false); 
   const form = useRef();  
   const [disable, setDisable] = useState(false);
+  const [isNew, setIsNew] = useState(false);
+
 
   const handlePageButtonClick = (data) => {
     setOffer(data);
@@ -51,24 +54,43 @@ export default function ManageOffers() {
   };
 
   const offerEdit = (data)=>{
+    setIsNew(false);
     setDiscount(data.discount);
     setIsActive(data.isActive);
     setValidTo(data.validTo);
     setShowEdit(true);
   }
 
-  const offerEditSubmit = async (e)=>{ 
+  const offerAdd = (data)=>{ 
+    setIsNew(true);
+    setShowForm(true);
+  }
+
+  const offerSubmit = async (e)=>{ 
      try {
       e.preventDefault();  
       setDisable(true)  
-      const response = await updateOffers(
-        { 
-          discountPercentage: discount,
-          validTo,
-          isActive
-        },
-        offer._id
-      );
+      var response = null;
+      if(isNew){
+        response = await addVendorOffers(
+          {          
+            discountPercentage: discount,
+            validTo,
+            isActive,
+            itemId: itemId
+          },
+        );
+      }
+      else{ 
+        response = await updateOffers(
+          { 
+            discountPercentage: discount,
+            validTo,
+            isActive,
+            itemId:''
+          }
+        );
+      }
       if(!response.ok()){
         throw new Error(`Request failed with status ${response.status}`);
       }
@@ -80,6 +102,7 @@ export default function ManageOffers() {
     setDisable(false)
   };
 
+  
   return (
     <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
         <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
@@ -90,6 +113,8 @@ export default function ManageOffers() {
           <p className='opacity-80 mb-8! mt-2! text-center text-md'>As an vandor you can manage offers of your restaurant, you can monitor, update and delete the offer.</p>
           <CustomeTable 
             colsNames={ Object.keys(offers[0]) } 
+            onAdd={offerAdd}
+            isAdd={true}
             isDelete={true}
             onDelete={handlePageButtonClick}
             isEdit={true}
@@ -97,18 +122,24 @@ export default function ManageOffers() {
             data={offers}/> 
         </div> 
         <ConfirmAction visible={showConfirm} result={handleConfirmResult} />
-         {showEdit && (
-              <div onClick={() => setShowEdit(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
-                <form ref={form} onSubmit={offerEditSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
+         {showForm && (
+              <div onClick={() => setShowForm(false)} className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
+                <form ref={form} onSubmit={offerSubmit} onClick={(e) => e.stopPropagation()} className='relative bg-white h-8/12 overflow-auto scroll-auto p-6 rounded-lg shadow-lg flex flex-col justify-center items-evenly w-6/12'>
                     <X size={55} color="#FF0000" onClick={() => setShowEdit(false)} className="cursor-pointer absolute top-0 right-0 px-4 py-2 rounded"></X>
-                    <h2 className="text-2xl font-bold mb-6! capitalize">edit order</h2> 
-                    <CustomeInput value={discount} onChange={(e)=> setDiscount(e.target.value)} name={"discountPercentage"} type={"text"}/> 
+                    <h2 className="text-2xl font-bold mb-6! capitalize">{ isNew ? 'add offer' : 'edit offer'}</h2> 
+                    {
+                      isNew ? 
+                        <CustomeInput value={itemId} onChange={(e)=> setItemId(e.target.value)} name={"item id"} type={"text"}/> 
+                      :
+                        <></>
+                    }
+                    <CustomeInput value={discount} onChange={(e)=> setDiscount(e.target.value)} name={"discount Percentage"} type={"text"}/> 
                     <CustomeInput value={validTo} onChange={(e)=> setValidTo(e.target.value)} name={"validTo"} type={"date"}/> 
                     <CustomeSelect value={isActive} onChange={(e)=> setIsActive(e.target.value)} data={['yes', 'no']} name={"isActive"} />  
                     <CustomeButton disable={disable} name={"submit"} />
                 </form>
               </div>      
-          )} 
+          )}  
     </div>
   )
 } 

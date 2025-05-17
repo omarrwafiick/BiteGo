@@ -7,6 +7,8 @@ export class MainEntity{
     validTo: string;
     @IsNotEmpty()
     isActive: boolean;
+    @IsNotEmpty()  
+    foodItemId: string;
 }
 
 export class CreateOfferDto extends MainEntity{ 

@@ -76,7 +76,7 @@ export const getFoodItems = async (req: Request, res: Response): Promise<void>  
     try {  
         const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
-        const foodItems = await FoodItem.find({vendorId: vendor?.id});
+        const foodItems = await FoodItem.find({vendorId: vendor?.id}).populate('offerId');
 
         if(!foodItems){
             res.status(404).json({ success: false, message: 'Nothing was not found'});

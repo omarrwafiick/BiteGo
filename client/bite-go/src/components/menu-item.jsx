@@ -11,6 +11,7 @@ export default function MenuItem({data, onClick}) {
         <div className='bg-white p-4 rounded-2xl mt-3 shadow w-full flex flex-col justify-center items-center'>
           <h3 className='capitalize text-md font-semibold'>{data.name}</h3> 
           <h3 className='mt-2! capitalize text-md font-semibold'>{data.category} / {data.price}$</h3> 
+          <h4 className='mt-2! capitalize text-md font-semibold text-primary'>with discount of :{data.offerId.discountPercentage}%</h4>
           <span className='font-medium flex mt-2'>{[...Array(data.rating)].map((s)=>(<Star size={20} color='#FE7531'className='ms-2' />))}</span>
         </div>
     </div>
