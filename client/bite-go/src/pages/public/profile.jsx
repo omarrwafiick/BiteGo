@@ -85,6 +85,7 @@ export default function Profile() {
         response = await updatetVendorProfile({
           phone: phone,
           name:name, 
+          address: address,
           pinCode:pincode
         });
       }
@@ -110,8 +111,8 @@ export default function Profile() {
   };
   
   return (
-    <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
-        <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
+    <div className='container'> 
+        <div className='sub-container'>
             <div className='w-full flex flex-col justify-start items-center'>
               <span className='m-2'>
                 <User size={55} color="#FE7531" /> 
@@ -200,7 +201,8 @@ export default function Profile() {
                     <h2 className="text-2xl font-bold mb-6! mt-60! capitalize">edit profile</h2> 
                     <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"name"} type={"text"}/>  
                     <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>    
-                    <CustomeSelect value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
+                    <CustomeSelect value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />                     <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>   
+                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>    
                     <CustomeButton disable={disable} name={"submit"} />
                 </form> 
               </div>      

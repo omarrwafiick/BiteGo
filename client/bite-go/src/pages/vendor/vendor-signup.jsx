@@ -19,9 +19,7 @@ export default function VendorSignup() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState(''); 
-  const [pincode, setPincode] = useState(''); 
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0); 
+  const [pincode, setPincode] = useState('');   
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
   const form = useRef();  
@@ -43,9 +41,7 @@ export default function VendorSignup() {
           address: address,
           phone: phone,  
           email: email,
-          password: password,
-          longitude,
-          latitude,
+          password: password, 
           pincode
         }
       );
@@ -62,7 +58,7 @@ export default function VendorSignup() {
   };
   
   return (
-    <div className='flex min-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
+    <div className='container'> 
           <motion.div
               initial={{opacity: 0, y:20}}
               animate={{opacity: 1, y:0}}
@@ -80,12 +76,10 @@ export default function VendorSignup() {
                   <CustomeInput style='w-10/12' value={oName} onChange={(e)=> setOName(e.target.value)} name={"owner name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/>  
                   <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
-                  <CustomeSelect style='w-10/12' titleStyle={'text-black!'} value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
                 </div>
-                <div className='flex flex-col items-center justify-center w-6/12'>
+                <div className='flex flex-col items-center justify-center w-6/12'>                  
+                  <CustomeSelect style='w-10/12' titleStyle={'text-black!'} value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
                   <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
-                  <CustomeInput style='w-10/12' value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/>   
                   <PasswordInput style='w-10/12' value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
                   <PasswordInput style='w-10/12' value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />  
                 </div> 

@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { CreateVendorDto, UpdateVendorDto } from "../dto/vendor.dto"; 
 import { findVendor } from "../utilities/helper.methods";
 import { plainToClass } from "class-transformer";
-import { validate } from "class-validator"; 
-import { UpdateLocationDto } from "../dto/main.dto";
+import { validate } from "class-validator";  
 import { GenerateSalt, hashingPassword } from "../utilities/security";
 import { Vendor } from "../models/vendor.model";
 import { checkUser } from "../utilities/getUser";
@@ -17,7 +16,7 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
         return;
     };    
     
-    const { name, ownerName, pinCode, address, phone, email, password, longitude, latitude } = <CreateVendorDto>req.body; 
+    const { name, ownerName, pinCode, address, phone, email, password } = <CreateVendorDto>req.body; 
  
     const exists = await findVendor('', email);
 
@@ -41,8 +40,6 @@ export const createVendor = async (req: Request, res: Response) : Promise<void> 
         salt: salt,
         serviceAvailable: false,
         coverImages: [], 
-        latitude,
-        longitude,
         isApproved: false
     });
      
@@ -80,13 +77,14 @@ export const updatetVendorProfile = async (req: Request, res: Response) : Promis
             return;
         };
                 
-        const { name, phone, menu, pinCode } = req.body as UpdateVendorDto;
+        const { name, phone, menu, pinCode, address } = req.body as UpdateVendorDto;
         
         const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
 
         vendor.name = name; 
         vendor.phone = phone;
         vendor.pinCode = pinCode;
+        vendor.address = address;
         if(menu.length > 0){
             vendor.menu.push(menu);
         } 
@@ -124,32 +122,6 @@ export const updateVendorService = async (req: Request, res: Response) : Promise
     }
     return;
 };
-
-export const updateVendorLocation = async (req: Request, res: Response) : Promise<void> => {
-    try {  
-        const vendor = await checkUser(req, res, String(process.env.VENDOR)); 
-
-        const vendorData = plainToClass(UpdateLocationDto, req.body);
-        const errors = await validate(vendorData, { skipMissingProperties: false });
-        if(errors.length > 0){
-            res.status(400).json({ success: false, message: 'All fields are required', errors });
-            return;
-        };
  
-        vendor.longitude = vendorData.longitude;
-        vendor.latitude = vendorData.latitude;  
-
-        if (!vendor.isModified()){
-            res.status(400).json({ success: false, message: 'No changes detected'});
-            return;
-        }
-        await vendor.save();
-        res.status(200).json({success:true, message: "Vendor location status was updated successfully"});    
-        
-    } catch (error) {
-        res.status(500).json({ message: 'Internal server error'});
-    }
-    return;
-};
 
 

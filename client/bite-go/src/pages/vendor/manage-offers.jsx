@@ -6,7 +6,7 @@ import ConfirmAction from '../../components/confirm-action'
 import CustomeInput from '../../components/custome-input'
 import CustomeButton from '../../components/custome-button'
 import CustomeSelect from '../../components/custome-select'
-import { updateOffers, getVendorOffers, removeVendorFromOffer, addVendorOffers } from '../../services/offer'; 
+import { updateOffers, getVendorOffers, removeVendorOffer, addVendorOffers } from '../../services/offer'; 
 import toaster from 'react-hot-toast'; 
 
 export default function ManageOffers() {
@@ -14,7 +14,7 @@ export default function ManageOffers() {
   const [offers, setOffers] = useState([]);
 
   const fetchData = async ()=>{
-    setOffers((await getVendorOffers(user._id)).data); 
+    setOffers((await getVendorOffers(user._id)).data);  
   };
 
   useEffect(()=>{
@@ -42,7 +42,7 @@ export default function ManageOffers() {
     setShowConfirm(false);
     if (confirmed) {
       try {
-      const response = await removeVendorFromOffer(offer._id);
+      const response = await removeVendorOffer(offer._id);
       if(!response.ok()){
         throw new Error(`Request failed with status ${response.status}`);
       }
@@ -104,8 +104,8 @@ export default function ManageOffers() {
 
   
   return (
-    <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
-        <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
+    <div className='container'> 
+        <div className='sub-container'>
           <span className='m-2'>
             <Ticket size={55} color="#FE7531" /> 
           </span>

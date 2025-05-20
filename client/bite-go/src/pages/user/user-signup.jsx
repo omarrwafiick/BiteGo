@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button'
 import CustomeInput from '../../components/custome-input'
@@ -15,9 +15,7 @@ export default function UserSignup() {
   const [lName, setLName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState(''); 
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0); 
+  const [address, setAddress] = useState('');  
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
   const form = useRef();  
@@ -39,9 +37,7 @@ export default function UserSignup() {
           address: address,
           phone: phone,  
           email: email,
-          password: password,
-          longitude,
-          latitude
+          password: password
         }
       );
       if(!response.ok()){
@@ -57,7 +53,7 @@ export default function UserSignup() {
   };
   
   return (
-    <div className='flex min-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
+    <div className='container'> 
           <motion.div
               initial={{opacity: 0, y:20}}
               animate={{opacity: 1, y:0}}
@@ -75,11 +71,9 @@ export default function UserSignup() {
                   <CustomeInput style='w-10/12' value={lName} onChange={(e)=> setLName(e.target.value)} name={"last name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/>  
                   <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
-                  <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 
                 </div>
-                <div className='flex flex-col items-center justify-start w-6/12'>
-                  <CustomeInput style='w-10/12' value={latitude} onChange={(e)=> setLatitude(e.target.value)} name={"latitude"} type={"number"}/> 
-                  <CustomeInput style='w-10/12' value={longitude} onChange={(e)=> setLongitude(e.target.value)} name={"longitude"} type={"number"}/>   
+                <div className='flex flex-col items-center justify-start w-6/12'>    
+                  <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 
                   <PasswordInput style='w-10/12' value={password} onChange={(e)=> setPassword(e.target.value)} name={"password"} />
                   <PasswordInput style='w-10/12' value={confirmPassword} onChange={(e)=> setConfirmPassword(e.target.value)} name={"confirm password"} />   
                   <CustomeButton disable={disable} styles='w-10/12 mt-3' name={"signup"} />

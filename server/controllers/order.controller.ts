@@ -83,14 +83,14 @@ export const createOrder = async (req: Request, res: Response): Promise<void> =>
 
 export const getUserOrders = async (req: Request, res: Response): Promise<void> => { 
     try {      
-        const orders = await User.findById(req.user?.id).populate('orderHistory');
-         
-        if(!orders){
-            res.status(404).json({ success: false, message: 'User was not found or has no orders'});
+        const orders = await Order.find({userId: req.user?.id});
+        
+        if(orders.length<=0){
+            res.status(404).json({ success: false, message: 'No order was found'});
             return;
-        };        
+        }       
  
-        res.status(200).json({ success: true, orders: orders.orderHistory});
+        res.status(200).json({ success: true, orders});
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -100,9 +100,9 @@ export const getUserOrders = async (req: Request, res: Response): Promise<void> 
 
 export const getVendorOrders = async (req: Request, res: Response): Promise<void> => { 
     try {     
-        const orders = await Vendor.findById(req.user?.id).populate('orders');
+        const orders = await Order.find({vendorId: req.user?.id});
         
-        if(!orders){
+        if(orders.length<=0){
             res.status(404).json({ success: false, message: 'No order was found'});
             return;
         }
@@ -117,9 +117,9 @@ export const getVendorOrders = async (req: Request, res: Response): Promise<void
 
 export const getDeliveryOrders = async (req: Request, res: Response): Promise<void> => { 
     try {     
-        const orders = await Delivery.findById(req.user?.id).populate('orders');
+       const orders = await Order.find({deliveryId: req.user?.id}).populate('userId');
         
-        if(!orders){
+        if(orders.length<=0){
             res.status(404).json({ success: false, message: 'No order was found'});
             return;
         }

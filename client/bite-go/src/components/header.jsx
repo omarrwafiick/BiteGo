@@ -78,11 +78,8 @@ export default function Header() {
             <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                 <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border opacity-80 backdrop-blur-md bg-opacity-50 border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
                     <li> 
-                        <Link onClick={() => handleClick(0)} to="/menus" className={`px-4 py-2 rounded-md font-medium capitalize ${activeIndex === 0 ? 'text-primary' : 'text-black'}`}  aria-current="page">menus</Link>
-                    </li>
-                    <li>
-                        <Link onClick={() => handleClick(1)} to="/offers" className={`px-4 py-2 rounded-md font-medium capitalize ${activeIndex === 1 ? 'text-primary' : 'text-black'}`}>offers</Link>
-                    </li>
+                        <Link onClick={() => handleClick(0)} to="/restaurants" className={`px-4 py-2 rounded-md font-medium capitalize ${activeIndex === 0 ? 'text-primary' : 'text-black'}`} >restaurants</Link>
+                    </li> 
                     <li>
                         <Link onClick={() => handleClick(3)} to="/search" className={`px-4 py-2 rounded-md font-medium capitalize ${activeIndex === 3 ? 'text-primary' : 'text-black'}`}>search</Link>
                     </li>

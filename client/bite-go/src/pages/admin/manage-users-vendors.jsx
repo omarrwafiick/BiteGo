@@ -1,5 +1,5 @@
 import { Users2Icon, X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import CustomeTable from '../../components/custome-table';
 import SmallButtonSimple from '../../components/small-button-simple';
 import CustomeInput from '../../components/custome-input';
@@ -11,9 +11,9 @@ import {passwordRegex} from '../../utils/main';
 import { addAdmin, deleteEntitiyById, updateUser, approveAccount, getAllEntities } from '../../services/admin';
 
 export default function ManageUsersAndVendors() { 
-  const [users, setUsers] = useState([]); 
-  const [vendors, setVendors] = useState([]); 
-  const [deliveries, setDeliveries] = useState([]);  
+  const [users, setUsers] = useState([{}]); 
+  const [vendors, setVendors] = useState([{}]); 
+  const [deliveries, setDeliveries] = useState([{}]);  
 
   const fetchData = async ()=>{
     setUsers((await getAllEntities('user')).data);
@@ -22,7 +22,7 @@ export default function ManageUsersAndVendors() {
   };
 
   useEffect(()=>{
-    fetchData();
+    //fetchData();
   },[users, vendors, deliveries]);
 
   const [showAdminPopup, setShowAdminPopup] = useState(false); 
@@ -164,8 +164,8 @@ export default function ManageUsersAndVendors() {
   }; 
 
   return (
-    <div className='flex min-h-scree justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
-    <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
+    <div className='container'> 
+    <div className='sub-container'>
       <span className='m-2'>
         <Users2Icon size={55} color="#FE7531" /> 
       </span>

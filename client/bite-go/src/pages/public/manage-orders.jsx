@@ -88,8 +88,8 @@ export default function ManageOrders() {
   };
 
   return (
-    <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
-        <div className='flex justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
+    <div className='container'> 
+        <div className='sub-container'>
           <span className='m-2'>
             <ListOrderedIcon size={55} color="#FE7531" /> 
           </span>
@@ -115,7 +115,7 @@ export default function ManageOrders() {
                       <> 
                         <CustomeTable 
                                 colsNames={ Object.keys(orders[0]) }  
-                                data={orders}/>
+                                data={orders?.map((order)=>({...order,'user address': order.userId.adress}))}/>
                       </>
                   :
                       <>   

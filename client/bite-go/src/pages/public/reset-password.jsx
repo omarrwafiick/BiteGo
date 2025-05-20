@@ -45,7 +45,7 @@ export default function ResetPassword() {
     setDisable(false)
   };
   return (
-    <div className='flex max-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
+    <div className='container'> 
       <motion.div
           initial={{opacity: 0, y:20}}
           animate={{opacity: 1, y:0}}

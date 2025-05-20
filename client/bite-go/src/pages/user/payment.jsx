@@ -31,8 +31,8 @@ export default function Payment() {
     }
   };
   return (
-    <div className='flex min-h-screen justify-center items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
-        <div className='flex min-h-60 justify-center items-center flex-col w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
+    <div className='container'> 
+        <div className='sub-container'>
           <span className='m-2'>
             <DollarSign size={55} color="#FE7531" /> 
           </span>

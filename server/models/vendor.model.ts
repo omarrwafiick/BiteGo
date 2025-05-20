@@ -18,9 +18,7 @@ interface IVendor extends Document{
     resetTokenExpiration?: Date;
     profilePicture?: string;  
     serviceAvailable: boolean;   
-    rating?: Types.Decimal128; 
-    latitude?:Types.Decimal128;
-    longitude?:Types.Decimal128;
+    rating?: Types.Decimal128;  
 };
  
 const VendorSchema = new Schema<IVendor>({ 
@@ -39,9 +37,7 @@ const VendorSchema = new Schema<IVendor>({
     rating:  { type : Types.Decimal128, default: 0 },  
     menu: [{ type: mongoose.Schema.Types.ObjectId, ref: "FoodItem" }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
-    isApproved: { type: Boolean, default: false },
-    latitude: { type: Types.Decimal128, default: 0 }, 
-    longitude: { type: Types.Decimal128, default: 0 }
+    isApproved: { type: Boolean, default: false }
 }, {
     toJSON:{
         transform(doc, ret){

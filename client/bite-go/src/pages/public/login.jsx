@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion';
 import CustomeButton from '../../components/custome-button'
 import CustomeInput from '../../components/custome-input'
@@ -47,7 +47,7 @@ export default function Login() {
   };
 
   return (
-    <div className='flex max-h-screen justify-center items-center flex-col w-full h-dvh bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
+    <div className='container pt-12 pb-12'> 
       <motion.div
           initial={{opacity: 0, y:20}}
           animate={{opacity: 1, y:0}}

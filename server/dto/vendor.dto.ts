@@ -15,6 +15,10 @@ class MainEntity{
     @IsNotEmpty() 
     pinCode:string;
 
+    @IsString()
+    @IsNotEmpty()
+    address:string; 
+
     menu: IFoodItem[];
 }
 export class CreateVendorDto extends MainEntity{ 
@@ -28,20 +32,10 @@ export class CreateVendorDto extends MainEntity{
     ownerName:string; 
 
     @IsString()
-    @IsNotEmpty()
-    address:string; 
-
-    @IsString()
     @Length(6,12)
     password:string;
       
-    orders: IOrder[];
-    
-    @IsNotEmpty()
-    latitude: number;
-    
-    @IsNotEmpty()
-    longitude: number;
+    orders: IOrder[]; 
 }
 
 

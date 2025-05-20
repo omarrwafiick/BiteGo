@@ -4,8 +4,7 @@ import { CreateUserDto, UpdateUserDto } from "../dto/user.dto";
 import { validate } from 'class-validator';
 import { generateOTP, GenerateSalt, GenerateSignature, hashingPassword, setCookie } from "../utilities/security";
 import { User } from "../models/user.model";
-import { sendOtp } from "../utilities/notification";
-import { UpdateLocationDto } from "../dto/main.dto"; 
+import { sendOtp } from "../utilities/notification"; 
 import { checkUser } from "../utilities/getUser";
 import { Contact } from "../models/contact.model";
 import { ContactDto } from "../dto/contact.dto";
@@ -20,7 +19,7 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
         
-        const { email, password, firstName, lastName, phone, address, latitude, longitude } = userData;
+        const { email, password, firstName, lastName, phone, address } = userData;
 
         const exists = await User.findOne({ email: email });
         if (exists) {
@@ -41,8 +40,6 @@ export const CreateUser = async (req: Request, res: Response): Promise<void> => 
             lastName: lastName,
             phone: phone,
             address: address,
-            latitude,
-            longitude,
             salt: salt,
             otp: otp,
             otpExp: otpExp
@@ -168,37 +165,6 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
 
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
-    }
-    return;
-};
-
-export const updateUserLocation = async (req: Request, res: Response) : Promise<void> => {
-    try {  
-        const user = await checkUser(req, res, String(process.env.USER)); 
-        const userData = plainToClass(UpdateLocationDto, req.body);
-            
-        const errors = await validate(userData, { skipMissingProperties: false });
-        if(errors.length > 0){
-            res.status(400).json({ success: false, message: 'All fields are required', errors });
-            return;
-        };
-
-        const { latitude, longitude } = userData; 
-      
-        user.longitude = longitude;
-        user.latitude = latitude; 
-
-        if (!user.isModified()){
-            res.status(400).json({ success: false, message: 'No changes detected'});
-            return;
-        }  
-        
-        await user.save();
-        
-        res.status(200).json({success:true, message: "User location status was updated successfully"});  
-         
-    } catch (error) {
-        res.status(500).json({ message: 'Internal server error'});
     }
     return;
 };

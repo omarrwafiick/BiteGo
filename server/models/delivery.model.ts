@@ -15,9 +15,7 @@ export interface IDelivery extends Document {
   vehicleType: "Bike" | "Car" | "Van"; 
   status?: boolean; 
   estimatedTime?: Types.Decimal128; 
-  isApproved: boolean;
-  latitude?:Types.Decimal128;
-  longitude?:Types.Decimal128;
+  isApproved: boolean; 
 }
 
 const DeliverySchema = new Schema<IDelivery>({
@@ -33,9 +31,7 @@ const DeliverySchema = new Schema<IDelivery>({
   vehicleType: { type: String, enum: ["Bike", "Car", "Van"], required: true },
   status: { type: Boolean, default: true }, 
   estimatedTime: { type: Types.Decimal128, default: 0  }, 
-  isApproved: { type: Boolean, default: false },
-  latitude: { type: Types.Decimal128, default: 0 }, 
-  longitude: { type: Types.Decimal128, default: 0 }
+  isApproved: { type: Boolean, default: false }
 }, {
   toJSON:{
       transform(doc, ret){ 

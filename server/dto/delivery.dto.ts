@@ -40,10 +40,5 @@ export class UpdateDeliveryDto  extends MainEntity{
     
   @IsNumber() 
   estimatedTime: number; 
-
-  @IsDecimal() 
-  latitude: Decimal128;
-
-  @IsDecimal() 
-  longitude: Decimal128;
+ 
 };

@@ -12,9 +12,7 @@ export interface IUser extends mongoose.Document {
   resetToken?: string;
   resetTokenExpiration?: Date;
   otp?:number;
-  otpExp?:Date;
-  latitude?:Types.Decimal128;
-  longitude?:Types.Decimal128;
+  otpExp?:Date; 
   isVerified:boolean;
   orderHistory?: mongoose.Types.ObjectId[];  
   cart?: mongoose.Types.ObjectId;  
@@ -32,9 +30,7 @@ const UserSchema = new Schema<IUser>({
     address: { type: String, required: true },
     profilePicture: { type: String, default: "" }, 
     otp: { type: Number, default: 0 }, 
-    otpExp: { type: Date, default: Date.now()  }, 
-    latitude: { type: Types.Decimal128, default: 0 }, 
-    longitude: { type: Types.Decimal128, default: 0 }, 
+    otpExp: { type: Date, default: Date.now()  },  
     isVerified: { type: Boolean, default: false }, 
     orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order", default: null }], 
     cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" , default: null}, 

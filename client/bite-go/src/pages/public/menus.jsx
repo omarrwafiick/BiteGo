@@ -5,7 +5,7 @@ import MenuItem from '../../components/menu-item';
 import { Minus, Plus } from 'lucide-react';
 import CustomeButton from '../../components/custome-button';
 import { getVendorMenu } from '../../services/vendor'; 
-import { addToCart, deleteCartItem } from '../../services/cart'; 
+import { manageCart, deleteCartItem } from '../../services/cart'; 
 import toaster from 'react-hot-toast';
 
 export default function Menus() {  
@@ -34,7 +34,7 @@ export default function Menus() {
 
   const addToCartItem =  async(item)=>{
     try { 
-      const response = await addToCart(
+      const response = await manageCart(
         {   
           foodId: item._id,
           quantity: itemQuantity
@@ -53,8 +53,8 @@ export default function Menus() {
   };
 
   return (
-    <div className='flex min-h-screen justify-start items-center flex-col w-full bg-gradient-to-br from-[#F66A35] via-[#FF8C4D] to-[#c9c9c9]'> 
-        <div className='flex flex-col justify-center items-center w-10/12 bg-white rounded-2xl ps-16 pe-16 pt-10 pb-10 mt-6 mb-6 shadow-lg'>
+    <div className='container'> 
+        <div className='sub-container'>
           <span className='m-2'> 
             <Scroll size={55} color="#FE7531" /> 
           </span>

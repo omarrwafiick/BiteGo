@@ -22,8 +22,7 @@ import VendorRouteProtector from '../components/vendor-route'
 import AdminRouteProtector from '../components/admin-route'
 import UserRouteProtector from '../components/user-route'
 import DeliveryRouteProtector from '../components/delivery-route'
-import Menus from '../pages/public/menus';
-import Offers from '../pages/public/offers';
+import Menus from '../pages/public/menus'; 
 import Order from '../pages/user/order';
 
 const RoutesConfig  = () => ( 
@@ -37,8 +36,7 @@ const RoutesConfig  = () => (
     <Route path="/login" element={<Login />} />  
     <Route path="/profile" element={<Profile />} />  
     <Route path="/orders" element={<ManageOrders />} />  
-    <Route path="/menus/:vendorid" element={<Menus />} />   
-    <Route path="/offers" element={<Offers />} />   
+    <Route path="/menus/:vendorid" element={<Menus />} />     
     <Route path="/admin/users" element={<AdminManageUsersAndVendorse />} />   
     <Route path="/delivery/signup" element={<DeliverySignup />} />   
     <Route path="/user/cart" element={<Cart />} />   
