@@ -11,6 +11,7 @@ import AppStore from '../../store/appStore'
 import { signupDelivery } from '../../services/delivery';
 import toaster from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Address from '../../components/address-input' 
 
 export default function DeliverySignup() {
   const { pinCodes } = AppStore();
@@ -76,7 +77,7 @@ export default function DeliverySignup() {
                 <div className='flex flex-col items-center justify-center w-6/12'> 
                   <CustomeInput style='w-10/12'  value={name} onChange={(e)=> setName(e.target.value)} name={"driverName"} type={"text"}/>  
                   <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/> 
-                  <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                  <Address name={'address'} style='w-10/12!' onChange={setAddress} />
                   <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={estimatedTime} onChange={(e)=> setEstimatedTime(e.target.value)} name={"estimated time"} type={"number"}/> 
                 </div> 

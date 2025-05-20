@@ -9,6 +9,7 @@ import {passwordRegex} from '../../utils/main';
 import { signupUser } from '../../services/user';
 import toaster from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Address from '../../components/address-input';
 
 export default function UserSignup() { 
   const [fName, setFName] = useState('');
@@ -53,7 +54,7 @@ export default function UserSignup() {
   };
   
   return (
-    <div className='container'> 
+    <div className='container overflow-hidden'> 
           <motion.div
               initial={{opacity: 0, y:20}}
               animate={{opacity: 1, y:0}}
@@ -70,7 +71,7 @@ export default function UserSignup() {
                   <CustomeInput style='w-10/12'  value={fName} onChange={(e)=> setFName(e.target.value)} name={"first name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={lName} onChange={(e)=> setLName(e.target.value)} name={"last name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/>  
-                  <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                  <Address name={'address'} style='w-10/12!' onChange={setAddress} />
                 </div>
                 <div className='flex flex-col items-center justify-start w-6/12'>    
                   <CustomeInput style='w-10/12' value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone"} type={"text"}/> 

@@ -11,6 +11,7 @@ import CustomeSelect from '../../components/custome-select'
 import { sigupVendor } from '../../services/vendor';
 import toaster from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Address from '../../components/address-input'
 
 export default function VendorSignup() {
   const { pinCodes } = AppStore();
@@ -75,7 +76,7 @@ export default function VendorSignup() {
                   <CustomeInput style='w-10/12'  value={name} onChange={(e)=> setName(e.target.value)} name={"name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={oName} onChange={(e)=> setOName(e.target.value)} name={"owner name"} type={"text"}/> 
                   <CustomeInput style='w-10/12' value={email} onChange={(e)=> setEmail(e.target.value)} name={"email"} type={"email"}/>  
-                  <CustomeInput style='w-10/12' value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/> 
+                  <Address name={'address'} style='w-10/12!' onChange={setAddress} />
                 </div>
                 <div className='flex flex-col items-center justify-center w-6/12'>                  
                   <CustomeSelect style='w-10/12' titleStyle={'text-black!'} value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  

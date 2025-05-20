@@ -10,6 +10,7 @@ import { getDeliveryProfile, updateDeliveryProfile } from '../../services/delive
 import { getVendorProfile, updatetVendorProfile } from '../../services/vendor';
 import { getUserProfile, updateUserProfile } from '../../services/user';
 import toaster from 'react-hot-toast';
+import Address from '../../components/address-input'
 
 export default function Profile() { 
   const [data, setData] = useState(null);
@@ -189,7 +190,7 @@ export default function Profile() {
                     <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"first name"} type={"text"}/> 
                     <CustomeInput value={lName} onChange={(e)=> setLName(e.target.value)} name={"last name"} type={"text"}/> 
                     <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
-                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>   
+                    <Address name={'address'} style='w-10/12!' onChange={setAddress} />
                     <CustomeButton disable={disable} name={"submit"} />
                 </form>
               </div>      
@@ -202,7 +203,7 @@ export default function Profile() {
                     <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"name"} type={"text"}/>  
                     <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>    
                     <CustomeSelect value={pincode} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />                     <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>   
-                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>    
+                    <Address name={'address'} style='w-10/12!' onChange={setAddress} />
                     <CustomeButton disable={disable} name={"submit"} />
                 </form> 
               </div>      
@@ -215,7 +216,7 @@ export default function Profile() {
                     <CustomeInput value={name} onChange={(e)=> setName(e.target.value)} name={"driver name"} type={"text"}/> 
                     <CustomeSelect value={vehicle} onChange={(e)=> setVehicle(e.target.value)} data={["Bike", "Car", "Van"]} name={"vehicle type"} />  
                     <CustomeInput value={phone} onChange={(e)=> setPhone(e.target.value)} name={"phone number"} type={"text"}/>   
-                    <CustomeInput value={address} onChange={(e)=> setAddress(e.target.value)} name={"address"} type={"text"}/>                       
+                    <Address name={'address'} style='w-10/12!' onChange={setAddress} />
                     <CustomeSelect value={pinCodes} onChange={(e)=> setPincode(e.target.value)} data={pinCodes} name={"pincode"} />  
                     <CustomeButton disable={disable} name={"submit"} />
                 </form>
